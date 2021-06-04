@@ -1,0 +1,8 @@
+GSMtoSM: 
+    spacepy: 0.11318302154541016 seconds
+    geopack: 4.1961669921875e-05 seconds
+    %difference: 199.85175826489788 % 
+SMtoGSM: 
+    spacepy: 0.0018029212951660156 seconds
+    geopack: 1.71661376953125e-05 seconds
+    %difference: 196.2274037201991 % 
