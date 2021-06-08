@@ -14,7 +14,7 @@ This package is a thin wrapper to Tsyganenko's GEOPACK library, which contains m
 * [Hapgood, 1992, Space physics coordinate transformations: A user guide](https://doi.org/10.1016/0032-0633(92)90012-D)
 * [Kivelson and Russell, 1995; Appendix 3](https://books.google.com/books/about/Introduction_to_Space_Physics.html?id=qWHSqXGfsfQC)
 * [Russell, 1971, Geophysical Coordinate Tranformations](http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm)
-* [SPENVIS help on coordinate transformations](https://www.spenvis.oma.be/help/background/coortran/coortran.html]; includes (an animation)[https://www.spenvis.oma.be/help/background/coortran/coortran.html) and additional references at the bottom of the page.
+* [SPENVIS help on coordinate transformations](https://www.spenvis.oma.be/help/background/coortran/coortran.html); includes (an animation)[https://www.spenvis.oma.be/help/background/coortran/coortran.html) and additional references at the bottom of the page.
 
 # Installation
 
