@@ -98,6 +98,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(t.shape) == 1:
             if len(v.shape) == 1:
                 v = np.array([v])
+            #print(v)
             dtime = np.array(tpad(t, length=5), dtype=np.int32)
             ret = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
         else:
@@ -132,6 +133,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
+        #print(v)
         cvals = sc.Coords(v, csys_in, ctype_in)
 
         if len(t.shape) == 1:
@@ -245,7 +247,7 @@ def UTtoHMS(UT, **kwargs):
     return [hours, minutes, seconds]
 
 
-def MAGtoMLT(pos, time, csys='sph', debug=False):
+def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp', debug=False):
     """Compute magnetic local time given a UT and MAG position or longitude
 
     Uses equation 93 in https://arxiv.org/abs/1611.10321
@@ -297,7 +299,7 @@ def MAGtoMLT(pos, time, csys='sph', debug=False):
     if debug:
         print('phi =' + str(phi))
 
-    subsol_pt = transform(np.array([1, 0, 0]), time, 'GSM', 'MAG')
+    subsol_pt = transform(np.array([1, 0, 0]), time, 'GSM', 'MAG', lib=lib)
 
     #import pdb;pdb.set_trace()
     if len(subsol_pt.shape) == 1:
