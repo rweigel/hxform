@@ -1,13 +1,24 @@
-# hxtransform
+# hxform
 
 Heliophysics coordinate transforms in Python
 
-This package is a thin wrapper to Tsyganenko's GEOPACK library, which contains magnetospheric coordinate tranformation functions. Although SpacePy also wraps this library (via another wrapper library), its wrapper is not implemented for optimial efficiency - when an array of coordinates are to be transformed, the coordinates are looped over in Python and the Fortran function is called on each iteration. In contrast, this library performs the looping in Fortran, which leads to 100x or larger speed-ups, which was needed for the use-case of transforming the output of magnetospheric MHD simulations.
+# Overview
+
+This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field), which contains magnetospheric coordinate tranformation functions. To wrap this library, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. Arrays are passed to the Fortran wrapper function, which loops over it and calls the required Geopack functions on each iteration. This is much faster than looping over an array in Python and calling a Geopack functions on each iteration.
+
+`hxform` also contains a wrapper to [SpacePy's coordinate tranformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
+
+Extensive testing and inter-comparison has been performed on coordinate transform calculations between this library, [SpacePy (Python)](https://spacepy.github.io/irbempy.html) (which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/), which in turn wraps Tsyganenko's Geopack (Fortran)), and [SSCWeb's coordinate calculator](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi) (which uses [CXFORM](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/)).
+
+# Tests and Demos
+
 
 # Related Code
 
-* [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran).
+* [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
 * [CXFORM (C)](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/) is a library use by [SSCWeb](https://sscweb.gsfc.nasa.gov/) for coordinate tranformations. The library is based on the algorithms in Hapgood, 1992.
+* [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python.
+* [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
 
 # References
 
@@ -16,17 +27,23 @@ This package is a thin wrapper to Tsyganenko's GEOPACK library, which contains m
 * [Russell, 1971, Geophysical Coordinate Tranformations](http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm)
 * [SPENVIS help on coordinate transformations](https://www.spenvis.oma.be/help/background/coortran/coortran.html); includes (an animation)[https://www.spenvis.oma.be/help/background/coortran/coortran.html) and additional references at the bottom of the page.
 
-# Installation
+# Development
 
-To compile hxtransform python package, execute
 ```bash  
-f2py -c Geopack_08_dp.for T96_01.for -m hxtransform
+git clone https://github.com/rweigel/hxform
+cd hxform/src;
+f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
+cp *.so ../hxform
+cd ..;
+pip install -e .
 ```
 
-To test if compilation was successful, execute
-``` python -c "import hxtransform as hx; help(hx)"```
+To test if installation was successful, execute
 
-Which should produce something similar to 
 ```
-<module 'hxtransform' from '/Users/user/hxtransform/hxtransform.cpython-38-darwin.so'> 
-``` 
+python hxform_demo.py
+```
+
+# Tests and Comparisons
+
+See the files in the [test directory](https://github.com/rweigel/hxform/tree/master/test). 

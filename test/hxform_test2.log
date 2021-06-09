@@ -1,0 +1,72 @@
+------------------------------------------------------------
+transform:   GSMtoSM
+# of points: 10000
+First input: [0.00000000, 0.00000000, 0.00000000]
+Last input:  [199.98000000, 199.98000000, 199.98000000]
+Time:        1997-01-01T00:00:00
+Results:
+    SpacePy
+      First output: [nan, nan, nan]
+      Last output:  [nan, nan, nan]
+      Run time: 6.43e-01 s
+    hxform
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [271.02132590, 199.98000000, 80.81733543]
+      Run time: 3.03e-03 s
+SpacePy/hxform time:   212.45223833543506
+Max output difference: [nan, nan, nan]
+------------------------------------------------------------
+------------------------------------------------------------
+transform:   SMtoGSM
+# of points: 10000
+First input: [0.00000000, 0.00000000, 0.00000000]
+Last input:  [199.98000000, 199.98000000, 199.98000000]
+Time:        1997-01-01T00:00:00
+Results:
+    SpacePy
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [92.91678563, 199.98000000, 267.11509083]
+      Run time: 2.53e-01 s
+    hxform
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [80.81733543, 199.98000000, 271.02132590]
+      Run time: 9.45e-04 s
+SpacePy/hxform time:   267.9762865792129
+Max output difference: [0.00e+00, 5.68e-14, 3.91e+00]
+------------------------------------------------------------
+------------------------------------------------------------
+transform:   GSMtoSM
+# of points: 10000
+First input: [0.00000000, 0.00000000, 0.00000000]
+Last input:  [199.98000000, 199.98000000, 199.98000000]
+Time:        1997-01-01T00:00:00
+Results:
+    SpacePy
+      First output: [nan, nan, nan]
+      Last output:  [nan, nan, nan]
+      Run time: 8.09e-01 s
+    hxform
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [271.02132590, 199.98000000, 80.81733543]
+      Run time: 3.00e-03 s
+SpacePy/hxform time:   269.72623876560885
+Max output difference: [nan, nan, nan]
+------------------------------------------------------------
+------------------------------------------------------------
+transform:   SMtoGSM
+# of points: 10000
+First input: [0.00000000, 0.00000000, 0.00000000]
+Last input:  [199.98000000, 199.98000000, 199.98000000]
+Time:        1997-01-01T00:00:00
+Results:
+    SpacePy
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [92.91678563, 199.98000000, 267.11509083]
+      Run time: 2.52e-01 s
+    hxform
+      First output: [0.00000000, 0.00000000, 0.00000000]
+      Last output:  [80.81733543, 199.98000000, 271.02132590]
+      Run time: 9.40e-04 s
+SpacePy/hxform time:   268.5131912734652
+Max output difference: [0.00e+00, 5.68e-14, 3.91e+00]
+------------------------------------------------------------

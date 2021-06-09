@@ -6,8 +6,20 @@ import numpy as np
 #sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../' )
 #from config import conf
 
-# from magnetovis.util import tpad
-from util import tpad
+def tpad(time, length=7):
+
+    # TODO: Check that time is valid
+    time = list(time)
+
+    assert(len(time) > 2)
+
+    if len(time) > length:
+        time = time[0:length]
+    else:
+        pad = length - len(time)
+        time = time + pad*[0]
+
+    return tuple(time)
 
 import spacepy.coordinates as sc
 from spacepy.time import Ticktock
@@ -94,8 +106,8 @@ def transform(v, time, csys_in, csys_out, ctype_in=None, ctype_out=None):
         t = numpy.matlib.repmat(t, v.shape[0], 1)
 
     cvals = sc.Coords(v, csys_in, ctype_in)
-    print(v)
-    print(cvals)
+    #print(cvals)
+
     if len(t.shape)==1:
         t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tpad(t, length=6)
     else:
@@ -103,13 +115,9 @@ def transform(v, time, csys_in, csys_out, ctype_in=None, ctype_out=None):
         for i in range(t.shape[0]):
             t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tpad(t[i,:], length=6))
         t_str = np.array(t_str)
-        print(t_str)
-
 
     cvals.ticks = Ticktock(t_str, 'ISO')
-    print(cvals)
     newcoord = cvals.convert(csys_out, ctype_out)
-    print(newcoord)
 
     ret = newcoord.data
     # print(ret)
@@ -118,7 +126,6 @@ def transform(v, time, csys_in, csys_out, ctype_in=None, ctype_out=None):
 
     if in_type == np.ndarray:
         # print(ret)
-        print("inside cx transform")
         return ret
     else:
         return ret.tolist()
