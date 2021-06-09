@@ -105,7 +105,7 @@ def transform(v, time, csys_in, csys_out, ctype_in=None, ctype_out=None):
     if len(t.shape) == 1 and len(v.shape) > 1:
         t = numpy.matlib.repmat(t, v.shape[0], 1)
 
-    cvals = sc.Coords(v, csys_in, ctype_in)
+    cvals = sc.Coords([v], csys_in, ctype_in)
     #print(cvals)
 
     if len(t.shape)==1:

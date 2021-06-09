@@ -27,10 +27,10 @@ data = [
 
 # spherical input/output option note implemented in hxtranform with lib=geopack_08_dp
 # So for now, only use these two checks.
-data = [ 
-        [2003.0, 11.0, 20.0, 7.0,   0.0, 0.0, 1.,   0. ,  0.,  'car'],
-        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,   0.,   0.,  'car']
-    ]
+#data = [ 
+#        [2003.0, 11.0, 20.0, 7.0,   0.0, 0.0, 1.,   0. ,  0.,  'car'],
+#        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,   0.,   0.,  'car']
+#    ]
 
 # Results from
 # https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi
