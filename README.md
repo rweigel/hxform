@@ -10,7 +10,9 @@ This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](htt
 
 Extensive testing and inter-comparison has been performed on coordinate transform calculations between this library, [SpacePy (Python)](https://spacepy.github.io/irbempy.html) (which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/), which in turn wraps Tsyganenko's Geopack (Fortran)), and [SSCWeb's coordinate calculator](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi) (which uses [CXFORM](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/)).
 
-# Tests and Demos
+# Tests, Comparisons, and Demos
+
+See the files in the [test directory](https://github.com/rweigel/hxform/tree/master/test). 
 
 
 # Related Code
@@ -44,6 +46,3 @@ To test if installation was successful, execute
 python hxform_demo.py
 ```
 
-# Tests and Comparisons
-
-See the files in the [test directory](https://github.com/rweigel/hxform/tree/master/test). 
