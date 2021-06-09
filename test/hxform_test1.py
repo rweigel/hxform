@@ -58,7 +58,7 @@ for d in data:
         pos = d[6:9]
         v_sp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='spacepy')
         MLT_sp = hx.MAGtoMLT(pos, [time], csys='car')
-        v_gp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='spacepy')
+        v_gp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(pos, [time], csys='car')
     elif syst == 'sph':
         r, MLON, MLAT = d[6:9]
