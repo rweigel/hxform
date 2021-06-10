@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+from datetime import datetime
 
 def tpad(time, length=7):
 
@@ -18,6 +19,11 @@ def tpad(time, length=7):
     # TODO: If time was tuple, return tuple.
     #       If time was np.array, return np.array.
     return tuple(time)
+
+def to_doy(t):
+    t = np.array(tpad(t, length=6), dtype=np.int32)
+    day_of_year = datetime(t[0], t[1], t[2], t[3], t[4], t[5]).timetuple().tm_yday
+    return [t[0], day_of_year, t[3], t[4], t[5]]
 
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Transfrom between coordinates systems using Geopack or SpacePy.
@@ -109,19 +115,18 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(t.shape) == 1:
             if len(v.shape) == 1:
                 v = np.array([v])
-            #print(v)
-            dtime = np.array(tpad(t, length=5), dtype=np.int32)
+            dtime = np.array(to_doy(t), dtype=np.int32)
             ret = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
         else:
             if len(v.shape) == 1:
                 ret = np.full((t.shape[0], 3), np.nan)
                 for i in range(0, t.shape[0]):
-                    dtime = np.array(tpad(t[i,0:5], length=5), dtype=np.int32)
+                    dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
                     ret[i,:] = np.column_stack(geopack_08_dp.transform(v[0], v[1], v[2], trans, dtime))
             else:
                 ret = np.full((v.shape[0], 3), np.nan)
                 for i in range(0, t.shape[0]):
-                    dtime = np.array(tpad(t[i,0:5], length=5), dtype=np.int32)
+                    dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
                     ret[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
 
     if lib == 'spacepy':
