@@ -15,7 +15,8 @@ input1 = [1., 0., 0.]
 input2 = [input1,input1]
 
 if False:
-    # time and input can be np.arrays.
+    # time and input can be np.arrays
+    # Execution time will be faster in this case.
     time1 = np.array(time1)
     time2 = np.array(time2)
     input1 = np.array(input1)
