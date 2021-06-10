@@ -13,4 +13,3 @@ print(v_sp)
 dtime = np.array(time[0:5], dtype=np.int32)
 output = np.column_stack(geopack_08_dp.transform(pos[0], pos[1], pos[2], "MAGtoGSM", dtime))
 print(output)
-

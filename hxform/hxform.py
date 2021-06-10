@@ -29,6 +29,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         list containing lists of three floats
         np.array of three floats
         (Nv, 3) float np.array
+        list of 3-element np.arrays
 
     time : array-like
         list of 3+ ints
@@ -54,8 +55,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     Returns
     -------
-    array-like with structure matching either `time` (if `Nt` != 1) or
-    `v` (if `Nv` =! 1). If `Nv` and `Nt` != 1, size is same as `v`.
+    array-like with dimensions matching either `time` (if `Nt` != 1 and `Nv` = 1) or
+    `v` (if `Nv` =! 1 and `Nt` = 1). If `Nv` and `Nt` != 1, dimensions are same as `v`.
+
+    Return type will match that of `v`. Note that if a list of 3-element np.arrays are
+    passed, execution time will be larger. Use `np.ndarrays` for `v` and `time` for fastest
+    execution time.
 
     Examples
     --------
@@ -65,26 +70,32 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     v2 = [0, 1, 0]
 
     # All equivalent and return a list with three floats
-    transform([0, 1, 1], time1)
-    transform([0, 1, 1], time1, ctype_in='car')
-    transform([0, 1, 1], time1, ctype_in='car', ctype_out='car')
+    transform([0, 1, 1], time1, 'GSM', 'GSE')
+    transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car')
+    transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
 
-    # The following 3 calls return a list with two lists of 3 elements
-    # 1. Transform two vectors at same time t1
-    transform([v1, v2], t1)
+    The following 3 calls return a list with two lists of 3 elements
 
-    # 2. Transform two vectors, each at different times
-    transform([v1, v2], [t1, t2])
+    1. Transform two vectors at same time t1
+    
+        transform([v1, v2], t1, 'GSM', 'GSE')
 
-    # 3. Transform one vector at two different times
-    transform(v1, [t1, t2])
+    2. Transform one vector at two different times
+    
+        transform(v1, [t1, t2], 'GSM', 'GSE')
 
-    # 4. Transform one vector at three times
-    transform(np.array([v1, v2]), t1)
+    3. Transform two vectors, each at different times
+    
+        transform([v1, v2], [t1, t2], 'GSM', 'GSE')
 
     """
 
     in_type = type(v)
+
+    list_of_arrays = False
+    if isinstance(v[0], np.ndarray) and isinstance(v, list):
+        list_of_arrays = True
+
     v = np.array(v)
     t = np.array(time)
 
@@ -133,7 +144,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
-        #print(v)
         cvals = sc.Coords(v, csys_in, ctype_in)
 
         if len(t.shape) == 1:
@@ -156,7 +166,13 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if in_type == np.ndarray:
         return ret
     else:
-        return ret.tolist()
+        if list_of_arrays is True:
+            ret2 = []
+            for i in range(ret.shape[0]):
+                ret2.append(ret[i])
+            return ret2
+        else:
+            return ret.tolist()
 
 def MAGtoGSM(v_MAG, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     return transform(v_MAG, time, 'MAG', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)

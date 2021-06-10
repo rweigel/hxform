@@ -1,38 +1,38 @@
 import numpy as np
-import hxform.geopack_08_dp as geopack_08_dp
-import hxform.hxform as cx
+import hxform.hxform as hx
 
 def xprint(msg):
     # Print to console and logfile
-    import os
-    print(msg);
+    import os; print(msg);
     logfile = os.path.realpath(__file__)[0:-2] + "log"
     if not os.path.exists(logfile):
         with open(logfile, "w") as f: pass
     with open(logfile, "a") as f: f.write(str(msg) + "\n")
 
-libs=['geopack_08_dp','spacepy']
+time1 = [1997,1,1]
+time2 = [time1, time1]
+input1 = [1., 0., 0.]
+input2 = [input1,input1]
 
-time = (1997,1,1)
-input = [1., 0., 0.]
+if False:
+    # time and input can be np.arrays.
+    time1 = np.array(time1)
+    time2 = np.array(time2)
+    input1 = np.array(input1)
+    input2 = np.array(input2)
 
-for lib in libs:
-    output = cx.GSMtoSM(input, time, lib=lib)
-    xprint(input)
-    xprint(output)
+# Single time, single vector
+output = hx.GSMtoSM(input1, time1)
+xprint(output)
 
-    times = [time, time]
-    output = cx.GSMtoSM(input, times, lib=lib)
-    xprint(input)
-    xprint(output)
+# Multiple times, single vector
+output = hx.GSMtoSM(input1, time2)
+xprint(output)
 
-    inputs = [input,input]
-    output = cx.GSMtoSM(input, time, lib=lib)
-    xprint(input)
-    xprint(output)
+# Single time, multiple vectors
+output = hx.GSMtoSM(input2, time1)
+xprint(output)
 
-    times = [time, time]
-    inputs = [input,input]
-    output = cx.GSMtoSM(input, time, lib=lib)
-    xprint(input)
-    xprint(output)
+# Multiple times, multiple vectors
+output = hx.GSMtoSM(input2, time2)
+xprint(output)
