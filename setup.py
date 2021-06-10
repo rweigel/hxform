@@ -30,7 +30,10 @@ setup(
 # library file into the package directory. It seems like there
 # should be a way to pass an output directory for the the
 # library in either Extension or setup.
+import os
 import glob
 import shutil
 for file in glob.glob("geopack_08_dp*"):
-        shutil.move(file,"hxform")
+        if os.path.exists(os.path.join("hxform", file)):
+            os.remove(os.path.join("hxform", file))
+        shutil.move(file, "hxform")
