@@ -14,11 +14,7 @@ Extensive testing and inter-comparison has been performed on coordinate transfor
 
 ```bash  
 git clone https://github.com/rweigel/hxform
-cd hxform/src;
-# The following will generate many warnings
-f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
-cp *.so ../hxform
-cd ..;
+cd hxform;
 pip install -e .
 ```
 
@@ -26,6 +22,16 @@ To test if installation was successful, execute
 
 ```
 python hxform_demo.py
+```
+
+Alternative approach:
+
+```bash
+# The following will generate many warnings
+f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
+cp *.so ../hxform
+cd ..;
+pip install -e .
 ```
 
 # Tests, Comparisons, and Demos
