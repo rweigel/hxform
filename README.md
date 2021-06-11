@@ -54,8 +54,8 @@ python test/spacepy_demo.py
 
 * [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
 * [CXFORM (C)](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/) is a library used by [SSCWeb](https://sscweb.gsfc.nasa.gov/) for coordinate tranformations. The library is based on the algorithms in Hapgood, 1992. Python wrappers include:
-** https://aics.readthedocs.io/api.html
-** https://github.com/dpq/python-magnetosphere
+  * https://aics.readthedocs.io/api.html
+  * https://github.com/dpq/python-magnetosphere
 * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python.
 * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
 
