@@ -56,9 +56,9 @@ python test/spacepy_demo.py
   * https://aics.readthedocs.io/api.html
   * https://github.com/dpq/python-magnetosphere
 * [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magentic field models. Python translations and wrappers include
- * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
- * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
- * [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
+  * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
+  * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
+  * [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
 
 # References
 
