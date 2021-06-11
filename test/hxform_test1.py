@@ -1,8 +1,7 @@
 import numpy as np
 from datetime import datetime
 
-import hxform.cxtransform as cx
-import hxform.hxform as hx
+from hxform import hxform as hx
 
 def xprint(msg):
     # Print to console and logfile
@@ -15,21 +14,14 @@ def xprint(msg):
 
 # [year, month, day, hours, minutes, seconds, x, y, z, 'car']
 # or
-# [year, month, day, hours, minutes, seconds, r, long in degrees, latitude in degrees, 'sph']
+# [year, month, day, hours, minutes, seconds, r, latitude in degrees, long in degrees, 'sph']
 
 data = [ 
-        [2003.0, 11.0, 20.0, 7.0,   0.0, 0.0, 1.,   0. ,  0.,  'car'],
-        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,   0.,   0.,  'car'],
-        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,  68.5, 50.0, 'sph'],
-        [2003.0, 11.0, 20.0, 18.0, 43.0, 0.0, 1., 166.0, 52.5, 'sph'],
-        [2003.0, 11.0, 20.0, 18.0, 47.0, 0.0, 1., 166.0, 52.5, 'sph']
-    ]
-
-# spherical input/output option note implemented in hxtranform with lib=geopack_08_dp
-# So for now, only use these two checks.
-data = [ 
-        [2003.0, 11.0, 20.0, 7.0,   0.0, 0.0, 1.,   0. ,  0.,  'car'],
-        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,   0.,   0.,  'car']
+        [2003.0, 11.0, 20.0, 7.0,   0.0, 0.0, 1.,   0.,    0., 'car'],
+        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1.,   0.,    0., 'car'],
+        [2003.0, 11.0, 20.0, 17.0, 46.0, 0.0, 1., 50.0,  68.5, 'sph'],
+        [2003.0, 11.0, 20.0, 18.0, 43.0, 0.0, 1., 52.5, 166.0, 'sph'],
+        [2003.0, 11.0, 20.0, 18.0, 47.0, 0.0, 1., 52.5, 166.0, 'sph']
     ]
 
 # Results from
@@ -45,10 +37,6 @@ sscweb = [
             [-0.72, -0.19,  0.67,  1.20329]
         ]
 
-
-lib = 'spacepy'
-#lib = 'geopack_08_dp'
-
 k = 0
 for d in data:
     print('------------------------------------------------------------')
@@ -61,10 +49,11 @@ for d in data:
         v_gp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(pos, time, csys='car', lib='geopack_08_dp')
     elif syst == 'sph':
-        r, MLON, MLAT = d[6:9]
-        #v = hx.MAGtoGSM([r, MLAT, MLON], time, ctype_in='sph', ctype_out='car', lib=lib)
-        v = cx.MAGtoGSM([r, MLAT, MLON], [time], 'sph', 'car')
-        MLT = cx.MAGtoMLT(MLON, [time])
+        r, mlat, mlong = d[6:9]
+        v_sp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='spacepy')
+        MLT_sp = hx.MAGtoMLT(mlong, time, csys='sph', lib='spacepy')
+        v_gp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='geopack_08_dp')
+        MLT_gp = hx.MAGtoMLT(mlong, time, csys='sph', lib='geopack_08_dp')
     else:
         print('INVALID COORDINATE TYPE. Use "car" or "sph"')
     UT = time[3] + time[4]/60.+ time[5]/3600.
@@ -82,7 +71,7 @@ for d in data:
     if syst == 'car':
         xprint('   MAG           x     y     z')
     else:
-        xprint('   MAG           r     mlon    mlat')
+        xprint('   MAG           r     mlat   mlon')
     xprint('                {0:.2f}  {1:.2f}  {2:.2f}'.format(d[6], d[7], d[8]))
     xprint('Output:')
     xprint('   GSM                x             y             z           MLT')

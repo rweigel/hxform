@@ -21,8 +21,8 @@ def tpad(time, length=7):
     return tuple(time)
 
 def to_doy(t):
-    t = np.array(tpad(t, length=6), dtype=np.int32)
-    day_of_year = datetime(t[0], t[1], t[2], t[3], t[4], t[5]).timetuple().tm_yday
+    t = tuple(np.array(tpad(t, length=6), dtype=np.int32))
+    day_of_year = datetime(*t).timetuple().tm_yday
     return [t[0], day_of_year, t[3], t[4], t[5]]
 
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
@@ -38,20 +38,24 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         list of 3-element np.arrays
 
     time : array-like
-        list of 3+ ints
-        list containing lists of 3+ ints
-        np.array of 3+ ints
-        (Nt, 3) float np.array, where Nt = 1 or Nt = Nv
+           list of 3+ ints
+           list containing lists of 3+ ints
+           np.array of 3+ ints
+           (Nt, 3) float np.array, where Nt = 1 or Nt = Nv
 
-        The 3+ ints are [year, month, day, [hours, [minutes, [seconds]]]]
-        Zeros are used for any missing optional value.
+           The 3+ ints are [year, month, day, [hours, [minutes, [seconds]]]]
+           Zeros are used for any missing optional value.
 
     csys_in : str
+              One of MAG, GEI, GEO, GSE, GSM, SM
 
     csys_out : str
+               One of MAG, GEI, GEO, GSE, GSM, SM
 
     ctype_in : str
                'car' (default) or 'sph'
+               For spherical coordinates, `v` should be in r, latitude, longitude,
+               with angles in degrees.
 
     ctype_out : str
                'car' (default) or 'sph'
@@ -75,24 +79,28 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     v1 = [0, 0, 1]
     v2 = [0, 1, 0]
 
-    # All equivalent and return a list with three floats
-    transform([0, 1, 1], time1, 'GSM', 'GSE')
-    transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car')
-    transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
+    # All of the following are equivalent and return a list with three floats
+    from hxform import hxform as hx
+    hx.transform([0, 1, 1], time1, 'GSM', 'GSE')
+    hx.transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car')
+    hx.transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
 
     The following 3 calls return a list with two lists of 3 elements
 
     1. Transform two vectors at same time t1
     
-        transform([v1, v2], t1, 'GSM', 'GSE')
+        from hxform import hxform as hx
+        hx.transform([v1, v2], t1, 'GSM', 'GSE')
 
     2. Transform one vector at two different times
     
-        transform(v1, [t1, t2], 'GSM', 'GSE')
+        from hxform import hxform as hx
+        hx.transform(v1, [t1, t2], 'GSM', 'GSE')
 
     3. Transform two vectors, each at different times
-    
-        transform([v1, v2], [t1, t2], 'GSM', 'GSE')
+
+        from hxform import hxform as hx    
+        hx.transform([v1, v2], [t1, t2], 'GSM', 'GSE')
 
     """
 
@@ -112,27 +120,29 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if lib == 'geopack_08_dp':
         import hxform.geopack_08_dp as geopack_08_dp
         trans = csys_in + 'to' + csys_out
+
+        if len(v.shape) == 1:
+            v = np.array([v])
+
+        if ctype_in == 'sph':
+            v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
+
         if len(t.shape) == 1:
-            if len(v.shape) == 1:
-                v = np.array([v])
             dtime = np.array(to_doy(t), dtype=np.int32)
-            ret = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
+            vp = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
         else:
-            if len(v.shape) == 1:
-                ret = np.full((t.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
-                    ret[i,:] = np.column_stack(geopack_08_dp.transform(v[0], v[1], v[2], trans, dtime))
-            else:
-                ret = np.full((v.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
-                    ret[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
+            vp = np.full((v.shape[0], 3), np.nan)
+            for i in range(0, t.shape[0]):
+                dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
+                ret[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
+
+        if ctype_out == 'sph':
+            vp[:,0], vp[:,1], vp[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
 
     if lib == 'spacepy':
         try:
             # SpacePy is not installed when hxform is installed due to
-            # frequent install failures and the default is to not use it.
+            # frequent install failures and so the default is to not use it.
             import spacepy.coordinates as sc
             from spacepy.time import Ticktock
             import numpy.matlib
@@ -163,75 +173,138 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         cvals.ticks = Ticktock(t_str, 'ISO')
         newcoord = cvals.convert(csys_out, ctype_out)
 
-        ret = newcoord.data
+        vp = newcoord.data
 
     if len(t.shape) == 1 and len(v.shape) == 1:
-        ret = ret[0, :]
+        vp = ret[0, :]
 
     if in_type == np.ndarray:
-        return ret
+        return vp
     else:
         if list_of_arrays is True:
-            ret2 = []
+            vp2 = []
             for i in range(ret.shape[0]):
-                ret2.append(ret[i])
-            return ret2
+                vp2.append(ret[i])
+            return vp2
         else:
-            return ret.tolist()
+            return vp.tolist()
 
-def MAGtoGSM(v_MAG, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_MAG, time, 'MAG', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GSMtoMAG(v_GSM, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GSM, time, 'GSM', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def MAGtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'MAG', 'GEI', ...)"""
+    return transform(v, time, 'MAG', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GEOtoGSM(v_GEO, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GEO, time, 'GEO', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def MAGtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'MAG', 'GEO', ...)"""
+    return transform(v, time, 'MAG', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GEOtoMAG(v_GEO, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GEO, time, 'GEO', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def MAGtoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'MAG', 'GSE', ...)"""
+    return transform(v, time, 'MAG', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def MAGtoGEO(v_MAG, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_MAG, time, 'MAG', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def MAGtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'MAG', 'GSM', ...)"""
+    return transform(v, time, 'MAG', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def MAGtoSM(v_MAG, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_MAG, time, 'MAG', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def MAGtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'MAG', 'SM', ...)"""
+    return transform(v, time, 'MAG', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def MAGtoGEI(v_MAG, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_MAG, time, 'MAG', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GEOtoGEI(v_GEO, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GEO, time, 'GEO', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GEOtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'MAG', ...)"""
+    return transform(v, time, 'GEO', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GEOtoSM(v_GEO, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GEO, time, 'GEO', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GEOtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'GEI', ...)"""
+    return transform(v, time, 'GEO', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GSEtoGSM(v_GSE, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GSE, time, 'GSE', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GEOtoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'GSE', ...)"""
+    return transform(v, time, 'GEO', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GSMtoGSE(v_GSM, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GSM, time, 'GSM', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GEOtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'GSM', ...)"""
+    return transform(v, time, 'GEO', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def SMtoGSM(v_SM, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_SM, time, 'SM', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GEOtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'SM', ...)"""
+    return transform(v, time, 'GEO', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GSMtoSM(v_SM, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_SM, time, 'GSM', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def GEItoGEO(v_GEI, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
-    return transform(v_GEI, time, 'GEI','GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+def GSEtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSE', 'MAG', ...)"""
+    return transform(v, time, 'GSE','MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-def StoC(r, theta, phi):
-    """Convert from spherical to cartesian coordinates
+def GSEtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSE', 'GEI', ...)"""
+    return transform(v, time, 'GSE','GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-    r, theta, phi: array-like
+def GSEtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSE', 'GEO', ...)"""
+    return transform(v, time, 'GSE','GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-    """
-    x = r*np.cos(phi)*np.sin(theta)
-    y = r*np.sin(phi)*np.sin(theta)
-    z = r*np.cos(theta)
+def GSEtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSE', 'SM', ...)"""
+    return transform(v, time, 'GSE','SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+
+def GSMtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSM', 'MAG', ...)"""
+    return transform(v, time, 'GSM', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GSMtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSM', 'GEI', ...)"""
+    return transform(v, time, 'GSM', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GSMtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSM', 'GEO', ...)"""
+    return transform(v, time, 'GSM', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GSMtoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSM', 'GSE', ...)"""
+    return transform(v, time, 'GSM', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GSMtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSM', 'SM', ...)"""
+    return transform(v, time, 'GSM', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+
+def SMtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'SM', 'MAG', ...)"""
+    return transform(v, time, 'SM', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def SMtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'SM', 'GEI', ...)"""
+    return transform(v_SM, time, 'SM', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def SMtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'SM', 'GEO', ...)"""
+    return transform(v, time, 'SM', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def SMtoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'SM', 'GSE', ...)"""
+    return transform(v, time, 'SM', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def SMtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'SM', 'GSM', ...)"""
+    return transform(v, time, 'SM', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+
+def CtoS(x, y, z):
+    """Convert from cartesian to spherical coordinates."""
+    r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
+    theta = 90.0 - (180.0/np.pi)*np.acos(z/r)
+    phi = (180.0/np.pi)*np.atan2(y, x)
+
+    return r, theta, phi
+
+def StoC(r, colat, long):
+    """Convert from spherical to cartesian coordinates."""
+    x = r*np.cos((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
+    y = r*np.sin((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
+    z = r*np.cos(np.pi/2.0 - (np.pi/180.0)*colat)
     return x, y, z
-
 
 def UTtoHMS(UT, **kwargs):
     """Convert universal time in fractional hours into integer hour, minutes, seconds
