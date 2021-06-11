@@ -1,9 +1,18 @@
-import os
-import sys
 import numpy as np
 from datetime import datetime
 
 def tpad(time, length=7):
+    """Pad list with 3 or more elements with zeros.
+    
+    Example:
+    --------
+    >>> from hxform import hxform as hx
+    >>> print(hx.tpad([2000,1,1]))                 # [2000, 1, 1, 0, 0, 0, 0]
+    >>> print(hx.tpad([2000,1,1], length=4))       # [2000, 1, 1, 0]
+    >>> print(hx.tpad([2000,1,1,2,3,4], length=3)) # [2000, 1, 1]
+    """
+
+    in_type = type(time)
 
     # TODO: Check that time is valid
     time = list(time)
@@ -16,14 +25,26 @@ def tpad(time, length=7):
         pad = length - len(time)
         time = time + pad*[0]
 
-    # TODO: If time was tuple, return tuple.
-    #       If time was np.array, return np.array.
-    return tuple(time)
+
+    if in_type == np.ndarray:
+        return np.array(time)
+    elif in_type == tuple:
+        return tuple(time)
+    else:
+        return time
+
 
 def to_doy(t):
+    """Convert from [y, m, d, h, min, sec] to [y, doy, h, min, sec].
+    
+    Example
+    -------
+    >>> to_doy([2000,2,1,9,9,9]) # [2000,32,9,9,9]
+    """
     t = tuple(np.array(tpad(t, length=6), dtype=np.int32))
     day_of_year = datetime(*t).timetuple().tm_yday
     return [t[0], day_of_year, t[3], t[4], t[5]]
+
 
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Transfrom between coordinates systems using Geopack or SpacePy.
@@ -31,10 +52,15 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     Parameters
     ----------
     v : array-like
-        list of three floats
-        list containing lists of three floats
-        np.array of three floats
+
         (Nv, 3) float np.array
+
+        np.array of three floats
+
+        list of three floats
+
+        list containing lists of three floats
+
         list of 3-element np.arrays
 
     time : array-like
@@ -74,34 +100,31 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     Examples
     --------
-    t1 = [2000, 1, 1, 0, 0, 0]
-    t2 = [2000, 1, 1, 2, 0, 0]
-    v1 = [0, 0, 1]
-    v2 = [0, 1, 0]
-
-    # All of the following are equivalent and return a list with three floats
-    from hxform import hxform as hx
-    hx.transform([0, 1, 1], time1, 'GSM', 'GSE')
-    hx.transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car')
-    hx.transform([0, 1, 1], time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
+    >>> from hxform import hxform as hx
+    >>> t1 = [2000, 1, 1, 0, 0, 0] # or np.array([2000, 1, 1, 0, 0, 0])
+    >>> v1 = [0, 0, 1]             # or np.array([0, 0, 1])
+    >>> # All of the following are equivalent and return a list with three floats
+    >>> from hxform import hxform as hx
+    >>> hx.transform(v1, time1, 'GSM', 'GSE')
+    >>> hx.transform(v1, time1, 'GSM', 'GSE', ctype_in='car')
+    >>> hx.transform(v1, time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
 
     The following 3 calls return a list with two lists of 3 elements
 
     1. Transform two vectors at same time t1
     
-        from hxform import hxform as hx
-        hx.transform([v1, v2], t1, 'GSM', 'GSE')
+        >>> from hxform import hxform as hx
+        >>> hx.transform([v1, v1], t1, 'GSM', 'GSE')
 
     2. Transform one vector at two different times
     
-        from hxform import hxform as hx
-        hx.transform(v1, [t1, t2], 'GSM', 'GSE')
+        >>> from hxform import hxform as hx
+        >>> hx.transform(v1, [t1, t1], 'GSM', 'GSE')
 
     3. Transform two vectors, each at different times
 
-        from hxform import hxform as hx    
-        hx.transform([v1, v2], [t1, t2], 'GSM', 'GSE')
-
+        >>> from hxform import hxform as hx    
+        >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
 
     in_type = type(v)
@@ -131,10 +154,16 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             dtime = np.array(to_doy(t), dtype=np.int32)
             vp = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
         else:
-            vp = np.full((v.shape[0], 3), np.nan)
-            for i in range(0, t.shape[0]):
-                dtime = np.array(to_doy(t[i,:]), dtype=np.int32)
-                ret[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
+            if v.shape[0] == 1:
+                vp = np.full((t.shape[0], 3), np.nan)
+                for i in range(0, t.shape[0]):
+                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
+                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[0,0], v[0,1], v[0,2], trans, dtime))
+            else:
+                vp = np.full((v.shape[0], 3), np.nan)
+                for i in range(0, t.shape[0]):
+                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
+                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
 
         if ctype_out == 'sph':
             vp[:,0], vp[:,1], vp[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
@@ -163,11 +192,11 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         if len(t.shape) == 1:
             # SpacePy requires time values to be strings with second precision
-            t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tpad(t, length=6)
+            t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(t, length=6))
         else:
             t_str = []
             for i in range(t.shape[0]):
-                t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tpad(t[i,:], length=6))
+                t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(t[i,:], length=6)))
             t_str = np.array(t_str)
 
         cvals.ticks = Ticktock(t_str, 'ISO')
@@ -176,15 +205,15 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         vp = newcoord.data
 
     if len(t.shape) == 1 and len(v.shape) == 1:
-        vp = ret[0, :]
+        vp = vp[0, :]
 
     if in_type == np.ndarray:
         return vp
     else:
         if list_of_arrays is True:
             vp2 = []
-            for i in range(ret.shape[0]):
-                vp2.append(ret[i])
+            for i in range(vp.shape[0]):
+                vp2.append(vp[i])
             return vp2
         else:
             return vp.tolist()
@@ -276,7 +305,7 @@ def SMtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
 
 def SMtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'SM', 'GEI', ...)"""
-    return transform(v_SM, time, 'SM', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+    return transform(v, time, 'SM', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
 def SMtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'SM', 'GEO', ...)"""
@@ -306,16 +335,16 @@ def StoC(r, colat, long):
     z = r*np.cos(np.pi/2.0 - (np.pi/180.0)*colat)
     return x, y, z
 
+
 def UTtoHMS(UT, **kwargs):
-    """Convert universal time in fractional hours into integer hour, minutes, seconds
+    """Convert universal time in fractional hours into integer hour, minutes, seconds.
 
-    from cxtransform import UTtoHMS
-
-    print(UTtoHMS(12))              # [12, 0, 0]
-
-    print(UTtoHMS(24))              # [0, 0, 0]
-
-    print(UTtoHMS(24, keep24=True)) # [24, 0, 0]
+    Example
+    -------
+    >>> from hxform import hxform as hx
+    >>> print(hx.UTtoHMS(12))              # [12, 0, 0]
+    >>> print(hx.UTtoHMS(24))              # [0, 0, 0]
+    >>> print(hx.UTtoHMS(24, keep24=True)) # [24, 0, 0]
     """
 
     keep24 = False
@@ -341,19 +370,19 @@ def UTtoHMS(UT, **kwargs):
     return [hours, minutes, seconds]
 
 
-def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp', debug=False):
-    """Compute magnetic local time given a UT and MAG position or longitude
+def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp'):
+    """Compute magnetic local time given a UT and MAG position or longitude.
 
-    Uses equation 93 in https://arxiv.org/abs/1611.10321
+    Uses equation 93 in Laundal and Richmond, 2016 (10.1007/s11214-016-0275-y)
 
     Usage:
     ------
-    import cxtransform as cx
-    mlt = cx.MAGtoMLT(MAGlong, time)
-    mlt = cx.MAGtoMLT([MAGlong1, Mlong2, ...], time)
+    >>> from hxform import hxform as hx
+    >>> mlt = hx.MAGtoMLT(MAGlong, time)
+    >>> mlt = hx.MAGtoMLT([MAGlong1, Mlong2, ...], time)
 
-    mlt = cx.MAGtoMLT([MAGx, MAGy, MAGz], time, csys='car')
-    mlt = cx.MAGtoMLT([[MAGx1, MAGy1, MAGz1],...], time, csys='car')
+    >>> mlt = hx.MAGtoMLT([MAGx, MAGy, MAGz], time, csys='car')
+    >>> mlt = hx.MAGtoMLT([[MAGx1, MAGy1, MAGz1],...], time, csys='car')
 
     Returns:
     --------
@@ -361,24 +390,28 @@ def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp', debug=False):
 
     Examples:
     --------
-    import cxtransform as cx
+    >>> from hxform import hxform as hx
+    >>> mlt = hx.MAGtoMLT(0., [2000, 1, 1, 0, 0, 0])
+    >>> print(mlt) # 18.869936573301775
 
-    mlt = cx.MAGtoMLT(0., [2000, 1, 1, 0, 0, 0])
-    print(mlt) # 18.869936573301775
+    >>> from hxform import hxform as hx
+    >>> mlt = hx.MAGtoMLT([0., 0.], [2000, 1, 1, 0, 0, 0])
+    >>> print(mlt) # [18.86993657 18.86993657]
 
-    mlt = cx.MAGtoMLT([0., 0.], [2000, 1, 1, 0, 0, 0])
-    print(mlt) # [18.86993657 18.86993657]
+    >>> from hxform import hxform as hx
+    >>> mlt = hx.MAGtoMLT([-1., 0., 0.], [2000, 1, 1, 0, 0, 0], csys='car')
+    >>> print(mlt) # 6.869936573301775
 
-    mlt = cx.MAGtoMLT([-1., 0., 0.], [2000, 1, 1, 0, 0, 0], csys='car')
-    print(mlt) # 6.869936573301775
-
-    mlt = cx.MAGtoMLT([[-1., 0., 0.],[-1., 0., 0.]], [2000, 1, 1, 0, 0, 0], csys='car')
-    print(mlt) # [6.86993657 6.86993657]
+    >>> from hxform import hxform as hx
+    >>> mlt = hx.MAGtoMLT([[-1., 0., 0.],[-1., 0., 0.]], [2000, 1, 1, 0, 0, 0], csys='car')
+    >>> print(mlt) # [6.86993657 6.86993657]
 """
 
     assert(csys == 'car' or csys == 'sph')
+
     pos = np.array(pos)
     time = np.array(time)
+
     if not isinstance(pos, float):
         pos = np.array(pos)
 
@@ -390,26 +423,16 @@ def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp', debug=False):
         else:
             phi = np.arctan2(pos[:, 1], pos[:, 0])
 
-    if debug:
-        print('phi =' + str(phi))
-
     subsol_pt = transform(np.array([1, 0, 0]), time, 'GSM', 'MAG', lib=lib)
 
-    #import pdb;pdb.set_trace()
     if len(subsol_pt.shape) == 1:
         phi_cds = np.arctan2(subsol_pt[1], subsol_pt[0])
     else:
         phi_cds = np.arctan2(subsol_pt[:, 1], subsol_pt[:, 0])
 
-    if debug:
-        print('phi_cds =' + str(phi_cds))
-
     delta = phi - phi_cds # note np.array([a1, a2, ...])+b == np.array([a1+b, a2+b, ...])
 
-    if debug:
-        print('delta =' + str(delta))
-
-    if isinstance(delta,float):
+    if isinstance(delta, float):
         delta = np.array([delta])
 
     idx = np.where(delta > np.pi)
