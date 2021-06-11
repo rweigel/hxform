@@ -46,7 +46,7 @@ python test/geopack_08_dp_wrapper_demo.py
 
 Demo of bug in SpacePy
 
-````
+```
 python test/spacepy_demo.py
 ```
 
