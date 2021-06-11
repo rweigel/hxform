@@ -68,11 +68,11 @@ for t in trans:
     xprint("      First output: [{0:.8f}, {1:.8f}, {2:.8f}]".format(out_sp[0][0], out_sp[0][1], out_sp[0][2]))
     xprint("      Last output:  [{0:.8f}, {1:.8f}, {2:.8f}]".format(out_sp[-1][0], out_sp[-1][1], out_sp[-1][2]))
     xprint("      Run time: {0:.2e} s".format(sp_time))
-    xprint("    hxform")
+    xprint("    Geopack-08 double precision")
     xprint("      First output: [{0:.8f}, {1:.8f}, {2:.8f}]".format(out_gp[0][0], out_gp[0][1], out_gp[0][2]))
     xprint("      Last output:  [{0:.8f}, {1:.8f}, {2:.8f}]".format(out_gp[-1][0], out_gp[-1][1], out_gp[-1 ][2]))
     xprint("      Run time: {0:.2e} s".format(gp_time))
 
-    xprint("SpacePy/hxform time:   {}".format(sp_time/gp_time))
+    xprint("SpacePy/Geopack-08-dp time: {0:.1f}".format(sp_time/gp_time))
     xprint("Max output difference: [{0:.2e}, {1:.2e}, {2:.2e}]".format(maxdiff[0], maxdiff[1], maxdiff[2]))
     xprint(60*"-")

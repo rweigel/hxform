@@ -8,12 +8,12 @@ Results:
     SpacePy
       First output: [nan, nan, nan]
       Last output:  [nan, nan, nan]
-      Run time: 6.43e-01 s
-    hxform
+      Run time: 7.77e-01 s
+    Geopack-08 double precision
       First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [271.02132590, 199.98000000, 80.81733543]
-      Run time: 3.03e-03 s
-SpacePy/hxform time:   212.45223833543506
+      Last output:  [267.12757466, 199.98000000, 92.88088962]
+      Run time: 6.24e-03 s
+SpacePy/Geopack-08-dp time: 124.5
 Max output difference: [nan, nan, nan]
 ------------------------------------------------------------
 ------------------------------------------------------------
@@ -26,47 +26,11 @@ Results:
     SpacePy
       First output: [0.00000000, 0.00000000, 0.00000000]
       Last output:  [92.91678563, 199.98000000, 267.11509083]
-      Run time: 2.53e-01 s
-    hxform
+      Run time: 2.84e-01 s
+    Geopack-08 double precision
       First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [80.81733543, 199.98000000, 271.02132590]
-      Run time: 9.45e-04 s
-SpacePy/hxform time:   267.9762865792129
-Max output difference: [0.00e+00, 5.68e-14, 3.91e+00]
-------------------------------------------------------------
-------------------------------------------------------------
-transform:   GSMtoSM
-# of points: 10000
-First input: [0.00000000, 0.00000000, 0.00000000]
-Last input:  [199.98000000, 199.98000000, 199.98000000]
-Time:        1997-01-01T00:00:00
-Results:
-    SpacePy
-      First output: [nan, nan, nan]
-      Last output:  [nan, nan, nan]
-      Run time: 8.09e-01 s
-    hxform
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [271.02132590, 199.98000000, 80.81733543]
-      Run time: 3.00e-03 s
-SpacePy/hxform time:   269.72623876560885
-Max output difference: [nan, nan, nan]
-------------------------------------------------------------
-------------------------------------------------------------
-transform:   SMtoGSM
-# of points: 10000
-First input: [0.00000000, 0.00000000, 0.00000000]
-Last input:  [199.98000000, 199.98000000, 199.98000000]
-Time:        1997-01-01T00:00:00
-Results:
-    SpacePy
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [92.91678563, 199.98000000, 267.11509083]
-      Run time: 2.52e-01 s
-    hxform
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [80.81733543, 199.98000000, 271.02132590]
-      Run time: 9.40e-04 s
-SpacePy/hxform time:   268.5131912734652
-Max output difference: [0.00e+00, 5.68e-14, 3.91e+00]
+      Last output:  [92.88088962, 199.98000000, 267.12757466]
+      Run time: 8.42e-04 s
+SpacePy/Geopack-08-dp time: 337.7
+Max output difference: [0.00e+00, 5.68e-14, 1.25e-02]
 ------------------------------------------------------------
