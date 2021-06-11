@@ -3,14 +3,14 @@ from datetime import datetime
 
 from hxform import hxform as hx
 
+# Print to console and logfile
+import os
+logfile = os.path.realpath(__file__)[0:-2] + "log"
+if os.path.exists(logfile):
+    with open(logfile, "w") as f: pass
 def xprint(msg):
-    # Print to console and logfile
-    import os
-    print(msg);
-    logfile = os.path.realpath(__file__)[0:-2] + "log"
-    if not os.path.exists(logfile):
-        with open(logfile, "w") as f: pass
-    with open(logfile, "a") as f: f.write(msg + "\n")
+    import os; print(msg);
+    with open(logfile, "a") as f: f.write(str(msg) + "\n")
 
 # [year, month, day, hours, minutes, seconds, x, y, z, 'car']
 # or

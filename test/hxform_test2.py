@@ -8,14 +8,14 @@ from datetime import datetime
 
 import hxform.hxform as hx
 
+# Print to console and logfile
+import os
+logfile = os.path.realpath(__file__)[0:-2] + "log"
+if os.path.exists(logfile):
+    with open(logfile, "w") as f: pass
 def xprint(msg):
-    # Print to console and logfile
-    import os
-    print(msg);
-    logfile = os.path.realpath(__file__)[0:-2] + "log"
-    if not os.path.exists(logfile):
-        with open(logfile, "w") as f: pass
-    with open(logfile, "a") as f: f.write(msg + "\n")
+    import os; print(msg);
+    with open(logfile, "a") as f: f.write(str(msg) + "\n")
 
 # Tsyganenko uses Geocentric-Solar Wind GSW instead of GSM. GSW has the positive
 # x-axis pointing antiparallel to the solar wind. He chose this coordinate system
