@@ -6,7 +6,7 @@ import time as tm
 import numpy as np
 from datetime import datetime
 
-import hxform.hxform as hx
+from hxform import hxform as hx
 
 # Print to console and logfile
 import os

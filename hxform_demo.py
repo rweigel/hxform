@@ -1,5 +1,5 @@
 import numpy as np
-import hxform.hxform as hx
+from hxform import hxform as hx
 
 # Print to console and logfile
 import os
