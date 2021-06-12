@@ -9,10 +9,10 @@ install_requires = ["numpy"]
 ext1 = Extension(
                 'hxform.geopack_08_dp',
                 sources = [
-							'src/geopack-2008/Geopack-2008_dp_wrapper.for',
-							'src/geopack-2008/Geopack-2008_dp.for',
-							'src/geopack-2008/T96_01.for'
-						])
+                            'src/geopack-2008/Geopack-2008_dp_wrapper.for',
+                            'src/geopack-2008/Geopack-2008_dp.for',
+                            'src/geopack-2008/T96_01.for'
+                        ])
 
 ext2 = Extension('hxform.cxformv',
                 sources = [
@@ -28,7 +28,7 @@ setup(
     author_email='rweigel@gmu.edu',
     packages=find_packages(),
     description='Heliophysical coordinate transformations using various libraries',
-	setup_requires=['numpy'],
+    setup_requires=['numpy'],
     install_requires=install_requires,
     ext_modules=[ext1, ext2]
 )

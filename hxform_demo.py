@@ -1,14 +1,8 @@
 import numpy as np
 from hxform import hxform as hx
 
-# Print to console and logfile
-import os
-logfile = os.path.realpath(__file__)[0:-2] + "log"
-if os.path.exists(logfile):
-    with open(logfile, "w") as f: pass
-def xprint(msg):
-    import os; print(msg);
-    with open(logfile, "a") as f: f.write(str(msg) + "\n")
+from demo.xprint import Xprint as Xp
+xp = Xp() # Print to console and log file
 
 time1 = [1997,1,1]
 time2 = [time1, time1]
@@ -24,17 +18,17 @@ if False:
     input2 = np.array(input2)
 
 # Single time, single vector
-output = hx.GSMtoSM(input1, time1)
-xprint(output)
+output = hx.GSMtoGSE(input1, time1)
+xp.xprint(output)
 
 # Multiple times, single vector
-output = hx.GSMtoSM(input1, time2)
-xprint(output)
+output = hx.GSMtoGSE(input1, time2)
+xp.xprint(output)
 
 # Single time, multiple vectors
-output = hx.GSMtoSM(input2, time1)
-xprint(output)
+output = hx.GSMtoGSE(input2, time1)
+xp.xprint(output)
 
 # Multiple times, multiple vectors
-output = hx.GSMtoSM(input2, time2)
-xprint(output)
+output = hx.GSMtoGSE(input2, time2)
+xp.xprint(output)
