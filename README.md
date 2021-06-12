@@ -36,25 +36,27 @@ pip install -e .
 
 # Tests, Comparisons, and Demos
 
-See the files in the [test directory](https://github.com/rweigel/hxform/tree/master/test). The result form executing the files is stored in a `.log` file.
+See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) and [demo](https://github.com/rweigel/hxform/tree/master/demo) directories. The result form executing the files is stored in a `.log` file.
 
-```
+```bash
 python test/hxform_test1.py
 python test/hxform_test2.py
-python test/geopack_08_dp_wrapper_demo.py
 ```
 
-Demo of bug in SpacePy
+The following demos show how [`hxform.py`](https://github.com/rweigel/hxform/blob/main/hxform/hxform.py) calls Geopack-08, cxform, and SpacePy. In general, you should not need to use the methods demonstrated except for debugging.
 
-```
-python test/spacepy_demo.py
+```bash
+python demo/geopack_08_dp_wrapper_demo.py
+python demo/cxform_demo.py
+python demo/spacepy_demo.py
 ```
 
 # Related Code
 
-* [CXFORM (C)](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/) is a library used by [SSCWeb](https://sscweb.gsfc.nasa.gov/) for coordinate tranformations. The library is based on the algorithms in Hapgood, 1992. Python wrappers include:
+* [CXFORM (C)](https://github.com/edsantiago/cxform) is a library is based on the algorithms in Hapgood, 1992. Python wrappers include:
   * https://aics.readthedocs.io/api.html
   * https://github.com/dpq/python-magnetosphere
+  * https://github.com/bsd-conqueror/cxform
 * [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magentic field models. Python translations and wrappers include
   * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
   * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.

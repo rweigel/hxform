@@ -1,3 +1,5 @@
+# Demo of calling C library cxform directly instead of through hxform.
+
 import os
 import ctypes
 from datetime import datetime
