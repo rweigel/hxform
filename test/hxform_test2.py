@@ -1,4 +1,4 @@
-arr_size = 10000
+arr_size = 1000
 
 import os
 import sys
@@ -17,30 +17,25 @@ def xprint(msg):
     import os; print(msg);
     with open(logfile, "a") as f: f.write(str(msg) + "\n")
 
-# Tsyganenko uses Geocentric-Solar Wind GSW instead of GSM. GSW has the positive
-# x-axis pointing antiparallel to the solar wind. He chose this coordinate system
-# in order to simplify his code. GSW becomes identical to GSM when the solar Wind
-# velocity travels only in the negative x-axis direction, Tsyganenko chose
-#  <-400,0,0> SMGSW_08
-
 X1 = (200/arr_size)*np.arange(0, arr_size, dtype=np.float64)
 Y1 = (200/arr_size)*np.arange(0, arr_size, dtype=np.float64)
 Z1 = (200/arr_size)*np.arange(0, arr_size, dtype=np.float64)
 
-trans = []
-csys = ['GSM','SM']#,'GSE','MAG','GEO','GEI']
+xforms = []
+#csys = ['GSM','GSE','GSE','MAG','GEO','GEI']
+csys = ['GSM','GSE']
 for c1 in csys:
     for c2 in csys:
         if c1 != c2:
-            trans.append('to'.join((c1,c2)))
+            xforms.append('to'.join((c1, c2)))
 
 XYZ = np.column_stack([X1,Y1,Z1])
 time = (1997,1,1)
-time_str = datetime(time[0], time[1], time[2]).isoformat()
+#time = np.full(XYZ.shape, time)
 
-for t in trans:
+for xform in xforms:
 
-    initial, final = t.split('to')
+    initial, final = xform.split('to')
 
     gp_start = tm.time()
     out_gp = hx.transform(XYZ, time, initial, final, lib='geopack_08_dp')
@@ -57,11 +52,11 @@ for t in trans:
     sp_time = sp_end - sp_start
 
     xprint(60*"-")
-    xprint("transform:   {0:s}".format(t))
+    xprint("transform:   {0:s}".format(xform))
     xprint("# of points: {0:d}".format(arr_size))
     xprint("First input: [{0:.8f}, {1:.8f}, {2:.8f}]".format(X1[0], Y1[0], Z1[0]))
     xprint("Last input:  [{0:.8f}, {1:.8f}, {2:.8f}]".format(X1[-1], Y1[-1], Z1[-1]))
-    xprint("Time:        {0:s}".format(time_str))
+    #xprint("Time:        {0:s}".format(time_str))
 
     xprint("Results:")
     xprint("    SpacePy")
