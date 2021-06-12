@@ -46,7 +46,6 @@ int cxformv(const void *indatav, const void *timev, const char *from, const char
         }
     } else {
         es = date2es(time[0], time[1], time[2], time[3], time[4], time[5]);
-        printf("%d",time[0])
         for (i = 0; i < Nv; i++) {
             v_in[0] = indata[3*i];
             v_in[1] = indata[3*i+1];

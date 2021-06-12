@@ -5,6 +5,15 @@ import ctypes
 from datetime import datetime
 import numpy as np
 
+def xprint(msg):
+    # Print to console and logfile
+    import os
+    print(msg);
+    logfile = os.path.realpath(__file__)[0:-2] + "log"
+    if not os.path.exists(logfile):
+        with open(logfile, "w") as f: pass
+    with open(logfile, "a") as f: f.write(str(msg) + "\n")
+
 import glob
 for file in glob.glob(os.path.join(os.path.dirname(__file__), "../hxform/cxformv*")):
 	pass
@@ -33,10 +42,10 @@ ret = libcxform.cxform(
 		v_in.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),
 		v_out.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 	) 
-print(ret)
-print(time)
-print(v_in)
-print(v_out)
+xprint(ret)
+xprint(time)
+xprint(v_in)
+xprint(v_out)
 
 # Call vectorized wrapper function cxformv
 time = np.array([time], dtype=np.int32)
@@ -57,7 +66,7 @@ ret = libcxform.cxformv(
 		ctypes.c_int(indata.shape[0]),
 		ctypes.c_int(time.shape[0])
 	)
-print(ret)
-print(time)
-print(indata)
-print(outdata)
+xprint(ret)
+xprint(time)
+xprint(indata)
+xprint(outdata)
