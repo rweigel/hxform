@@ -3,14 +3,8 @@ from datetime import datetime
 
 from hxform import hxform as hx
 
-# Print to console and logfile
-import os
-logfile = os.path.realpath(__file__)[0:-2] + "log"
-if os.path.exists(logfile):
-    with open(logfile, "w") as f: pass
-def xprint(msg):
-    import os; print(msg);
-    with open(logfile, "a") as f: f.write(str(msg) + "\n")
+from hxform.xprint import Xprint as Xp
+xp = Xp() # Print to console and log file
 
 # [year, month, day, hours, minutes, seconds, x, y, z, 'car']
 # or
@@ -66,20 +60,20 @@ for d in data:
 
     time_str = datetime(int(time[0]), int(time[1]), int(time[2]), int(time[3]), int(time[4]), int(time[5])).isoformat()
 
-    xprint('Input:')
-    xprint('   ' + time_str)
+    xp.xprint('Input:')
+    xp.xprint('   ' + time_str)
     if syst == 'car':
-        xprint('   MAG           x     y     z')
+        xp.xprint('   MAG           x     y     z')
     else:
-        xprint('   MAG           r     mlat   mlon')
-    xprint('                {0:.2f}  {1:.2f}  {2:.2f}'.format(d[6], d[7], d[8]))
-    xprint('Output:')
-    xprint('   GSM                x             y             z           MLT')
-    xprint('   SpacePy:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+        xp.xprint('   MAG           r     mlat   mlon')
+    xp.xprint('                {0:.2f}  {1:.2f}  {2:.2f}'.format(d[6], d[7], d[8]))
+    xp.xprint('Output:')
+    xp.xprint('   GSM                x             y             z           MLT')
+    xp.xprint('   SpacePy:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(spacepy[0], spacepy[1], spacepy[2], spacepy[3]))
-    xprint('   Geopack:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   Geopack:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(geopack[0], geopack[1], geopack[2], geopack[3]))
-    xprint('   SSCWeb:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   SSCWeb:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(sscweb[k][0], sscweb[k][1], sscweb[k][2], sscweb[k][3]))
     #print('   Diff:       {0:.3f} {1:.3f} {2:.3f} {3:.3f}' \
     #    .format(sscweb[k][0] - spacepy[0],sscweb[k][1] - spacepy[1],

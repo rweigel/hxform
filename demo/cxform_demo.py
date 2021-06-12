@@ -5,7 +5,7 @@ import ctypes
 from datetime import datetime
 import numpy as np
 
-from xprint import Xprint as Xp
+from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 import glob

@@ -3,7 +3,7 @@
 import spacepy.coordinates as sc
 from spacepy.time import Ticktock
 
-from xprint import Xprint as Xp
+from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 input = sc.Coords([1,0,0], 'GSM', 'car')
@@ -13,4 +13,3 @@ xp.xprint(input)
 
 output = input.convert('GSE', 'car')
 xp.xprint(output)
-

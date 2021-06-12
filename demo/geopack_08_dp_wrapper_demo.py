@@ -4,7 +4,7 @@ import numpy as np
 import hxform.geopack_08_dp as geopack_08_dp
 import hxform.hxform as hx
 
-from xprint import Xprint as Xp
+from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 # Time format for geopack_08_dp is
