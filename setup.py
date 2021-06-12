@@ -14,7 +14,7 @@ ext1 = Extension(
 							'src/geopack-2008/T96_01.for'
 						])
 
-ext2 = Extension('cxform',
+ext2 = Extension('cxformv',
                 sources = [
                             'src/cxform/cxformv.c',
                             'src/cxform/cxform-manual.c',
@@ -29,7 +29,6 @@ setup(
     packages=find_packages(),
     description='Heliophysical coordinate transformations using various libraries',
 	setup_requires=['numpy'],
-    package_data={'hxform': ['*.so']},
     install_requires=install_requires,
     ext_modules=[ext1, ext2]
 )
@@ -42,7 +41,7 @@ setup(
 import os
 import glob
 import shutil
-for file in glob.glob("geopack_08_dp*"):
+for file in glob.glob("*so"):
         if os.path.exists(os.path.join("hxform", file)):
             os.remove(os.path.join("hxform", file))
         shutil.move(file, "hxform")
