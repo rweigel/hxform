@@ -46,16 +46,19 @@ python test/geopack_08_dp_wrapper_demo.py
 
 Demo of bug in SpacePy
 
-````
+```
 python test/spacepy_demo.py
 ```
 
 # Related Code
 
-* [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
-* [CXFORM (C)](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/) is a library use by [SSCWeb](https://sscweb.gsfc.nasa.gov/) for coordinate tranformations. The library is based on the algorithms in Hapgood, 1992.
-* [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python.
-* [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
+* [CXFORM (C)](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/) is a library used by [SSCWeb](https://sscweb.gsfc.nasa.gov/) for coordinate tranformations. The library is based on the algorithms in Hapgood, 1992. Python wrappers include:
+  * https://aics.readthedocs.io/api.html
+  * https://github.com/dpq/python-magnetosphere
+* [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magentic field models. Python translations and wrappers include
+  * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
+  * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
+  * [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
 
 # References
 
