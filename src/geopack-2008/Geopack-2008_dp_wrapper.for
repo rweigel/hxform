@@ -27,21 +27,6 @@ C
       RETURN
       END
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-      SUBROUTINE CONS_MAG(PARMOD,bx, by, bz)
-
-!f2py intent(in) :: PARMOD
-!f2py intent(out) :: bx, by, bz
-        REAL*8 :: PARMOD(10), bx, by, bz
-
-        bx = PARMOD(1)
-        by = PARMOD(2)
-        bz = PARMOD(3)
-        RETURN
-      END
-
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
@@ -167,177 +152,228 @@ C  RECALC_08 prepares elements of rot matrix and puts in common block
         CPS = COS(PSI)
       END IF
 
-      DO ind=1,N
+
 
 c these transformations only rely on one call.
       IF      (trans=='GEItoGEO') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GEOtoGEI') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
       ELSE IF (trans=='GEOtoGSM') THEN
+        DO ind=1,N
         CALL GEOGSW_08 (Xin(ind),Yin(ind),Zin(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSMtoGEO') THEN
+        DO ind=1,N
          CALL GEOGSW_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
       ELSE IF (trans=='GEOtoMAG') THEN
+        DO ind=1,N
         CALL GEOMAG_08 (Xin(ind),Yin(ind),Zin(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='MAGtoGEO') THEN
+        DO ind=1,N
         CALL GEOMAG_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
       ELSE IF (trans=='GSMtoGSE') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (Xin(ind),Yin(ind),Zin(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSEtoGSM') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
       ELSE  IF (trans=='MAGtoSM') THEN
+        DO ind=1,N
         CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='SMtoMAG') THEN
+        DO ind=1,N
         CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
       ELSE IF (trans=='SMtoGSM') THEN
+        DO ind=1,N
         CALL SMGSW_08 (Xin(ind),Yin(ind),Zin(ind),
      1                 Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSMtoSM') THEN
+        DO ind=1,N
         CALL SMGSW_08 (Xout(ind),Yout(ind),Zout(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
-
+        END DO
 c these transformations rely on multiple calls.
+
       ELSE IF (trans=='MAGtoGSM') THEN
+        DO ind=1,N
         CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSMtoMAG') THEN
+        DO ind=1,N
         CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEItoMAG') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='MAGtoGEI') THEN
+        DO ind=1,N
         CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEOtoSM') THEN
+        DO ind=1,N
         CALL GEOMAG_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='SMtoGEO') THEN
+        DO ind=1,N
         CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEOMAG_08 (Xout(ind),Yout(ind),Zout(ind),
      1                xtmp(ind),ytmp(ind),ztmp(ind),-1)
+        END DO
 
 
       ELSE IF (trans=='SMtoGSE') THEN
+        DO ind=1,N
         CALL SMGSW_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSEtoSM') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL SMGSW_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEOtoGSE') THEN
+        DO ind=1,N
         CALL GEOGSW_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSEtoGEO') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEOGSW_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEItoGSM') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSMtoGEI') THEN
+        DO ind=1,N
         CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEItoSM') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
         CALL MAGSM_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='SMtoGEI') THEN
+        DO ind=1,N
         CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEOMAG_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
         CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
+        END DO
 
 
       ELSE IF (trans=='GEItoGSE') THEN
+        DO ind=1,N
         CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
      1              xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
         CALL GSWGSE_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
       ELSE IF (trans=='GSEtoGEI') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL GEOGSW_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
         CALL GEIGEO_08(Xout(ind),Yout(ind),Zout(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
+        END DO
 
       ELSE IF (trans=='MAGtoGSE') THEN
+        DO ind=1,N
         CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
         CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
         CALL GSWGSE_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               Xout(ind),Yout(ind),Zout(ind), 1)
+        END DO
 
       ELSE IF (trans=='GSEtoMAG') THEN
+        DO ind=1,N
         CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
      1               Xin(ind),Yin(ind),Zin(ind), -1)
         CALL SMGSW_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
      1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
         CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
      1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
-
-      ELSE
-       PRINT *, "INCORRECT VALUE: ", trans, "FOR trans"
+        END DO
 
       END IF
-C10    CONTINUE
-      END DO
+
       END
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
