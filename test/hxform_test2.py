@@ -16,8 +16,8 @@ Y1 = (200/arr_size)*np.arange(0, arr_size, dtype=np.float64)
 Z1 = (200/arr_size)*np.arange(0, arr_size, dtype=np.float64)
 
 xforms = []
-#csys = ['GSM','GSE','GSE','MAG','GEO','GEI']
-csys = ['GSM','GSE']
+csys = ['GSM','GSE','GSE','MAG','GEO','GEI']
+#csys = ['GSM','GSE']
 for c1 in csys:
     for c2 in csys:
         if c1 != c2:
