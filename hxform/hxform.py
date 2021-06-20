@@ -3,7 +3,7 @@ from datetime import datetime
 
 def tpad(time, length=7):
     """Pad list with 3 or more elements with zeros.
-    
+
     Example:
     --------
     >>> from hxform import hxform as hx
@@ -36,7 +36,7 @@ def tpad(time, length=7):
 
 def to_doy(t):
     """Convert from [y, m, d, h, min, sec] to [y, doy, h, min, sec].
-    
+
     Example
     -------
     >>> to_doy([2000,2,1,9,9,9]) # [2000,32,9,9,9]
@@ -112,18 +112,18 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     The following 3 calls return a list with two lists of 3 elements
 
     1. Transform two vectors at same time t1
-    
+
         >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], t1, 'GSM', 'GSE')
 
     2. Transform one vector at two different times
-    
+
         >>> from hxform import hxform as hx
         >>> hx.transform(v1, [t1, t1], 'GSM', 'GSE')
 
     3. Transform two vectors, each at different times
 
-        >>> from hxform import hxform as hx    
+        >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
 
@@ -146,27 +146,28 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         if len(v.shape) == 1:
             v = np.array([v])
+        if len(t.shape) == 1:
+            t = np.array([t])
+            dtime = np.array([to_doy(t[0])], dtype=np.int32)# angel modification
+        else:
+            dtime = [] # angel modification
+            for i in range(0, t.shape[0]):
+                dtime.append(to_doy(tpad(t[i,0:5], length=5)))
+            dtime = np.array(dtime, dtype=np.int32)
+
+        # angel modification outsize is the size of the array returned by the fortran subroutine
+        if v.shape[0] <= t.shape[0]:
+            outsize = t.shape[0]
+        else:
+            outsize= v.shape[0]
 
         if ctype_in == 'sph':
             v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
-
-        if len(t.shape) == 1:
-            dtime = np.array(to_doy(t), dtype=np.int32)
-            vp = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
-        else:
-            if v.shape[0] == 1:
-                vp = np.full((t.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
-                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[0,0], v[0,1], v[0,2], trans, dtime))
-            else:
-                vp = np.full((v.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
-                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
+        # angel modification.
+        vp = geopack_08_dp.transform(v, trans, dtime, outsize)
 
         if ctype_out == 'sph':
-            vp[:,0], vp[:,1], vp[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
+            vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])# angel modification
 
     if lib == 'spacepy':
         try:
@@ -247,6 +248,10 @@ def GEOtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
 def GEOtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'GEO', 'GEI', ...)"""
     return transform(v, time, 'GEO', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+# angel modification
+def GEItoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEO', 'GEI', ...)"""
+    return transform(v, time, 'GEI', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
 def GEOtoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'GEO', 'GSE', ...)"""
