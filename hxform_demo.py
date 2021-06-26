@@ -18,17 +18,17 @@ if False:
     input2 = np.array(input2)
 
 # Single time, single vector
-output = hx.GEItoGEO(input1, time1)
+output = hx.GSMtoGSE(input1, time1)
 xp.xprint(output)
 
 # Multiple times, single vector
-output = hx.GEItoGEO(input1, time2)
+output = hx.GSMtoGSE(input1, time2)
 xp.xprint(output)
 
 # Single time, multiple vectors
-output = hx.GEItoGEO(input2, time1)
+output = hx.GSMtoGSE(input2, time1)
 xp.xprint(output)
 
 # Multiple times, multiple vectors
-output = hx.GEItoGEO(input2, time2)
+output = hx.GSMtoGSE(input2, time2)
 xp.xprint(output)
