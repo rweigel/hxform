@@ -4,11 +4,11 @@ Heliophysics coordinate transforms in Python
 
 # Overview
 
-This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field), which contains magnetospheric coordinate tranformation functions. To wrap this library, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. Arrays are passed to the Fortran wrapper function, which loops over it and calls the required Geopack functions on each iteration. This is much faster than looping over an array in Python and calling a Geopack functions on each iteration.
+This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contains magnetospheric coordinate tranformation functions. 
+
+To wrap ``Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `csform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the  wrapper function, which loops over it and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
 `hxform` also contains a wrapper to [SpacePy's coordinate tranformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
-
-Extensive testing and inter-comparison has been performed on coordinate transform calculations between this library, [SpacePy (Python)](https://spacepy.github.io/irbempy.html) (which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/), which in turn wraps Tsyganenko's Geopack (Fortran)), and [SSCWeb's coordinate calculator](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi) (which uses [CXFORM](https://spdf.gsfc.nasa.gov/pub/software/old/selected_software_from_nssdc/coordinate_transform/)).
 
 # Install
 
@@ -24,36 +24,46 @@ To test if installation was successful, execute
 python hxform_demo.py
 ```
 
-Alternative approach:
+See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/demo) directory. The result form executing the files is stored in a `.log` file.
 
-```bash
-# The following will generate many warnings
-f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
-cp *.so ../hxform
-cd ..;
-pip install -e .
-```
+# Tests
 
-# Tests, Comparisons, and Demos
+See the files in the [test](https://github.com/rweigel/hxform/tree/master/test). The result form executing the files is stored in a `.log` file.
 
-See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) and [demo](https://github.com/rweigel/hxform/tree/master/demo) directories. The result form executing the files is stored in a `.log` file.
+To run, execute
 
 ```bash
 python test/hxform_test1.py
 python test/hxform_test2.py
 ```
 
-The following demos show how [`hxform.py`](https://github.com/rweigel/hxform/blob/main/hxform/hxform.py) calls Geopack-08, cxform, and SpacePy. In general, you should not need to use the methods demonstrated except for debugging.
+# Development
+
+To build the libraries for testing, use
+
+```bash
+cd src/geopack-2008
+# The following will generate many warnings
+f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for -m geopack_08_dp
+cp *.so ../../hxform
+```
+
+```bash
+cd src/cxform/
+gcc -fPIC -shared -o cxform_wrapper.so cxform_wrapper.c cxform-manual.c cxform-auto.c
+cp *.so ../../hxform
+```
+
+The following demos show how [`hxform.py`](https://github.com/rweigel/hxform/blob/main/hxform/hxform.py) calls Geopack-08, cxform, and SpacePy. In general, you should not need to use these methods except for debugging.
 
 ```bash
 python demo/geopack_08_dp_wrapper_demo.py
 python demo/cxform_demo.py
 python demo/spacepy_demo.py
 ```
-
 # Related Code
 
-* [CXFORM (C)](https://github.com/edsantiago/cxform) is a library is based on the algorithms in Hapgood, 1992. Python wrappers include:
+* [cxform (C)](https://github.com/edsantiago/cxform) is a library is based on the algorithms in Hapgood, 1992. Python wrappers include:
   * https://aics.readthedocs.io/api.html
   * https://github.com/dpq/python-magnetosphere
   * https://github.com/bsd-conqueror/cxform
