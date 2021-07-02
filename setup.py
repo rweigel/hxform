@@ -14,9 +14,9 @@ ext1 = Extension(
                             'src/geopack-2008/T96_01.for'
                         ])
 
-ext2 = Extension('hxform.cxformv',
+ext2 = Extension('hxform.cxform_wrapper',
                 sources = [
-                            'src/cxform/cxformv.c',
+                            'src/cxform/cxform_wrapper.c',
                             'src/cxform/cxform-manual.c',
                             'src/cxform/cxform-auto.c'
                         ])

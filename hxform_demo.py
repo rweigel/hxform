@@ -4,7 +4,7 @@ from hxform import hxform as hx
 from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
-time1 = [1997,1,1]
+time1 = [1997, 1, 1]
 time2 = [time1, time1]
 input1 = [1., 0., 0.]
 input2 = [input1,input1]

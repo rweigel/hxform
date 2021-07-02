@@ -9,16 +9,16 @@ from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 import glob
-for file in glob.glob(os.path.join(os.path.dirname(__file__), "../hxform/cxformv*")):
+for file in glob.glob(os.path.join(os.path.dirname(__file__), "../hxform/cxform_wrapper*")):
 	# The name of the .so or .dll file will not be the same on all systems, so we
-	# need to find it. (For example, on one system it is cxformv.cpython-37m-darwin.so.)
+	# need to find it. (For example, on one system it is cxform_wrapper.cpython-37m-darwin.so.)
 	break
 
 libcxform_path = os.path.join(file)
 libcxform = ctypes.cdll.LoadLibrary(libcxform_path)
 
-time = [1997,1,1,0,0,0]
-v_in = np.array([1,0,0],dtype=np.double)
+time = [1997, 1, 1, 0, 0, 0]
+v_in = np.array([1, 1, 0], dtype=np.double)
 v_out = np.full(3, np.nan, dtype=np.double)
 
 # Call native cxform function directly
@@ -43,7 +43,7 @@ xp.xprint(time)
 xp.xprint(v_in)
 xp.xprint(v_out)
 
-# Call vectorized wrapper function cxformv
+# Call vectorized wrapper function cxform_wrapper
 time = np.array([time], dtype=np.int32)
 #time = np.array([time,time], dtype=np.int32)
 
@@ -53,7 +53,7 @@ indata = np.array([v_in], dtype=np.double)
 outdata = np.array([v_out,v_out], dtype=np.double)
 libcxform = ctypes.cdll.LoadLibrary(libcxform_path)
 
-ret = libcxform.cxformv(
+ret = libcxform.cxform_wrapper(
 		ctypes.c_void_p(indata.ctypes.data),
 		ctypes.c_void_p(time.ctypes.data),
 		ctypes.c_char_p(str.encode('GSM')),
