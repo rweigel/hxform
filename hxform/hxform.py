@@ -194,26 +194,28 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
+        if len(t.shape) == 1:
+            t = np.array([t])
+            dtime = np.array([to_doy(t[0])], dtype=np.int32)# angel modification
+        else:
+            dtime = [] # angel modification
+            for i in range(0, t.shape[0]):
+                dtime.append(to_doy(tpad(t[i,0:5], length=5)))
+            dtime = np.array(dtime, dtype=np.int32)
+
+        if v.shape[0] <= t.shape[0]:
+            outsize = t.shape[0]
+        else:
+            outsize= v.shape[0]
+
         if ctype_in == 'sph':
             v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
-        if len(t.shape) == 1:
-            dtime = np.array(to_doy(t), dtype=np.int32)
-            vp = np.column_stack(geopack_08_dp.transform(v[:,0], v[:,1], v[:,2], trans, dtime))
-        else:
-            if v.shape[0] == 1:
-                vp = np.full((t.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
-                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[0,0], v[0,1], v[0,2], trans, dtime))
-            else:
-                vp = np.full((v.shape[0], 3), np.nan)
-                for i in range(0, t.shape[0]):
-                    dtime = np.array(to_doy(tpad(t[i,0:5], length=5)), dtype=np.int32)
-                    vp[i,:] = np.column_stack(geopack_08_dp.transform(v[i,0], v[i,1], v[i,2], trans, dtime))
+        vp = geopack_08_dp.transform(v, trans, dtime, outsize)
 
         if ctype_out == 'sph':
-            vp[:,0], vp[:,1], vp[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
+            vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])# angel modification
+
 
     if lib == 'spacepy':
         try:
@@ -287,6 +289,27 @@ def MAGtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     return transform(v, time, 'MAG', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
 
+def GEItoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEI', 'MAG', ...)"""
+    return transform(v, time, 'GEI', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GEItoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEI', 'GEO', ...)"""
+    return transform(v, time, 'GEI', 'GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GEItoGSE(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEI', 'GSE', ...)"""
+    return transform(v, time, 'GEI', 'GSE', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GEItoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEI', 'GSM', ...)"""
+    return transform(v, time, 'GEI', 'GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GEItoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GEI', 'SM', ...)"""
+    return transform(v, time, 'GEI', 'SM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+
 def GEOtoMAG(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'GEO', 'MAG', ...)"""
     return transform(v, time, 'GEO', 'MAG', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
@@ -319,6 +342,10 @@ def GSEtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
 def GSEtoGEO(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'GSE', 'GEO', ...)"""
     return transform(v, time, 'GSE','GEO', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+
+def GSEtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
+    """Equivalent to transform(v, time, 'GSE', 'GEO', ...)"""
+    return transform(v, time, 'GSE','GSM', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
 def GSEtoSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'GSE', 'SM', ...)"""

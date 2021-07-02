@@ -1630,9 +1630,8 @@ c      CALL EXNAME (IOPT,PARMOD,PSI,X,Y,Z,BXGSW,BYGSW,BZGSW)
 c      CALL INNAME (X,Y,Z,HXGSW,HYGSW,HZGSW)
       IF(EXNAME == 't96_01') THEN
         CALL T96_01(IOPT, PARMOD, PSI, X, Y, Z, BXGSW, BYGSW, BZGSW)
-      ELSE IF (EXNAME == 'cons_mag') THEN
-        CALL CONS_MAG(PAMOD, BXGSW, BYGSW, BZGSW)
       END IF
+      
       IF (INNAME == 'dip_08') THEN
         CALL DIP_08 (X,Y,Z,HXGSW, HYGSW, HZGSW)
       ELSE IF (INNAME == 'IGRF_GSW_08') THEN
@@ -1812,7 +1811,7 @@ C
       DIMENSION XX(LMAX),YY(LMAX),ZZ(LMAX), PARMOD(10)
       COMMON /GEOPACK1/ AA(12),DD,BB(21)
 C      EXTERNAL EXNAME,INNAME
-      CHARACTER(30) :: EXNAME, INNAME 
+      CHARACTER(30) :: EXNAME, INNAME
 C
       L=0
       NREV=0
@@ -2162,6 +2161,3 @@ C                                           THE MAGNETOSPHERE
 C
 C===================================================================================
 C
-
-
-
