@@ -127,6 +127,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
 
+    assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
     in_type = type(v)
 
     list_of_arrays = False
@@ -139,6 +140,52 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if len(t.shape) > 1 and len(v.shape) > 1:
         if t.shape[0] != v.shape[0]:
             raise ValueError("t and v cannot be different lengths")
+
+    if lib == 'cxform':
+        import os
+        import glob
+        import ctypes
+        this_script = os.path.join(os.path.dirname(__file__),
+                                "../hxform/cxform_wrapper*")
+
+        for lib_file in glob.glob(this_script):
+            # The name of the .so or .dll file will not be the same on all
+            # systems, so we need to find it. (For example, on one system
+            # it is cxform_wrapper.cpython-37m-darwin.so.)
+            # TODO: Find a better way to do this.
+            break
+        lib_path = os.path.join(lib_file)
+        lib_obj = ctypes.cdll.LoadLibrary(lib_path)
+
+        assert(len(t.shape) <= 2 and len(v.shape) <= 2)
+
+        v = np.array(v)
+        if len(v.shape) == 1:
+            v = np.array([v])
+
+        time = np.array(time, dtype=np.int32)
+        if len(time.shape) == 1:
+            Nt = 1
+        else:
+            Nt = time.shape[0]
+
+        if ctype_in == 'sph':
+            v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
+
+        vp = np.full(v.shape, np.nan)
+
+        ret = lib_obj.cxform_wrapper(
+                ctypes.c_void_p(v.ctypes.data),
+                ctypes.c_void_p(time.ctypes.data),
+                ctypes.c_char_p(str.encode(csys_in)),
+                ctypes.c_char_p(str.encode(csys_out)),
+                ctypes.c_void_p(vp.ctypes.data),
+                ctypes.c_int(v.shape[0]),
+                ctypes.c_int(int(Nt))
+            )
+
+        if ctype_out == 'sph':
+            vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
     if lib == 'geopack_08_dp':
         import hxform.geopack_08_dp as geopack_08_dp

@@ -42,12 +42,16 @@ for d in data:
         MLT_sp = hx.MAGtoMLT(pos, time, csys='car', lib='spacepy')
         v_gp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(pos, time, csys='car', lib='geopack_08_dp')
+        v_cx = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='cxform')
+        MLT_cx = hx.MAGtoMLT(pos, time, csys='car', lib='cxform')
     elif syst == 'sph':
         r, mlat, mlong = d[6:9]
         v_sp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='spacepy')
         MLT_sp = hx.MAGtoMLT(mlong, time, csys='sph', lib='spacepy')
         v_gp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(mlong, time, csys='sph', lib='geopack_08_dp')
+        v_cx = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='cxform')
+        MLT_cx = hx.MAGtoMLT(mlong, time, csys='sph', lib='cxform')
     else:
         print('INVALID COORDINATE TYPE. Use "car" or "sph"')
     UT = time[3] + time[4]/60.+ time[5]/3600.
@@ -56,6 +60,7 @@ for d in data:
     # the first element of MLT will show up in the print statements that follow
     spacepy = np.append(v_sp, MLT_sp)
     geopack = np.append(v_gp, MLT_gp)
+    cxform = np.append(v_cx, MLT_cx)
     #print(spacepy.shape)
 
     time_str = datetime(int(time[0]), int(time[1]), int(time[2]), int(time[3]), int(time[4]), int(time[5])).isoformat()
@@ -73,6 +78,8 @@ for d in data:
         .format(spacepy[0], spacepy[1], spacepy[2], spacepy[3]))
     xp.xprint('   Geopack:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(geopack[0], geopack[1], geopack[2], geopack[3]))
+    xp.xprint('   cxform:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+        .format(cxform[0], cxform[1], cxform[2], cxform[3]))
     xp.xprint('   SSCWeb:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(sscweb[k][0], sscweb[k][1], sscweb[k][2], sscweb[k][3]))
     #print('   Diff:       {0:.3f} {1:.3f} {2:.3f} {3:.3f}' \
