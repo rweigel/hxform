@@ -1,0 +1,31 @@
+1625,1641c1625,1626
+<       
+< C CALL EXNAME and CALL INNAME have been commented out because they kept producing
+< C errors when trying to compile with F2PY. EXNAME and INNAME used to be function
+< C variables. They have been replaced by strings which trigger the appropriate
+< C function calls.     - ANGEL GUTARRA-LEON
+< c      CALL EXNAME (IOPT,PARMOD,PSI,X,Y,Z,BXGSW,BYGSW,BZGSW)
+< c      CALL INNAME (X,Y,Z,HXGSW,HYGSW,HZGSW)
+<       CHARACTER(30) :: EXNAME, INNAME
+<       IF(EXNAME == 't96_01') THEN
+<         CALL T96_01(IOPT, PARMOD, PSI, X, Y, Z, BXGSW, BYGSW, BZGSW)
+<       END IF
+<       
+<       IF (INNAME == 'dip_08') THEN
+<         CALL DIP_08 (X,Y,Z,HXGSW, HYGSW, HZGSW)
+<       ELSE IF (INNAME == 'IGRF_GSW_08') THEN
+<         CALL IGRF_GSW_08 (X,Y,Z, HXGSW, HYGSW, HZGSW)
+<       END IF
+---
+>       CALL EXNAME (IOPT,PARMOD,PSI,X,Y,Z,BXGSW,BYGSW,BZGSW)
+>       CALL INNAME (X,Y,Z,HXGSW,HYGSW,HZGSW)
+1682,1683c1667
+<       CHARACTER(30) :: EXNAME, INNAME
+< C      EXTERNAL EXNAME,INNAME
+---
+>       EXTERNAL EXNAME,INNAME
+1814,1815c1798
+< C      EXTERNAL EXNAME,INNAME
+<       CHARACTER(30) :: EXNAME, INNAME
+---
+>       EXTERNAL EXNAME,INNAME
