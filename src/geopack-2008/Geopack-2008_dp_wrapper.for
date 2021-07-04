@@ -122,19 +122,19 @@ c these transformations only rely on one call.
         CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
         END DO
-      ELSE IF (Nv.EQ.1) THEN
+        ELSE IF (Nv.EQ.1) THEN
         DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GEIGEO_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
         END DO
-      ELSE
+        ELSE
         CALL RECALC_08_W (datetime(1,:))
         DO i=1,Nv
           CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
         END DO
-      END IF
+        END IF
 
 
       ELSE IF (trans=='GEOtoGEI') THEN
@@ -158,164 +158,715 @@ c these transformations only rely on one call.
           END DO
         END IF
 
-C      ELSE IF (trans=='GEOtoGSM') THEN
-C        CALL GEOGSW_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSMtoGEO') THEN
-C         CALL GEOGSW_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C
-C      ELSE IF (trans=='GEOtoMAG') THEN
-C        CALL GEOMAG_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='MAGtoGEO') THEN
-C        CALL GEOMAG_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C
-C      ELSE IF (trans=='GSMtoGSE') THEN
-C        CALL GSWGSE_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSEtoGSM') THEN
-C        CALL GSWGSE_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C
-C      ELSE  IF (trans=='MAGtoSM') THEN
-C        CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='SMtoMAG') THEN
-C        CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C
-C      ELSE IF (trans=='SMtoGSM') THEN
-C        CALL SMGSW_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1                 Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSMtoSM') THEN
-C        CALL SMGSW_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C
+      ELSE IF (trans=='GEOtoGSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+
+      ELSE IF (trans=='GSMtoGEO') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        END IF
+
+
+
+
+      ELSE IF (trans=='GEOtoMAG') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+
+      ELSE IF (trans=='MAGtoGEO') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        END IF
+
+
+      ELSE IF (trans=='GSMtoGSE') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+      ELSE IF (trans=='GSEtoGSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        END IF
+
+
+
+      ELSE IF (trans=='MAGtoSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+      ELSE IF (trans=='SMtoMAG') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        END IF
+
+
 C these transformations rely on multiple calls.
-C      ELSE IF (trans=='MAGtoGSM') THEN
-C        CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSMtoMAG') THEN
-C        CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEItoMAG') THEN
-C        CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='MAGtoGEI') THEN
-C        CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEOtoSM') THEN
-C        CALL GEOMAG_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='SMtoGEO') THEN
-C        CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEOMAG_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1                xtmp(ind),ytmp(ind),ztmp(ind),-1)
-C
-C
-C      ELSE IF (trans=='SMtoGSE') THEN
-C        CALL SMGSW_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSEtoSM') THEN
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL SMGSW_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEOtoGSE') THEN
-C        CALL GEOGSW_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSEtoGEO') THEN
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEOGSW_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEItoGSM') THEN
-C        CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSMtoGEI') THEN
-C        CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEItoSM') THEN
-C        CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GEOMAG_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
-C        CALL MAGSM_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='SMtoGEI') THEN
-C        CALL MAGSM_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEOMAG_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C        CALL GEIGEO_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
-C
-C
-C      ELSE IF (trans=='GEItoGSE') THEN
-C        CALL GEIGEO_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1              xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL GEOGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
-C        CALL GSWGSE_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C      ELSE IF (trans=='GSEtoGEI') THEN
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL GEOGSW_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C        CALL GEIGEO_08(Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
-C
-C      ELSE IF (trans=='MAGtoGSE') THEN
-C        CALL MAGSM_08 (Xin(ind),Yin(ind),Zin(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), 1)
-C        CALL SMGSW_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), 1)
-C        CALL GSWGSE_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               Xout(ind),Yout(ind),Zout(ind), 1)
-C
-C      ELSE IF (trans=='GSEtoMAG') THEN
-C        CALL GSWGSE_08 (xtmp(ind),ytmp(ind),ztmp(ind),
-C     1               Xin(ind),Yin(ind),Zin(ind), -1)
-C        CALL SMGSW_08 (xtmp2(ind),ytmp2(ind),ztmp2(ind),
-C     1               xtmp(ind),ytmp(ind),ztmp(ind), -1)
-C        CALL MAGSM_08 (Xout(ind),Yout(ind),Zout(ind),
-C     1               xtmp2(ind),ytmp2(ind),ztmp2(ind), -1)
-C
-C      ELSE
-C       PRINT *, "INCORRECT VALUE: ", trans, "FOR trans"
-C
+
+      ELSE IF (trans=='MAGtoGSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+      ELSE IF (trans=='GSMtoMAG') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+
+
+      ELSE IF (trans=='GEItoMAG') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='MAGtoGEI') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+
+      ELSE IF (trans=='GEOtoSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='SMtoGEO') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+
+
+
+      ELSE IF (trans=='SMtoGSE') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='GSEtoSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+
+
+
+      ELSE IF (trans=='GEOtoGSE') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='GSEtoGEO') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+
+
+
+
+      ELSE IF (trans=='GEItoGSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='GSMtoGEI') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp, ytmp, ztmp,-1)
+          END DO
+        END IF
+
+C start of three subroutine calls for transformations
+
+      ELSE IF (trans=='GEItoSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL MAGSM_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL MAGSM_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOMAG_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL MAGSM_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='SMtoGEI') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        END IF
+
+
+
+
+      ELSE IF (trans=='GEItoGSE') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL GEOGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='GSEtoGEI') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL GEOGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        END IF
+
+
+
+      ELSE IF (trans=='MAGtoGSE') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   xtmp, ytmp, ztmp, 1)
+          CALL SMGSW_08(xtmp, ytmp, ztmp,
+     *                   xtmp2, ytmp2, ztmp2,1)
+          CALL GSWGSE_08(xtmp2, ytmp2, ztmp2,
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+      ELSE IF (trans=='GSEtoMAG') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL GSWGSE_08(xtmp, ytmp, ztmp,
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          CALL SMGSW_08(xtmp2, ytmp2, ztmp2,
+     *                   xtmp, ytmp, ztmp,-1)
+          CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   xtmp2, ytmp2, ztmp2,-1)
+          END DO
+        END IF
+
       END IF
 
       END

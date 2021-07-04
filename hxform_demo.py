@@ -18,8 +18,7 @@ if False:
     input2 = np.array(input2)
 
 # Single time, single vector
-#output = hx.GSMtoGSE(input1, time1)
-output = hx.GEItoGEO(input1, time1, lib='geopack_08_dp')
+output = hx.GSMtoGSE(input1, time1)
 xp.xprint(output)
 
 # Multiple times, single vector
