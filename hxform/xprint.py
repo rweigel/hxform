@@ -7,8 +7,7 @@ class Xprint:
     def __init__(self):
         fname = stack()[1][1]
         logfile = os.path.realpath(fname[0:-2]) + "log"
-        if not os.path.exists(logfile):
-            with open(logfile, "w") as f: pass
+        with open(logfile, "w") as f: pass
         self.logfile = logfile
 
     def xprint(self, msg):
