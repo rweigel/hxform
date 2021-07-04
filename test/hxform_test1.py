@@ -23,6 +23,30 @@ data = [
 # Can only manually enter spherical coordinates for MAG
 
 # GSM [x, y, z, MLT]
+# For the first point, enter
+# Time = 2003 324 17:46:00
+# X = 1.    Lat: 0.
+# Y = 0.    Lon: 0.
+# Z = 0.    R: 1.
+# Then click "GM" button (GM = MAG coordinate system)
+# Output is
+"""
+TIME: 2003 324  7.00000 
+              Input:  GM                                                        
+
+ Radial distance     1.00 
+          Lat    Long      X       Y       Z   hh.hhhhh 
+ GEI    -10.29   92.13   -0.04    0.98   -0.18 
+ J2000  -10.29   92.08   -0.04    0.98   -0.18 
+ GEO    -10.29  -71.76    0.31   -0.93   -0.18  2.21613 
+ GM       0.00    0.00    1.00    0.00    0.00  2.64457 
+ GSE    -33.71 -145.02   -0.68   -0.48   -0.56  2.33229 
+ GSM    -20.97 -136.87   -0.68   -0.64   -0.36 
+ SM      -0.00 -140.33   -0.77   -0.64   -0.00  2.64457 
+"""
+# The hh.hhhh on the GM line is MLT
+# The X, Y, Z values for GSM are MAG X,Y,Z = 1,0,0 converted to GSM
+
 sscweb = [
             [-0.68, -0.64, -0.36,  2.64457],
             [ 0.94,  0.30,  0.16, 13.16680],
