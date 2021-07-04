@@ -13,11 +13,11 @@ int cxform_wrapper(const void *indatav, const void *timev, const char *from, con
     double *outdata = (double *) outdatav;
 
     if (debug) printf("cxform_wrapper(): %s to %s\n", from, to);
-    if (debug) printf("cxform_wrapper(): es = %d\n", es);
     if (Nv == Nt) {
         for (i = 0; i < Nv; i++) {
             if (debug) printf("cxform_wrapper(): time = [%d %d %d %d %d %d]\n", time[6*i], time[6*i+1], time[6*i+2], time[6*i+3], time[6*i+4], time[6*i+5]);
             es = date2es(time[6*i], time[6*i+1], time[6*i+2], time[6*i+3], time[6*i+4], time[6*i+5]);
+            if (debug) printf("cxform_wrapper(): es = %d\n", es);
             v_in[0] = indata[3*i];
             v_in[1] = indata[3*i+1];
             v_in[2] = indata[3*i+2];
@@ -40,7 +40,9 @@ int cxform_wrapper(const void *indatav, const void *timev, const char *from, con
         v_in[1] = indata[1];
         v_in[2] = indata[2];
         for (i = 0; i < Nt; i++) {
+            if (debug) printf("cxform_wrapper(): time = [%d %d %d %d %d %d]\n", time[6*i], time[6*i+1], time[6*i+2], time[6*i+3], time[6*i+4], time[6*i+5]);
             es = date2es(time[6*i], time[6*i+1], time[6*i+2], time[6*i+3], time[6*i+4], time[6*i+5]);
+            if (debug) printf("cxform_wrapper(): es = %d\n", es);
             ret = cxform(from, to, es, indata, v_out);
             if (ret != 0) {return ret;}
             outdata[3*i] = v_out[0];
@@ -48,7 +50,9 @@ int cxform_wrapper(const void *indatav, const void *timev, const char *from, con
             outdata[3*i+2] = v_out[2];
         }
     } else {
+        if (debug) printf("cxform_wrapper(): time = [%d %d %d %d %d %d]\n", time[6*i], time[6*i+1], time[6*i+2], time[6*i+3], time[6*i+4], time[6*i+5]);
         es = date2es(time[0], time[1], time[2], time[3], time[4], time[5]);
+        if (debug) printf("cxform_wrapper(): es = %d\n", es);
         for (i = 0; i < Nv; i++) {
             v_in[0] = indata[3*i];
             v_in[1] = indata[3*i+1];
