@@ -163,14 +163,23 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             v = np.array([v])
 
         if len(time.shape) == 1:
-            Nt = 1
-        else:
-            Nt = time.shape[0]
+            time = np.array([time])
+
+        Nt = time.shape[0]
+
+        if time.shape[1] < 3:
+            raise ValueError("At least year, month, and day must be given for time.")
 
         if ctype_in == 'sph':
             v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
         vp = np.full(v.shape, np.nan)
+
+        nz = time.shape[1]
+        if nz != 6:
+            # Pad time. TODO: Do this in wrapper so extra memory is not needed.
+            tmp = np.zeros((time.shape[0], 6-nz), dtype=np.int32)
+            time = np.concatenate((time, tmp), 1)
 
         ret = lib_obj.cxform_wrapper(
                 ctypes.c_void_p(v.ctypes.data),

@@ -1,6 +1,9 @@
 import numpy as np
 from datetime import datetime
 
+import warnings
+warnings.filterwarnings("ignore", message="Leapseconds.*")
+
 from hxform import hxform as hx
 
 from hxform.xprint import Xprint as Xp
