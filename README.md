@@ -44,7 +44,7 @@ To build the libraries for testing, use
 ```bash
 cd src/geopack-2008
 # The following will generate many warnings
-f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for -m geopack_08_dp
+f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
 cp *.so ../../hxform
 ```
 
