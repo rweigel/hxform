@@ -23,7 +23,7 @@ ext2 = Extension('hxform.cxform_wrapper',
 
 setup(
     name='hxform',
-    version='0.0.3',
+    version='0.0.4',
     author='Angel Gutarra-Leon, Bob Weigel, Gary Quaresima',
     author_email='rweigel@gmu.edu',
     packages=find_packages(),

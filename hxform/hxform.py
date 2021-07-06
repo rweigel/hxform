@@ -267,10 +267,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
-        if len(t.shape) == 1:
-            t = np.array([t])
+        if len(time.shape) == 1:
+            time = np.array([time])
 
-        dtime = np.array(to_doy(t))
+        dtime = np.array(to_doy(time))
 
         if v.shape[0] <= time.shape[0]:
             outsize = time.shape[0]
