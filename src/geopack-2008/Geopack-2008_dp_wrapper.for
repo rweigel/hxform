@@ -201,6 +201,49 @@ c these transformations only rely on one call.
           END DO
         END IF
 
+      ELSE IF (trans=='SMtoGSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          END DO
+        END IF
+
+
+      ELSE IF (trans=='GSMtoSM') THEN
+        IF (Nv.EQ.Nt) THEN
+          DO i=1,Nv
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        ELSE IF (Nv.EQ.1) THEN
+          DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+          END DO
+        ELSE
+          CALL RECALC_08_W (datetime(1,:))
+          DO i=1,Nv
+          CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
+     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+          END DO
+        END IF
+
 
 
 
