@@ -1,9 +1,10 @@
 import numpy as np
 from datetime import datetime
+import time as tm # angel addon for checking timing.py
 
 def tpad(time, length=7):
     """Pad list with 3 or more elements with zeros.
-    
+
     Example:
     --------
     >>> from hxform import hxform as hx
@@ -15,35 +16,100 @@ def tpad(time, length=7):
     in_type = type(time)
 
     # TODO: Check that time is valid
-    time = list(time)
+    time = np.array(time)
 
     assert(len(time) > 2)
 
-    if len(time) > length:
-        time = time[0:length]
+    if len(time.shape) == 1:
+        if len(time) > length:
+            time = time[0:length]
+        else:
+            pad = length - len(time)
+            time = np.pad(time, (0,pad), 'constant', constant_values=0)
     else:
-        pad = length - len(time)
-        time = time + pad*[0]
+        if len(time[0]) > length:
+            time = time[:,0:length]
+        else:
+            pad = length - len(time)
+            time = np.pad(time, ((0,0),(0,pad)), 'constant', constant_values=0)
+
 
 
     if in_type == np.ndarray:
-        return np.array(time)
-    elif in_type == tuple:
-        return tuple(time)
-    else:
         return time
+    elif in_type == tuple:
+        return tuple(map(tuple,time))
+    else:
+        return list(map(list,time))
 
+
+def  is_leap_year(year):
+    if isinstance(year, int):
+        if year % 100 == 0:
+            return year % 400 == 0
+        return year % 4 == 0
+    else:
+        year = np.array(year)
+        leap400 = np.where(year%400==0, True,False)
+        leap100 = np.where(year%100==0, True, False)
+        leap4 = np.where(year%4==0, True, False)
+        cor1 = np.where(leap100, False, leap4)
+        return np.where(leap400, True, cor1)
+
+def doy(date):
+    """
+    doy([2021,7,5])  ->  186
+    doy([[2000,9,30],[1900,9,30],[1980,5,5]]) -> [274, 273. 126]
+    """
+    date = np.array(date)
+
+    if len(date.shape) == 1:
+        year, month, day = date[0], date[1], date[2]
+
+        if is_leap_year(year): K = 1
+        else: K = 2
+    else:
+        year, month, day = date[:,0], date[:,1], date[:,2]
+
+        K = np.where(is_leap_year(year),1, 2)
+
+    N = np.fix((275* month) / 9.0) - K * np.fix((month + 9) / 12.0) + day - 30
+
+    return N.astype(int)
 
 def to_doy(t):
     """Convert from [y, m, d, h, min, sec] to [y, doy, h, min, sec].
-    
+
     Example
     -------
     >>> to_doy([2000,2,1,9,9,9]) # [2000,32,9,9,9]
     """
-    t = tuple(np.array(tpad(t, length=6), dtype=np.int32))
-    day_of_year = datetime(*t).timetuple().tm_yday
-    return [t[0], day_of_year, t[3], t[4], t[5]]
+    in_type = type(t)
+
+    t = np.array(t)
+
+    if len(t.shape) == 1:
+        pad = 6 - len(t)
+        t = np.pad(t, (0,pad), 'constant', constant_values=0)
+    else:
+        pad = 6 - len(t[0])
+        t = np.pad(t, ((0,0),(0,pad)), 'constant', constant_values=0)
+
+    if len(t.shape) == 1:
+        day_of_year = datetime(*t).timetuple().tm_yday
+        doy_list = np.array([t[0], day_of_year, t[3], t[4], t[5]])
+    else:
+        day_of_year = doy(t[:,:3])
+        t = np.column_stack((t[:,0], day_of_year, t[:,3], t[:,4], t[:,5]))
+
+
+    if in_type == np.ndarray:
+        return t
+    elif in_type == tuple:
+        return tuple(t.tolist()) #tuple(map(tuple,t))
+    else:
+        return t.tolist()
+
 
 
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
@@ -112,18 +178,18 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     The following 3 calls return a list with two lists of 3 elements
 
     1. Transform two vectors at same time t1
-    
+
         >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], t1, 'GSM', 'GSE')
 
     2. Transform one vector at two different times
-    
+
         >>> from hxform import hxform as hx
         >>> hx.transform(v1, [t1, t1], 'GSM', 'GSE')
 
     3. Transform two vectors, each at different times
 
-        >>> from hxform import hxform as hx    
+        >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
 
@@ -201,14 +267,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
-        if len(time.shape) == 1:
-            time = np.array([time])
-            dtime = np.array([to_doy(time[0])], dtype=np.int32)
-        else:
-            dtime = [] # angel modification
-            for i in range(0, time.shape[0]):
-                dtime.append(to_doy(tpad(time[i,0:5], length=5)))
-            dtime = np.array(dtime, dtype=np.int32)
+        if len(t.shape) == 1:
+            t = np.array([t])
+
+        dtime = np.array(to_doy(t))
 
         if v.shape[0] <= time.shape[0]:
             outsize = time.shape[0]

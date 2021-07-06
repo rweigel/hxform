@@ -1,5 +1,6 @@
 import time
 import numpy as np
+from numpy import matlib
 from hxform import hxform as hx
 
 import warnings
@@ -27,7 +28,9 @@ for lib in libs:
 xp.xprint(60*'-')
 xp.xprint('t.size = ({0:d}, 6); p_in.size = ({0:d}, 3)'.format(N))
 xp.xprint('time     lib')
-t = np.matlib.repmat(t, N, 3)
+
+t = matlib.repmat(t, N, 1)
+
 for lib in libs:
     tic = time.time()
     p_out = hx.MAGtoGSM(p_in, t, ctype_in='car', ctype_out='car', lib=lib)
@@ -47,4 +50,3 @@ if False:
         xp.xprint('{0:.3f}   {1:s}'.format(toc-tic, lib))
 
 xp.xprint(60*'-')
-
