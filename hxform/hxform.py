@@ -200,12 +200,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if isinstance(v[0], np.ndarray) and isinstance(v, list):
         list_of_arrays = True
 
-    v = np.array(v)
-    t = np.array(time)
+    v = np.array(v, dtype=np.double)
+    time = np.array(time, dtype=np.int32)
 
-    if len(t.shape) > 1 and len(v.shape) > 1:
-        if t.shape[0] != v.shape[0]:
-            raise ValueError("t and v cannot be different lengths")
+    if len(time.shape) > 1 and len(v.shape) > 1:
+        if time.shape[0] != v.shape[0]:
+            raise ValueError("time and v cannot be different lengths")
 
     if lib == 'cxform':
         import os
@@ -223,22 +223,29 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         lib_path = os.path.join(lib_file)
         lib_obj = ctypes.cdll.LoadLibrary(lib_path)
 
-        assert(len(t.shape) <= 2 and len(v.shape) <= 2)
+        assert(len(time.shape) <= 2 and len(v.shape) <= 2)
 
-        v = np.array(v)
         if len(v.shape) == 1:
             v = np.array([v])
 
-        time = np.array(time, dtype=np.int32)
         if len(time.shape) == 1:
-            Nt = 1
-        else:
-            Nt = time.shape[0]
+            time = np.array([time])
+
+        Nt = time.shape[0]
+
+        if time.shape[1] < 3:
+            raise ValueError("At least year, month, and day must be given for time.")
 
         if ctype_in == 'sph':
             v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
         vp = np.full(v.shape, np.nan)
+
+        nz = time.shape[1]
+        if nz != 6:
+            # Pad time. TODO: Do this in wrapper so extra memory is not needed.
+            tmp = np.zeros((time.shape[0], 6-nz), dtype=np.int32)
+            time = np.concatenate((time, tmp), 1)
 
         ret = lib_obj.cxform_wrapper(
                 ctypes.c_void_p(v.ctypes.data),
@@ -265,10 +272,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         dtime = np.array(to_doy(t))
 
-        if v.shape[0] <= t.shape[0]:
-            outsize = t.shape[0]
+        if v.shape[0] <= time.shape[0]:
+            outsize = time.shape[0]
         else:
-            outsize= v.shape[0]
+            outsize = v.shape[0]
 
         if ctype_in == 'sph':
             v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
@@ -276,7 +283,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         vp = geopack_08_dp.transform(v, trans, dtime, outsize)
 
         if ctype_out == 'sph':
-            vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])# angel modification
+            vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
 
     if lib == 'spacepy':
@@ -292,22 +299,22 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             print(exception, False)
             print(exception.__class__.__name__ + ": " + exception.message)
 
-        if len(t.shape) == 1 and len(v.shape) > 1:
-            t = numpy.matlib.repmat(t, v.shape[0], 1)
-        if len(v.shape) == 1 and len(t.shape) > 1:
-            v = numpy.matlib.repmat(v, t.shape[0], 1)
+        if len(time.shape) == 1 and len(v.shape) > 1:
+            time = numpy.matlib.repmat(time, v.shape[0], 1)
+        if len(v.shape) == 1 and len(time.shape) > 1:
+            v = numpy.matlib.repmat(v, time.shape[0], 1)
         if len(v.shape) == 1:
             v = np.array([v])
 
         cvals = sc.Coords(v, csys_in, ctype_in)
 
-        if len(t.shape) == 1:
+        if len(time.shape) == 1:
             # SpacePy requires time values to be strings with second precision
-            t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(t, length=6))
+            t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(time, length=6))
         else:
             t_str = []
-            for i in range(t.shape[0]):
-                t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(t[i,:], length=6)))
+            for i in range(time.shape[0]):
+                t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(tpad(time[i,:], length=6)))
             t_str = np.array(t_str)
 
         cvals.ticks = Ticktock(t_str, 'ISO')
@@ -315,7 +322,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         vp = newcoord.data
 
-    if len(t.shape) == 1 and len(v.shape) == 1:
+    if len(time.shape) == 1 and len(v.shape) == 1:
         vp = vp[0, :]
 
     if in_type == np.ndarray:
@@ -559,7 +566,7 @@ def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp'):
         else:
             phi = np.arctan2(pos[:, 1], pos[:, 0])
 
-    subsol_pt = transform(np.array([1, 0, 0]), time, 'GSM', 'MAG', lib=lib)
+    subsol_pt = transform(np.array([1., 0., 0.]), time, 'GSM', 'MAG', lib=lib)
 
     if len(subsol_pt.shape) == 1:
         phi_cds = np.arctan2(subsol_pt[1], subsol_pt[0])

@@ -1,34 +1,330 @@
 ------------------------------------------------------------
-transform:   GSMtoGSE
-# of points: 1000
-First input: [0.00000000, 0.00000000, 0.00000000]
-Last input:  [199.80000000, 199.80000000, 199.80000000]
-Results:
-    SpacePy
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [199.80000000, 246.55606868, 138.03860715]
-      Run time: 3.94e-01 s
-    Geopack-08 double precision
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [199.80000000, 246.60523715, 137.93453887]
-      Run time: 1.93e-03 s
-SpacePy/Geopack-08-dp time: 204.4
-Max output difference: [5.68e-14, 4.92e-02, 0.00e+00]
+Transform: GEItoGEO
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 128.3
+cxform/Geopack-08-dp time:  0.1
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [5.77e-12, -1.31e-12, 0.00e+00]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.89e-05, 8.80e-06, 0.00e+00]
 ------------------------------------------------------------
 ------------------------------------------------------------
-transform:   GSEtoGSM
-# of points: 1000
-First input: [0.00000000, 0.00000000, 0.00000000]
-Last input:  [199.80000000, 199.80000000, 199.80000000]
-Results:
-    SpacePy
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [199.80000000, 138.03051813, 246.54210266]
-      Run time: 2.88e-02 s
-    Geopack-08 double precision
-      First output: [0.00000000, 0.00000000, 0.00000000]
-      Last output:  [199.80000001, 137.93453886, 246.60523715]
-      Run time: 1.78e-04 s
-SpacePy/Geopack-08-dp time: 162.2
-Max output difference: [1.22e-08, 0.00e+00, 6.31e-02]
+Transform: GEItoGSE
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.3
+cxform/Geopack-08-dp time:  5.6
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.33e-10, 2.65e-05, 7.06e-06]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-5.03e-06, 3.90e-07, 1.23e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEItoGSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 9.5
+cxform/Geopack-08-dp time:  5.0
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.33e-10, 3.21e-04, -4.54e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-5.03e-06, 2.61e-06, 7.89e-07]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEItoMAG
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.9
+cxform/Geopack-08-dp time:  6.1
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.43e-04, 2.10e-03, -3.58e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [3.60e-06, -4.82e-05, -2.44e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEItoSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 14.5
+cxform/Geopack-08-dp time:  6.6
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [7.92e-04, 3.21e-04, -3.58e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.28e-06, 2.61e-06, -2.44e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEOtoGEI
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.2
+cxform/Geopack-08-dp time:  10.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.31e-12, 5.77e-12, 0.00e+00]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [8.80e-06, -3.89e-05, 0.00e+00]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEOtoGSE
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.7
+cxform/Geopack-08-dp time:  8.6
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.02e-10, 2.36e-05, 1.52e-05]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.38e-05, 1.93e-05, 2.08e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEOtoGSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 15.5
+cxform/Geopack-08-dp time:  6.8
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.02e-10, -1.24e-04, 1.17e-03]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.38e-05, 1.80e-05, 3.67e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEOtoMAG
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.4
+cxform/Geopack-08-dp time:  6.5
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.92e-07, -1.27e-04, 2.70e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.67e-05, -6.30e-06, -9.07e-07]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GEOtoSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 12.6
+cxform/Geopack-08-dp time:  6.2
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-5.70e-05, -1.24e-04, 2.70e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.70e-05, 1.80e-05, -9.07e-07]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSEtoGEI
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 12.9
+cxform/Geopack-08-dp time:  6.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-2.06e-05, -3.38e-06, -4.61e-05]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [7.30e-07, -5.37e-06, 7.97e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSEtoGEO
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 15.3
+cxform/Geopack-08-dp time:  7.6
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-8.95e-06, -2.68e-05, -4.61e-05]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [9.00e-06, -2.47e-05, 7.97e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSEtoGSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.9
+cxform/Geopack-08-dp time:  6.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.21e-11, 7.73e-04, -2.11e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.21e-11, 1.01e-05, -2.29e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSEtoMAG
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.1
+cxform/Geopack-08-dp time:  5.5
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [2.23e-03, -8.20e-05, -9.14e-05]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.39e-05, -6.38e-07, 4.83e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSEtoSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.3
+cxform/Geopack-08-dp time:  6.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.42e-04, 7.73e-04, -9.14e-05]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.08e-06, 1.01e-05, 4.83e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSMtoGEI
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.5
+cxform/Geopack-08-dp time:  9.0
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.42e-04, 3.75e-04, 1.17e-03]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.27e-06, -8.02e-07, 2.70e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSMtoGEO
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 9.2
+cxform/Geopack-08-dp time:  7.1
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.50e-04, -2.43e-04, 1.17e-03]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.80e-05, -1.94e-05, 2.70e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSMtoGSE
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 9.3
+cxform/Geopack-08-dp time:  9.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-4.44e-16, -1.55e-04, 8.32e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-2.22e-16, -2.29e-06, 1.01e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSMtoMAG
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 10.8
+cxform/Geopack-08-dp time:  6.0
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [2.16e-04, -8.14e-05, 3.32e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.48e-05, 1.91e-06, 1.17e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: GSMtoSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 16.4
+cxform/Geopack-08-dp time:  5.9
+*Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+*Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: MAGtoGEI
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 15.2
+cxform/Geopack-08-dp time:  8.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [5.10e-04, -1.70e-04, 5.33e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.48e-05, 2.95e-07, 3.91e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: MAGtoGEO
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 10.1
+cxform/Geopack-08-dp time:  4.7
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-2.23e-04, 7.50e-05, 5.33e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-8.07e-06, 1.86e-05, 3.91e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: MAGtoGSE
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 13.2
+cxform/Geopack-08-dp time:  6.3
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-7.64e-05, 1.68e-04, 3.61e-03]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.11e-06, -8.41e-06, 8.17e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: MAGtoGSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 12.5
+cxform/Geopack-08-dp time:  6.3
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-7.64e-05, 1.42e-04, 5.17e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.11e-06, -1.11e-05, 1.02e-05]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: MAGtoSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.7
+cxform/Geopack-08-dp time:  6.3
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-5.88e-05, 1.42e-04, 0.00e+00]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [4.59e-06, -1.11e-05, 2.22e-16]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: SMtoGEI
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 15.3
+cxform/Geopack-08-dp time:  7.3
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.99e-04, 1.23e-03, 3.82e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.95e-06, 6.19e-06, 4.83e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: SMtoGEO
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 12.4
+cxform/Geopack-08-dp time:  5.9
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.85e-04, -3.35e-04, 3.82e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.95e-05, -1.49e-05, 4.83e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: SMtoGSE
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.7
+cxform/Geopack-08-dp time:  4.9
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.32e-04, -2.40e-04, 5.40e-04]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.17e-05, -3.69e-06, 5.07e-06]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: SMtoGSM
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 9.1
+cxform/Geopack-08-dp time:  8.1
+*Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+*Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+------------------------------------------------------------
+------------------------------------------------------------
+Transform: SMtoMAG
+Time: 1997-01-10
+# of points: 1
+First input: [1.00000000, 1.00000000, 1.00000000]
+Last input:  [1.00000000, 1.00000000, 1.00000000]
+SpacePy/Geopack-08-dp time: 11.6
+cxform/Geopack-08-dp time:  7.4
+Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.42e-04, -5.88e-05, 0.00e+00]
+Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.11e-05, 4.59e-06, -1.11e-16]
 ------------------------------------------------------------
