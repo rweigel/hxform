@@ -3,3 +3,4 @@ hxform.egg-info/
 hxform/__pycache__/
 *.so
 *.dll
+*.pyc

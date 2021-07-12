@@ -464,18 +464,21 @@ def SMtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
 
 
 def CtoS(x, y, z):
-    """Convert from cartesian to spherical coordinates."""
+    """Convert from cartesian to r, colatitude [degrees], longitude [degrees]."""
     r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
-    theta = 90.0 - (180.0/np.pi)*np.acos(z/r)
-    phi = (180.0/np.pi)*np.atan2(y, x)
+    assert np.all(r > 0), 'radius must be greater than zero.'
+    theta = 90.0 - (180.0/np.pi)*np.arccos(z/r)
+    phi = (180.0/np.pi)*np.arctan2(y, x)
 
     return r, theta, phi
 
 def StoC(r, colat, long):
-    """Convert from spherical to cartesian coordinates."""
+    """Convert r, colatitude [degrees], longitude [degrees] to cartesian."""
+    assert np.all(r > 0), 'radius must be greater than zero.'
     x = r*np.cos((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
     y = r*np.sin((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
     z = r*np.cos(np.pi/2.0 - (np.pi/180.0)*colat)
+
     return x, y, z
 
 
