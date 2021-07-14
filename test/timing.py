@@ -11,7 +11,7 @@ from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 N = 10000
-libs = ['spacepy','cxform','geopack_08_dp']
+libs = ['spacepy','spacepy-irbem','cxform','geopack_08_dp']
 
 p_in = np.random.random((N,3))
 t = np.array([2001,1,1,0,0,0])

@@ -67,6 +67,8 @@ for d in data:
         pos = d[6:9]
         v_sp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='spacepy')
         MLT_sp = hx.MAGtoMLT(pos, time, csys='car', lib='spacepy')
+        v_sp2 = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='spacepy-irbem')
+        MLT_sp2 = hx.MAGtoMLT(pos, time, csys='car', lib='spacepy-irbem')
         v_gp = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(pos, time, csys='car', lib='geopack_08_dp')
         v_cx = hx.MAGtoGSM(pos, time, ctype_in='car', ctype_out='car', lib='cxform')
@@ -75,6 +77,8 @@ for d in data:
         r, mlat, mlong = d[6:9]
         v_sp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='spacepy')
         MLT_sp = hx.MAGtoMLT(mlong, time, csys='sph', lib='spacepy')
+        v_sp2 = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='spacepy-irbem')
+        MLT_sp2 = hx.MAGtoMLT(mlong, time, csys='sph', lib='spacepy-irbem')
         v_gp = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='geopack_08_dp')
         MLT_gp = hx.MAGtoMLT(mlong, time, csys='sph', lib='geopack_08_dp')
         v_cx = hx.MAGtoGSM([r, mlat, mlong], time, ctype_in='sph', ctype_out='car', lib='cxform')
@@ -86,6 +90,7 @@ for d in data:
     # NOTE: if MLT has more then one element, this will be longer than 4 and only 
     # the first element of MLT will show up in the print statements that follow
     spacepy = np.append(v_sp, MLT_sp)
+    spacepy2 = np.append(v_sp2, MLT_sp2)
     geopack = np.append(v_gp, MLT_gp)
     cxform = np.append(v_cx, MLT_cx)
     #print(spacepy.shape)
@@ -101,15 +106,14 @@ for d in data:
     xp.xprint('                {0:.2f}  {1:.2f}  {2:.2f}'.format(d[6], d[7], d[8]))
     xp.xprint('Output:')
     xp.xprint('   GSM                x             y             z           MLT')
-    xp.xprint('   SpacePy:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   SpacePy:       {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(spacepy[0], spacepy[1], spacepy[2], spacepy[3]))
-    xp.xprint('   Geopack:    {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   SpacePy-IRBEM: {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+        .format(spacepy[0], spacepy[1], spacepy[2], spacepy[3]))
+    xp.xprint('   Geopack:       {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(geopack[0], geopack[1], geopack[2], geopack[3]))
-    xp.xprint('   cxform:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   cxform:        {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(cxform[0], cxform[1], cxform[2], cxform[3]))
-    xp.xprint('   SSCWeb:     {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
+    xp.xprint('   SSCWeb:        {0:12.8f}  {1:12.8f}  {2:12.8f}  {3:11.8f}' \
         .format(sscweb[k][0], sscweb[k][1], sscweb[k][2], sscweb[k][3]))
-    #print('   Diff:       {0:.3f} {1:.3f} {2:.3f} {3:.3f}' \
-    #    .format(sscweb[k][0] - spacepy[0],sscweb[k][1] - spacepy[1],
-    #            sscweb[k][2] - spacepy[2],sscweb[k][3] - spacepy[3]))
     k = k + 1

@@ -193,7 +193,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
 
-    assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
+    assert(lib in ['cxform', 'geopack_08_dp', 'spacepy', 'spacepy-irbem'])
     in_type = type(v)
 
     list_of_arrays = False
@@ -286,7 +286,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
 
-    if lib == 'spacepy':
+    if lib == 'spacepy' or lib == 'spacepy-irbem':
+        import warnings
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+
         try:
             # SpacePy is not installed when hxform is installed due to
             # frequent install failures and so the default is to not use it.
@@ -294,8 +297,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             from spacepy.time import Ticktock
             import numpy.matlib
         except ImportError as error:
-            print(error.__class__.__name__ + ": " + error.message)
+            print(error.__class__.__name__ + ": " + error.msg)
         except Exception as exception:
+            import pdb;pdb.set_trace()
             print(exception, False)
             print(exception.__class__.__name__ + ": " + exception.message)
 
@@ -306,7 +310,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if len(v.shape) == 1:
             v = np.array([v])
 
-        cvals = sc.Coords(v, csys_in, ctype_in)
+        if lib == 'spacepy':
+            cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=True)
+        else:
+            cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=False)
 
         if len(time.shape) == 1:
             # SpacePy requires time values to be strings with second precision

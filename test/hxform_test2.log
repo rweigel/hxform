@@ -1,330 +1,420 @@
 ------------------------------------------------------------
 Transform: GEItoGEO
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 128.3
-cxform/Geopack-08-dp time:  0.1
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [5.77e-12, -1.31e-12, 0.00e+00]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.89e-05, 8.80e-06, 0.00e+00]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   234.0
+SpacePy-IRBEM/Geopack-08-dp time: 164.6
+cxform/Geopack-08-dp time:        0.5
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+3.50e-14, +1.66e-14, +0.00e+00]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.28e-09, -6.08e-10, +0.00e+00]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.18e-09, -5.60e-10, +0.00e+00]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEItoGSE
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.3
-cxform/Geopack-08-dp time:  5.6
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.33e-10, 2.65e-05, 7.06e-06]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-5.03e-06, 3.90e-07, 1.23e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1266.0
+SpacePy-IRBEM/Geopack-08-dp time: 1125.5
+cxform/Geopack-08-dp time:        3.3
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+2.99e-12, +3.66e-07, +3.66e-08]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.98e-06, +1.70e-06, +6.19e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [+4.51e-08, +5.39e-09, +6.36e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEItoGSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 9.5
-cxform/Geopack-08-dp time:  5.0
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.33e-10, 3.21e-04, -4.54e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-5.03e-06, 2.61e-06, 7.89e-07]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1440.8
+SpacePy-IRBEM/Geopack-08-dp time: 1340.6
+cxform/Geopack-08-dp time:        11.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+2.99e-12, +3.63e-06, -2.16e-08]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.98e-06, +6.33e-07, +2.06e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [+4.51e-08, +2.95e-08, +7.50e-09]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEItoMAG
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.9
-cxform/Geopack-08-dp time:  6.1
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.43e-04, 2.10e-03, -3.58e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [3.60e-06, -4.82e-05, -2.44e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1588.5
+SpacePy-IRBEM/Geopack-08-dp time: 1449.4
+cxform/Geopack-08-dp time:        8.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+4.09e-06, +3.57e-06, -2.22e-08]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+4.77e-08, -1.34e-09, -4.54e-11]
+Max cxform - Geopack-08-dp Relative Diff:        [+4.30e-08, -4.10e-10, -1.51e-10]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEItoSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 14.5
-cxform/Geopack-08-dp time:  6.6
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [7.92e-04, 3.21e-04, -3.58e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.28e-06, 2.61e-06, -2.44e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1299.3
+SpacePy-IRBEM/Geopack-08-dp time: 1232.1
+cxform/Geopack-08-dp time:        18.2
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.66e-08, +3.63e-06, -2.22e-08]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.81e-06, +6.33e-07, +3.72e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-4.78e-11, +2.95e-08, -1.51e-10]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEOtoGEI
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.2
-cxform/Geopack-08-dp time:  10.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.31e-12, 5.77e-12, 0.00e+00]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [8.80e-06, -3.89e-05, 0.00e+00]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1668.4
+SpacePy-IRBEM/Geopack-08-dp time: 1543.9
+cxform/Geopack-08-dp time:        2.9
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.66e-14, +3.50e-14, +0.00e+00]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-6.08e-10, -1.28e-09, +0.00e+00]
+Max cxform - Geopack-08-dp Relative Diff:        [-5.60e-10, -1.18e-09, +0.00e+00]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEOtoGSE
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.7
-cxform/Geopack-08-dp time:  8.6
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.02e-10, 2.36e-05, 1.52e-05]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.38e-05, 1.93e-05, 2.08e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1417.1
+SpacePy-IRBEM/Geopack-08-dp time: 1268.0
+cxform/Geopack-08-dp time:        4.6
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-6.79e-15, -1.04e-09, +1.03e-07]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-6.32e-09, +2.34e-06, +5.51e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [+1.83e-07, -8.45e-10, +1.40e-07]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEOtoGSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 15.5
-cxform/Geopack-08-dp time:  6.8
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.02e-10, -1.24e-04, 1.17e-03]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.38e-05, 1.80e-05, 3.67e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1676.2
+SpacePy-IRBEM/Geopack-08-dp time: 1535.4
+cxform/Geopack-08-dp time:        14.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-6.79e-15, +1.31e-06, +4.01e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-6.32e-09, +1.75e-06, +4.56e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [+1.83e-07, -9.48e-10, +1.26e-07]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEOtoMAG
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.4
-cxform/Geopack-08-dp time:  6.5
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.92e-07, -1.27e-04, 2.70e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.67e-05, -6.30e-06, -9.07e-07]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1608.4
+SpacePy-IRBEM/Geopack-08-dp time: 1498.3
+cxform/Geopack-08-dp time:        8.0
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.57e-11, -8.01e-09, +2.34e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+8.80e-12, -2.77e-11, +8.09e-09]
+Max cxform - Geopack-08-dp Relative Diff:        [-6.68e-10, -3.97e-10, -3.92e-11]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GEOtoSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 12.6
-cxform/Geopack-08-dp time:  6.2
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-5.70e-05, -1.24e-04, 2.70e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.70e-05, 1.80e-05, -9.07e-07]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1482.6
+SpacePy-IRBEM/Geopack-08-dp time: 1348.0
+cxform/Geopack-08-dp time:        22.0
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.09e-04, -9.57e-05, -6.62e-06]*
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.09e-04, -9.57e-05, -6.63e-06]*
+Max cxform - Geopack-08-dp Relative Diff:        [-1.09e-04, -9.57e-05, -6.63e-06]*
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSEtoGEI
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 12.9
-cxform/Geopack-08-dp time:  6.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-2.06e-05, -3.38e-06, -4.61e-05]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [7.30e-07, -5.37e-06, 7.97e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1331.3
+SpacePy-IRBEM/Geopack-08-dp time: 1183.5
+cxform/Geopack-08-dp time:        3.3
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.31e-09, +3.21e-08, -1.56e-09]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.20e-06, +2.65e-06, +1.46e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [+9.31e-09, +5.09e-08, +5.39e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSEtoGEO
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 15.3
-cxform/Geopack-08-dp time:  7.6
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-8.95e-06, -2.68e-05, -4.61e-05]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [9.00e-06, -2.47e-05, 7.97e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1437.4
+SpacePy-IRBEM/Geopack-08-dp time: 1286.1
+cxform/Geopack-08-dp time:        4.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.18e-07, +2.37e-07, -1.56e-09]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.92e-06, -8.74e-09, +1.46e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [-5.94e-10, +2.18e-07, +5.39e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSEtoGSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.9
-cxform/Geopack-08-dp time:  6.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-3.21e-11, 7.73e-04, -2.11e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.21e-11, 1.01e-05, -2.29e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1681.6
+SpacePy-IRBEM/Geopack-08-dp time: 1505.8
+cxform/Geopack-08-dp time:        11.4
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.60e-15, +4.69e-06, -1.35e-08]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.60e-15, -5.12e-09, +4.88e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.60e-15, +6.12e-08, -1.46e-10]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSEtoMAG
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.1
-cxform/Geopack-08-dp time:  5.5
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [2.23e-03, -8.20e-05, -9.14e-05]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.39e-05, -6.38e-07, 4.83e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1361.8
+SpacePy-IRBEM/Geopack-08-dp time: 1252.1
+cxform/Geopack-08-dp time:        9.4
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+6.42e-06, +1.26e-06, -3.39e-09]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.98e-06, +1.27e-06, +1.85e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [-2.01e-10, +9.78e-09, +3.58e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSEtoSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.3
-cxform/Geopack-08-dp time:  6.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.42e-04, 7.73e-04, -9.14e-05]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.08e-06, 1.01e-05, 4.83e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1494.8
+SpacePy-IRBEM/Geopack-08-dp time: 1384.3
+cxform/Geopack-08-dp time:        19.2
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.02e-08, +4.69e-06, -3.39e-09]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.27e-09, -5.12e-09, +1.33e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [-2.22e-10, +6.12e-08, +3.58e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSMtoGEI
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.5
-cxform/Geopack-08-dp time:  9.0
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.42e-04, 3.75e-04, 1.17e-03]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.27e-06, -8.02e-07, 2.70e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1499.5
+SpacePy-IRBEM/Geopack-08-dp time: 1400.3
+cxform/Geopack-08-dp time:        12.3
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.09e-08, -1.33e-08, +4.15e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.47e-06, +3.53e-06, +6.75e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-9.78e-11, +5.67e-09, +9.60e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSMtoGEO
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 9.2
-cxform/Geopack-08-dp time:  7.1
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.50e-04, -2.43e-04, 1.17e-03]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.80e-05, -1.94e-05, 2.70e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1552.6
+SpacePy-IRBEM/Geopack-08-dp time: 1455.4
+cxform/Geopack-08-dp time:        14.2
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-8.85e-09, +2.94e-06, +4.15e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.59e-06, -1.16e-08, +6.75e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.06e-09, +2.35e-07, +9.60e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSMtoGSE
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 9.3
-cxform/Geopack-08-dp time:  9.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-4.44e-16, -1.55e-04, 8.32e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-2.22e-16, -2.29e-06, 1.01e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1620.0
+SpacePy-IRBEM/Geopack-08-dp time: 1507.5
+cxform/Geopack-08-dp time:        11.2
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.42e-18, -9.88e-09, +5.05e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.11e-20, +4.88e-07, -5.12e-09]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.11e-20, -1.46e-10, +6.12e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSMtoMAG
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 10.8
-cxform/Geopack-08-dp time:  6.0
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [2.16e-04, -8.14e-05, 3.32e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.48e-05, 1.91e-06, 1.17e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1513.4
+SpacePy-IRBEM/Geopack-08-dp time: 1393.9
+cxform/Geopack-08-dp time:        19.3
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.50e-06, +1.22e-06, +1.63e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.87e-06, +1.72e-06, +1.21e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [-5.14e-10, -1.44e-10, +5.73e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: GSMtoSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 16.4
-cxform/Geopack-08-dp time:  5.9
-*Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
-*Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1627.7
+SpacePy-IRBEM/Geopack-08-dp time: 1497.5
+cxform/Geopack-08-dp time:        11.8
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-3.02e-09, +4.25e-18, +1.63e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.51e-09, +0.00e+00, +8.14e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.06e-10, +0.00e+00, +5.73e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: MAGtoGEI
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 15.2
-cxform/Geopack-08-dp time:  8.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [5.10e-04, -1.70e-04, 5.33e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-3.48e-05, 2.95e-07, 3.91e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1493.8
+SpacePy-IRBEM/Geopack-08-dp time: 1365.1
+cxform/Geopack-08-dp time:        8.3
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.54e-06, -1.28e-08, +4.25e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-1.48e-09, +5.15e-08, +1.47e-08]
+Max cxform - Geopack-08-dp Relative Diff:        [-5.24e-10, +4.44e-09, +3.12e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: MAGtoGEO
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 10.1
-cxform/Geopack-08-dp time:  4.7
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-2.23e-04, 7.50e-05, 5.33e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-8.07e-06, 1.86e-05, 3.91e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1659.4
+SpacePy-IRBEM/Geopack-08-dp time: 1516.1
+cxform/Geopack-08-dp time:        7.9
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.46e-08, -2.95e-09, +4.25e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [-5.06e-11, -1.01e-11, +1.47e-08]
+Max cxform - Geopack-08-dp Relative Diff:        [-5.31e-10, -7.30e-10, +3.12e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: MAGtoGSE
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 13.2
-cxform/Geopack-08-dp time:  6.3
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-7.64e-05, 1.68e-04, 3.61e-03]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.11e-06, -8.41e-06, 8.17e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1439.5
+SpacePy-IRBEM/Geopack-08-dp time: 1345.0
+cxform/Geopack-08-dp time:        9.8
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.14e-06, +1.44e-06, +4.83e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.61e-06, +2.69e-06, +7.93e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.58e-10, -3.60e-10, +1.09e-07]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: MAGtoGSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 12.5
-cxform/Geopack-08-dp time:  6.3
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-7.64e-05, 1.42e-04, 5.17e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.11e-06, -1.11e-05, 1.02e-05]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1460.1
+SpacePy-IRBEM/Geopack-08-dp time: 1349.7
+cxform/Geopack-08-dp time:        18.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.14e-06, +1.08e-06, +2.13e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.61e-06, +1.94e-06, +2.26e-06]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.58e-10, -4.23e-10, +4.21e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: MAGtoSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.7
-cxform/Geopack-08-dp time:  6.3
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-5.88e-05, 1.42e-04, 0.00e+00]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [4.59e-06, -1.11e-05, 2.22e-16]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1741.7
+SpacePy-IRBEM/Geopack-08-dp time: 1573.9
+cxform/Geopack-08-dp time:        31.9
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+6.97e-07, +1.08e-06, +2.83e-18]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+1.80e-06, +1.94e-06, +6.51e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-2.72e-10, -4.23e-10, +4.25e-18]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: SMtoGEI
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 15.3
-cxform/Geopack-08-dp time:  7.3
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [-1.99e-04, 1.23e-03, 3.82e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.95e-06, 6.19e-06, 4.83e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1376.3
+SpacePy-IRBEM/Geopack-08-dp time: 1287.7
+cxform/Geopack-08-dp time:        19.5
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.46e-08, -2.21e-08, +3.21e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+8.59e-07, +3.12e-06, -8.52e-10]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.43e-10, -1.11e-10, +4.06e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: SMtoGEO
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 12.4
-cxform/Geopack-08-dp time:  5.9
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.85e-04, -3.35e-04, 3.82e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [2.95e-05, -1.49e-05, 4.83e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1436.5
+SpacePy-IRBEM/Geopack-08-dp time: 1322.9
+cxform/Geopack-08-dp time:        21.7
+Max SpacePy New - Geopack-08-dp Relative Diff:   [-1.59e-08, +4.23e-06, +3.21e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.40e-06, -8.44e-09, -8.52e-10]
+Max cxform - Geopack-08-dp Relative Diff:        [-1.22e-09, +1.88e-07, +4.06e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: SMtoGSE
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.7
-cxform/Geopack-08-dp time:  4.9
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [3.32e-04, -2.40e-04, 5.40e-04]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [1.17e-05, -3.69e-06, 5.07e-06]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1464.9
+SpacePy-IRBEM/Geopack-08-dp time: 1334.2
+cxform/Geopack-08-dp time:        18.8
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.63e-06, -1.66e-08, +4.94e-06]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+8.14e-07, +6.33e-07, -6.98e-09]
+Max cxform - Geopack-08-dp Relative Diff:        [+5.73e-08, -2.55e-10, +4.63e-08]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: SMtoGSM
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 9.1
-cxform/Geopack-08-dp time:  8.1
-*Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
-*Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [inf, inf, inf]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1656.4
+SpacePy-IRBEM/Geopack-08-dp time: 1496.9
+cxform/Geopack-08-dp time:        11.9
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.63e-06, +4.25e-18, -3.02e-09]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+8.14e-07, +0.00e+00, -1.51e-09]
+Max cxform - Geopack-08-dp Relative Diff:        [+5.73e-08, +0.00e+00, -1.06e-10]
 ------------------------------------------------------------
 ------------------------------------------------------------
 Transform: SMtoMAG
 Time: 1997-01-10
-# of points: 1
+# of points: 10000
 First input: [1.00000000, 1.00000000, 1.00000000]
-Last input:  [1.00000000, 1.00000000, 1.00000000]
-SpacePy/Geopack-08-dp time: 11.6
-cxform/Geopack-08-dp time:  7.4
-Max (SpacePy - Geopack-08-dp)/Geopack-08-dp: [1.42e-04, -5.88e-05, 0.00e+00]
-Max (cxform  - Geopack-08-dp)/Geopack-08-dp: [-1.11e-05, 4.59e-06, -1.11e-16]
+Last input:  [200.00000000, 200.00000000, 200.00000000]
+A - B Relative Diff = max( (A - B)/|B| ); * = a relative diff > 1e-5
+SpacePy-New/Geopack-08-dp time:   1708.1
+SpacePy-IRBEM/Geopack-08-dp time: 1529.7
+cxform/Geopack-08-dp time:        32.0
+Max SpacePy New - Geopack-08-dp Relative Diff:   [+1.08e-06, +6.97e-07, +2.83e-18]
+Max SpacePy IRBEM - Geopack-08-dp Relative Diff: [+2.38e-06, +1.75e-06, +2.59e-07]
+Max cxform - Geopack-08-dp Relative Diff:        [-4.23e-10, -2.72e-10, +2.83e-18]
 ------------------------------------------------------------
