@@ -337,6 +337,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             return vp.tolist()
 
 
+def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
+    b1 = tranform(np.array([1.,0.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    b2 = tranform(np.array([0.,1.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    b3 = tranform(np.array([0.,0.,1.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    return np.column_stack([b1,b2,b3])
+
 def MAGtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Equivalent to transform(v, time, 'MAG', 'GEI', ...)"""
     return transform(v, time, 'MAG', 'GEI', ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
@@ -464,22 +470,46 @@ def SMtoGSM(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
 
 
 def CtoS(x, y, z):
-    """Convert from cartesian to r, colatitude [degrees], longitude [degrees]."""
+    """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
     r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
     assert np.all(r > 0), 'radius must be greater than zero.'
-    theta = 90.0 - (180.0/np.pi)*np.arccos(z/r)
-    phi = (180.0/np.pi)*np.arctan2(y, x)
+    lat = 90.0 - (180.0/np.pi)*np.arccos(z/r)
+    lon = (180.0/np.pi)*np.arctan2(y, x)
 
-    return r, theta, phi
+    return r, lat, lon
 
-def StoC(r, colat, long):
-    """Convert r, colatitude [degrees], longitude [degrees] to cartesian."""
+def StoC(r, lat, lon):
+    """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
     assert np.all(r > 0), 'radius must be greater than zero.'
-    x = r*np.cos((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
-    y = r*np.sin((np.pi/180.0)*long)*np.cos((np.pi/180.0)*colat)
-    z = r*np.cos(np.pi/2.0 - (np.pi/180.0)*colat)
+    x = r*np.cos((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
+    y = r*np.sin((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
+    z = r*np.sin((np.pi/180.0)*lat)
 
     return x, y, z
+
+def get_spherical_vector_components(v_cart, x_cart):
+    x = x_cart[:,0]
+    y = x_cart[:,1]
+    z = x_cart[:,2]
+    vx = v_cart[:,0]
+    vy = v_cart[:,1]
+    vz = v_cart[:,2]
+    
+    r = np.sqrt(x**2 + y**2 + z**2)
+    L = np.sqrt(x**2 + y**2)
+
+    v_r = (x*vx + y*vy + z*vz)/r
+    v_theta = ((x*vx + y*vy)*z - (L**2)*vz)/(r*L)
+    v_phi = (-y*vx + x*vy)/L
+
+    return np.column_stack([v_r, v_theta, v_phi])
+
+def get_NED_vector_components(v_cart, x_cart):
+    v_sph = get_spherical_vector_components(v_cart, x_cart)
+    v_north = -v_sph[:,1]
+    v_east  = +v_sph[:,2]
+    v_down  = -v_sph[:,0]
+    return np.column_stack([v_north, v_east, v_down])
 
 
 def UTtoHMS(UT, **kwargs):
