@@ -196,6 +196,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
     in_type = type(v)
 
+    if csys_in == csys_out:
+        return v
+
     list_of_arrays = False
     if isinstance(v[0], np.ndarray) and isinstance(v, list):
         list_of_arrays = True
@@ -206,6 +209,11 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if len(time.shape) > 1 and len(v.shape) > 1:
         if time.shape[0] != v.shape[0]:
             raise ValueError("time and v cannot be different lengths")
+
+    if len(v.shape) == 1:
+        v = np.array([v])
+    if len(time.shape) == 1:
+        time = np.array([time])
 
     if lib == 'cxform':
         import os
@@ -222,14 +230,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             break
         lib_path = os.path.join(lib_file)
         lib_obj = ctypes.cdll.LoadLibrary(lib_path)
-
-        assert(len(time.shape) <= 2 and len(v.shape) <= 2)
-
-        if len(v.shape) == 1:
-            v = np.array([v])
-
-        if len(time.shape) == 1:
-            time = np.array([time])
 
         Nt = time.shape[0]
 
@@ -263,13 +263,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if lib == 'geopack_08_dp':
         import hxform.geopack_08_dp as geopack_08_dp
         trans = csys_in + 'to' + csys_out
-
-        if len(v.shape) == 1:
-            v = np.array([v])
-
-        if len(time.shape) == 1:
-            time = np.array([time])
-
         dtime = np.array(to_doy(time))
 
         if v.shape[0] <= time.shape[0]:
@@ -285,7 +278,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if ctype_out == 'sph':
             vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
-
     if lib == 'spacepy':
         try:
             # SpacePy is not installed when hxform is installed due to
@@ -299,12 +291,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             print(exception, False)
             print(exception.__class__.__name__ + ": " + exception.message)
 
-        if len(time.shape) == 1 and len(v.shape) > 1:
+        if time.shape[0] == 1 and v.shape[0] > 1:
             time = numpy.matlib.repmat(time, v.shape[0], 1)
-        if len(v.shape) == 1 and len(time.shape) > 1:
+        if v.shape[0] == 1 and time.shape[0] > 1:
             v = numpy.matlib.repmat(v, time.shape[0], 1)
-        if len(v.shape) == 1:
-            v = np.array([v])
 
         cvals = sc.Coords(v, csys_in, ctype_in)
 
@@ -322,7 +312,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         vp = newcoord.data
 
-    if len(time.shape) == 1 and len(v.shape) == 1:
+    if vp.shape[0] == 1:
         vp = vp[0, :]
 
     if in_type == np.ndarray:
@@ -338,9 +328,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
 
 def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
-    b1 = tranform(np.array([1.,0.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
-    b2 = tranform(np.array([0.,1.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
-    b3 = tranform(np.array([0.,0.,1.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    b1 = transform(np.array([1.,0.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    b2 = transform(np.array([0.,1.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
+    b3 = transform(np.array([0.,0.,1.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)
     return np.column_stack([b1,b2,b3])
 
 def MAGtoGEI(v, time, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
