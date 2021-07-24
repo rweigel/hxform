@@ -111,7 +111,6 @@ def to_doy(t):
         return t.tolist()
 
 
-
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
     """Transfrom between coordinates systems using Geopack or SpacePy.
 
@@ -192,28 +191,28 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
-
     assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
-    in_type = type(v)
 
     if csys_in == csys_out:
         return v
 
-    list_of_arrays = False
-    if isinstance(v[0], np.ndarray) and isinstance(v, list):
-        list_of_arrays = True
-
-    v = np.array(v, dtype=np.double)
+    v_outertype = type(v)
+    v_innertype = type(v[0])
+    v = np.array(v, dtype=np.double)#!!!! double?
     time = np.array(time, dtype=np.int32)
 
-    if len(time.shape) > 1 and len(v.shape) > 1:
-        if time.shape[0] != v.shape[0]:
-            raise ValueError("time and v cannot be different lengths")
+    if len(time.shape) == 1 and len(v.shape) == 1:
+        return transform((v,) , (time,) ,
+                csys_in, csys_out, ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)[0]
+    elif len(time.shape) == 1:
+        return transform(v, [time],
+                csys_in, csys_out, ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
+    elif len(v.shape) == 1:
+        return transform(np.array([v]), time,
+                csys_in, csys_out, ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
 
-    if len(v.shape) == 1:
-        v = np.array([v])
-    if len(time.shape) == 1:
-        time = np.array([time])
+    assert(len(time.shape)==2 and len(v.shape)==2)
+    assert(time.shape[0]==v.shape[0] or time.shape[0]==1 or v.shape[0]==1)#, "time and v cannot be different lengths")
 
     if lib == 'cxform':
         import os
@@ -312,19 +311,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
         vp = newcoord.data
 
-    if vp.shape[0] == 1:
-        vp = vp[0, :]
-
-    if in_type == np.ndarray:
+    if issubclass(v_outertype, np.ndarray):
         return vp
+    elif issubclass(v_innertype, np.ndarray):
+        return v_outertype(vp)
     else:
-        if list_of_arrays is True:
-            vp2 = []
-            for i in range(vp.shape[0]):
-                vp2.append(vp[i])
-            return vp2
-        else:
-            return vp.tolist()
+        return v_outertype(map(v_innertype,vp))
 
 
 def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
