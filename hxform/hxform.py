@@ -202,8 +202,13 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     time = np.array(time, dtype=np.int32)
 
     if len(time.shape) == 1 and len(v.shape) == 1:
-        return transform((v,) , (time,) ,
+        toret = transform((v,) , (time,) ,
                 csys_in, csys_out, ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)[0]
+        if issubclass(v_outertype, np.ndarray):
+            return toret
+        else:
+            return v_outertype(toret)
+
     elif len(time.shape) == 1:
         return transform(v, [time],
                 csys_in, csys_out, ctype_in=ctype_in, ctype_out=ctype_out, lib=lib)
