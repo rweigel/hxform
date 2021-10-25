@@ -10,14 +10,14 @@ t = [2009,2,2,11,1,1]
 ##################################
 
 vt = trans(v,t)
-#assert(type(vt) == list)
-#assert(type(vt[0]) == float)
-#assert(len(vt) == 3)
+assert(type(vt) == list)
+assert(type(vt[0]) == np.double)
+assert(len(vt) == 3)
 
 vt = trans(np.array(v),np.array(t))
-#assert(type(vt) == np.ndarray)
-#assert(type(vt[0]) == np.double)
-#assert(vt.shape == (3,))
+assert(type(vt) == np.ndarray)
+assert(vt.shape == (3,))
+assert(type(vt[0]) == np.double)
 
 ##################################
 
@@ -59,8 +59,8 @@ assert(len(vt) == 2)
 assert(len(vt[0]) == 3)
 assert(len(vt[1]) == 3)
 for i in range(3):
-    assert(type(vt[0][i]) == float)
-    assert(type(vt[1][i]) == float)
+    assert(type(vt[0][i]) == np.double)
+    assert(type(vt[1][i]) == np.double)
 
 vt = trans(np.array([v,v]),np.array([t,t]))
 assert(type(vt) == np.ndarray)
