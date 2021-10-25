@@ -194,7 +194,21 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
 
     if csys_in == csys_out:
-        return v
+        if ctype_in == ctype_out:
+            return v
+        else:
+            if ctype_in == 'sph' and ctype_out == 'car':
+                x, y, z = StoC(v[:,0], v[:,1], v[:,2])
+                v[:,0] = x
+                v[:,1] = y
+                v[:,2] = z
+            else:
+                x, y, z = CtoS(v[:,0], v[:,1], v[:,2])
+                v[:,0] = x
+                v[:,1] = y
+                v[:,2] = z
+
+            return v
 
     v_outertype = type(v)
     v_innertype = type(v[0])
