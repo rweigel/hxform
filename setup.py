@@ -1,4 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import dist, setup, find_packages
+
+# https://stackoverflow.com/a/60740731/18433855
+# This script depends on numpy, which may not be installed.
+# The following line installs it.
+dist.Distribution().fetch_build_eggs(['numpy'])
 from numpy.distutils.core import setup, Extension
 
 install_requires = ["numpy"]
