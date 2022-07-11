@@ -43,7 +43,7 @@ def tpad(time, length=7):
         return list(map(list,time))
 
 
-def  is_leap_year(year):
+def is_leap_year(year):
     if isinstance(year, int):
         if year % 100 == 0:
             return year % 400 == 0
@@ -55,6 +55,7 @@ def  is_leap_year(year):
         leap4 = np.where(year%4==0, True, False)
         cor1 = np.where(leap100, False, leap4)
         return np.where(leap400, True, cor1)
+
 
 def doy(date):
     """
@@ -76,6 +77,7 @@ def doy(date):
     N = np.fix((275* month) / 9.0) - K * np.fix((month + 9) / 12.0) + day - 30
 
     return N.astype(int)
+
 
 def to_doy(t):
     """Convert from [y, m, d, h, min, sec] to [y, doy, h, min, sec].
@@ -109,6 +111,20 @@ def to_doy(t):
         return tuple(t.tolist()) #tuple(map(tuple,t))
     else:
         return t.tolist()
+
+
+def iso2ints(isostr):
+    import re
+    tmp = re.split("-|:|T|Z", isostr)
+    if len(tmp) > 6:
+        tmp = tmp[0:5]
+
+    int_list = []
+    for str_int in tmp:
+        if str_int != "Z" and str_int != '':
+            int_list.append(int(str_int))
+
+    return int_list
 
 
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='geopack_08_dp'):
@@ -193,12 +209,15 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     """
     assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
 
+    if isinstance(time, str):
+        time = iso2ints(time)
+
     if csys_in == csys_out:
         return v
 
     v_outertype = type(v)
     v_innertype = type(v[0])
-    v = np.array(v, dtype=np.double)#!!!! double?
+    v = np.array(v, dtype=np.double) #!!!! double?
     time = np.array(time, dtype=np.int32)
 
     if len(time.shape) == 1 and len(v.shape) == 1:
