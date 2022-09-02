@@ -6,7 +6,7 @@ Heliophysics coordinate transforms in Python
 
 This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contains magnetospheric coordinate tranformation functions. 
 
-To wrap ``Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `csform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the  wrapper function, which loops over it and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
+To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `csform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the  wrapper function, which loops over it and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
 `hxform` also contains a wrapper to [SpacePy's coordinate tranformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
 
