@@ -217,7 +217,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     v_outertype = type(v)
     v_innertype = type(v[0])
-    v = np.array(v, dtype=np.double) #!!!! double?
+    v = np.array(v, dtype=np.double)
     time = np.array(time, dtype=np.int32)
 
     if len(time.shape) == 1 and len(v.shape) == 1:
@@ -341,7 +341,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         return v_outertype(vp)
     else:
         return v_outertype(map(v_innertype,vp))
-
 
 def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
     b1 = transform(np.array([1.,0.,0.]), time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib=lib)

@@ -4,3 +4,4 @@ hxform/__pycache__/
 *.so
 *.dll
 *.pyc
+.eggs

@@ -7,7 +7,7 @@ xp = Xp() # Print to console and log file
 time1 = [1997, 1, 1]
 time2 = [time1, time1]
 input1 = [1., 0., 0.]
-input2 = [input1,input1]
+input2 = [input1, input1]
 
 if False:
     # time and input can be np.arrays
