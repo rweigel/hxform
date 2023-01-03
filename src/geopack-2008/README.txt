@@ -1,0 +1,1 @@
+Note that T96_01.for is needed because it is used in Geopack functions (for example in the subroutine T96_MGNP_08 in Geopack).
