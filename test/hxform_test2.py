@@ -1,4 +1,7 @@
-arr_size = 1
+# Compare differences and timing
+
+arr_size = 2
+print_all = False
 
 import os
 import sys
@@ -11,7 +14,7 @@ warnings.filterwarnings("ignore", message="Leapseconds.*")
 
 from hxform import hxform as hx
 
-from hxform.xprint import Xprint as Xp
+from xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 X1 = (200/arr_size)*np.arange(0.005, arr_size, dtype=np.float64)
@@ -28,7 +31,7 @@ for c1 in csys:
             xforms.append('to'.join((c1, c2)))
 
 XYZ = np.column_stack([X1,Y1,Z1])
-time = (1997,1,10)
+time = (2000,1,10)
 #time = np.full(XYZ.shape, time)
 
 for xform in xforms:
@@ -57,6 +60,16 @@ for xform in xforms:
     sp_time = sp_end - sp_start
     cx_time = cx_end - cx_start
 
+    sp_gp_err = ""
+    if np.any( np.abs(maxdiff_sp_gp) > 0.001):
+        sp_gp_err = "!!!"
+    cx_gp_err = ""
+    if np.any( np.abs(maxdiff_cx_gp) > 0.001):
+        cx_gp_err = "!!!"
+
+    if print_all == False and (sp_gp_err == "" and cx_gp_err == ""):
+        continue
+
     xp.xprint(60*"-")
     xp.xprint("Transform: {0:s}".format(xform))
     xp.xprint("Time: {0:d}-{1:02d}-{2:02d}".format(*time))
@@ -65,7 +78,7 @@ for xform in xforms:
     xp.xprint("First input: [{0:.8f}, {1:.8f}, {2:.8f}]".format(X1[0], Y1[0], Z1[0]))
     xp.xprint("Last input:  [{0:.8f}, {1:.8f}, {2:.8f}]".format(X1[-1], Y1[-1], Z1[-1]))
 
-    if False:
+    if True:
 
         xp.xprint("Results:")
         xp.xprint("    SpacePy")
@@ -86,14 +99,6 @@ for xform in xforms:
         xp.xprint("      Last output:  [{0:.8f}, {1:.8f}, {2:.8f}]"\
             .format(out_cx[-1][0], out_cx[-1][1], out_cx[-1 ][2]))
         xp.xprint("      Run time: {0:.2e} s".format(gp_time))
-
-    sp_gp_err = ""
-    if np.any( np.abs(maxdiff_sp_gp) > 0.01):
-        sp_gp_err = "*"
-    cx_gp_err = ""
-    if np.any( np.abs(maxdiff_cx_gp) > 0.01):
-        cx_gp_err = "*"
-
 
     #print(out_gp)
     #print(out_sp)

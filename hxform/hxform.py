@@ -168,7 +168,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
                'car' (default) or 'sph'
 
     lib : str
-          'geopack_08_dp' (default) or 'spacepy'
+          'cxform' (default), 'geopack_08_dp', or 'spacepy'
 
     Returns
     -------
@@ -207,7 +207,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         >>> from hxform import hxform as hx
         >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
     """
-    assert(lib in ['cxform', 'geopack_08_dp', 'spacepy'])
+    assert(lib in ['cxform', 'geopack_08_dp', 'spacepy', 'spacepy-irbem'])
 
     if isinstance(time, str):
         time = iso2ints(time)
@@ -301,7 +301,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if ctype_out == 'sph':
             vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
-    if lib == 'spacepy':
+    if lib.startswith('spacepy'):
         try:
             # SpacePy is not installed when hxform is installed due to
             # frequent install failures and so the default is to not use it.
@@ -319,7 +319,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         if v.shape[0] == 1 and time.shape[0] > 1:
             v = numpy.matlib.repmat(v, time.shape[0], 1)
 
-        cvals = sc.Coords(v, csys_in, ctype_in)
+        if lib.endswith('-irbem'):
+            cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=True)
+        else:
+            cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=False)
 
         if len(time.shape) == 1:
             # SpacePy requires time values to be strings with second precision

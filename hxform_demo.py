@@ -5,8 +5,12 @@ from hxform.xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 time1 = [1997, 1, 1]
+#time1 = [2010, 1, 10]
+#time1 = [2020, 8, 10, 12, 0, 0]
+time1 = [2010, 12, 30, 0, 0, 0]
 time2 = [time1, time1]
-input1 = [1., 0., 0.]
+input1 = [1., 1., 1.]
+#input1 = [0.50000000, 0.50000000, 0.50000000]
 input2 = [input1, input1]
 
 if False:
@@ -17,18 +21,53 @@ if False:
     input1 = np.array(input1)
     input2 = np.array(input2)
 
-# Single time, single vector
-output = hx.GSMtoGSE(input1, time1)
-xp.xprint(output)
+libs = ['cxform','geopack_08_dp','spacepy','spacepy-irbem']
+libs2 = ['cxform','geopack_08_dp','spacepy','spacepy-irbem']
+initial = 'GSM'
+final = 'GSE'
+#initial = 'GEO'
+#final = 'GSE'
 
-# Multiple times, single vector
-output = hx.GSMtoGSE(input1, time2)
-xp.xprint(output)
+xp.xprint("Time: {}".format(time1))
+xp.xprint(f"Transform: {initial} => {final}")
+xp.xprint("Input: {}\n".format(input1))
+xp.xprint("Output:\n" + 48*"-")
 
-# Single time, multiple vectors
-output = hx.GSMtoGSE(input2, time1)
-xp.xprint(output)
+lengths = []
+for lib in libs:
+  lengths.append(len(lib))
+ml = max(lengths)
 
-# Multiple times, multiple vectors
-output = hx.GSMtoGSE(input2, time2)
-xp.xprint(output)
+outputs = np.full((len(libs),3), fill_value=np.nan)
+
+for i, lib in enumerate(libs):
+  #xp.xprint('Using library: {}'.format(lib))
+  # Single time, single vector
+  output = hx.transform(input1, time1, initial, final, lib=lib)
+  outputs[i,:] = np.array(output)
+  xp.xprint("{}:{}   {:11.8f} {:11.8f} {:11.8f}".format(lib, (ml-len(lib))*" ",*output))
+
+max, min = np.max(outputs, axis=0), np.min(outputs, axis=0)
+xp.xprint("\n")
+xp.xprint("max-min:              {:11.8f} {:11.8f} {:11.8f}".format(*(max-min)))
+xp.xprint("100*|max-min|/|max|:  {:10.4f}% {:10.4f}% {:10.4f}%".format(*(100*np.abs(max-min)/np.abs(max))))
+
+if False:
+    # API Demo
+    for lib in libs:
+        xp.xprint('Using library: {}'.format(lib))
+        # Single time, single vector
+        output = hx.GSMtoGSE(input1, time1, lib=lib)
+        xp.xprint(output)
+
+        # Multiple times, single vector
+        output = hx.GSMtoGSE(input1, time2, lib=lib)
+        xp.xprint(output)
+
+        # Single time, multiple vectors
+        output = hx.GSMtoGSE(input2, time1, lib=lib)
+        xp.xprint(output)
+
+        # Multiple times, multiple vectors
+        output = hx.GSMtoGSE(input2, time2, lib=lib)
+        xp.xprint(output)

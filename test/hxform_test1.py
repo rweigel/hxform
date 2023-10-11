@@ -6,7 +6,7 @@ warnings.filterwarnings("ignore", message="Leapseconds.*")
 
 from hxform import hxform as hx
 
-from hxform.xprint import Xprint as Xp
+from xprint import Xprint as Xp
 xp = Xp() # Print to console and log file
 
 # [year, month, day, hours, minutes, seconds, x, y, z, 'car']
@@ -35,7 +35,7 @@ data = [
 # Output is
 """
 TIME: 2003 324  7.00000 
-              Input:  GM                                                        
+Input:  GM
 
  Radial distance     1.00 
           Lat    Long      X       Y       Z   hh.hhhhh 
