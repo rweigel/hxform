@@ -1,0 +1,7 @@
+Furnishing: spiceypy/kernels/naif0012.tls
+Furnishing: spiceypy/kernels/rbsp_general011.tf
+Furnishing: spiceypy/kernels/de440s.bsp
+Furnishing: spiceypy/kernels/pck00011.tpc
+ vec_geo: [1, 0, 0]
+ vec_gse: [ 0.963682    0.05830555 -0.26060981]
+ vec_gsm: [ 0.963682   -0.06970208 -0.25779571]

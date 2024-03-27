@@ -1,7 +1,6 @@
+.eggs/
 build/
-hxform.egg-info/
+hxform.egg-info
 hxform/__pycache__/
-*.so
-*.dll
-*.pyc
-.eggs
+hxform/*.so
+hxform/*.dll

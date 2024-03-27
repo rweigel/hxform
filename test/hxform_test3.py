@@ -55,6 +55,7 @@ def test_r_equal_zero():
     with pytest.raises(AssertionError):
         sph = hx.CtoS(*car0)
 
+
 def test_random_values():
 
     rng = np.random.default_rng(1)

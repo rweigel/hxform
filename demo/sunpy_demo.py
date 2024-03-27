@@ -1,14 +1,48 @@
-import astropy.units as u
-from astropy.constants import R_earth
-from astropy.coordinates import SkyCoord
-import sunpy.coordinates  # registers GSE as a coordinate frame
+# This adds the coordinates and units method to top-level astropy package.
+import astropy.coordinates
+
+# Add SunPy coordinate frames in astropy.coordinates. Editor may note that
+# import is not used, but it is.
+import sunpy.coordinates
+
+from hxform import xprint # print to console and spiceypy_demo.log
+
+frames = astropy.coordinates.frame_transform_graph.get_names()
+frames.sort()
+xprint("Available frames:")
+for frame in frames:
+  xprint(" " + frame)
 
 # https://datacenter.iers.org/eop.php
 # https://datacenter.iers.org/data/9/finals2000A.all
-geo_coord = SkyCoord(x=R_earth, y=0*u.m, z=0*u.m,
-                    frame='itrs', 
-                    obstime='2013-08-10 12:00', representation_type='cartesian')
 
-print(geo_coord.cartesian/R_earth)
+name_map = {
+  "GEI": "geocentricearthequatorial",
+  "GSE": "geocentricsolarecliptic",
+  "GSM": "geocentricsolarmagnetospheric",
+  "GEO": "itrs",
+  "SM":  "solarmagnetic",
+  "MAG": "geomagnetic"
+}
 
-print(geo_coord.transform_to('geocentricsolarecliptic').cartesian/R_earth)
+time = "2010-12-30T00:00"
+initial = 'GSM'
+final = 'GSE'
+
+R_E = astropy.constants.R_earth
+# TODO: Use
+#   R_E = astropy.units.m
+# when https://github.com/sunpy/sunpy/pull/7530 is merged.
+kwargs = {
+  "x": R_E,
+  "y": R_E,
+  "z": R_E,
+  "frame": name_map[initial],
+  "obstime": time,
+  "representation_type": "cartesian"
+}
+
+coord = astropy.coordinates.SkyCoord(**kwargs)
+
+xprint(coord.cartesian/R_E)
+xprint(coord.transform_to(name_map[final]).cartesian/R_E)

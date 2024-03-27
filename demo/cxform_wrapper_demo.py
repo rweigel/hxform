@@ -5,8 +5,7 @@ import ctypes
 from datetime import datetime
 import numpy as np
 
-from hxform.xprint import Xprint as Xp
-xp = Xp() # Print to console and log file
+from hxform import xprint # print to console and cxform_wrapper_demo.log
 
 import glob
 for file in glob.glob(os.path.join(os.path.dirname(__file__), "../hxform/cxform_wrapper*")):
@@ -38,10 +37,10 @@ ret = libcxform.cxform(
 		v_in.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),
 		v_out.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 	) 
-#xprint(ret)
-xp.xprint(time)
-xp.xprint(v_in)
-xp.xprint(v_out)
+
+xprint(time)
+xprint(v_in)
+xprint(v_out)
 
 # Call vectorized wrapper function cxform_wrapper
 time = np.array([time], dtype=np.int32)
@@ -62,7 +61,7 @@ ret = libcxform.cxform_wrapper(
 		ctypes.c_int(indata.shape[0]),
 		ctypes.c_int(time.shape[0])
 	)
-#xprint(ret)
-xp.xprint(time)
-xp.xprint(indata)
-xp.xprint(outdata)
+
+xprint(time)
+xprint(indata)
+xprint(outdata)

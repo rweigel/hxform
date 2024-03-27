@@ -115,7 +115,7 @@ c becomes identical to the GSM coordinate system.
 !f2py intent(out) ::  outdatav
 
 c these transformations only rely on one call.
-      IF      (trans=='GEItoGEO') THEN
+      IF (trans=='GEItoGEO') THEN
         IF (Nv.EQ.Nt) THEN
         DO i=1,Nv
         CALL RECALC_08_W (datetime(i,:))

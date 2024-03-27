@@ -8,12 +8,10 @@ def trans(v,t):
 
 v = [1,2,3]
 t = [2009,2,2,11,1,1]
-
+out = hx.transform(v, t, 'GSM','MAG', lib='geopack_08_dp')
 ##################################
 
 vt = trans(v,t)
-#print(type(vt))
-#print(vt)
 assert(type(vt) == list)
 assert(type(vt[0]) == np.double)
 assert(len(vt) == 3)
@@ -103,7 +101,7 @@ assert( trans(v2n  ,tn_0).shape == (2,3) )
 assert( trans(v1n_0,tn_0).shape == (1,3) )
 assert( trans(vn_0 ,tn_0).shape == ( 3,) )
 
-assert(np.all( trans(v2n  ,t2n)==np.array([trans(vn_0,tn_0),trans(vn_1,tn_1)]) ))
+assert(np.all( trans(v2n  ,t2n) == np.array([trans(vn_0,tn_0),trans(vn_1,tn_1)]) ))
 assert(np.all( trans(vn_0,tn_0) == trans(v1n_0,t1n_0).ravel() ))
 assert(np.all( trans(vn_0,tn_0) == trans(v1n_0, tn_0).ravel() ))
 assert(np.all( trans(vn_0,tn_0) == trans( vn_0,t1n_0).ravel() ))
