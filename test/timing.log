@@ -1,13 +1,19 @@
 ------------------------------------------------------------
-t.size = (1, 6); p_in.size = (10000, 3)
+# 1 time value; 100 vectors
 time     lib
-0.6376   spacepy
-0.0067   cxform
-0.0010   geopack_08_dp
+0.0011   cxform
+0.0054   geopack_08_dp
+0.0295   spacepy
+0.1361   spacepy-irbem
+0.0463   spiceypy
+0.6910   sunpy
 ------------------------------------------------------------
-t.size = (10000, 6); p_in.size = (10000, 3)
+# 100 time value; 100 vectors
 time     lib
-0.2732   spacepy
-0.0066   cxform
-0.1103   geopack_08_dp
+0.0002   cxform
+0.0003   geopack_08_dp
+0.0068   spacepy
+0.0021   spacepy-irbem
+0.0510   spiceypy
+1.2331   sunpy
 ------------------------------------------------------------

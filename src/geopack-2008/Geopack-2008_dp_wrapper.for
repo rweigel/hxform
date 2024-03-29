@@ -120,7 +120,7 @@ c these transformations only rely on one call.
         DO i=1,Nv
         CALL RECALC_08_W (datetime(i,:))
         CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                 outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
         END DO
         ELSE IF (Nv.EQ.1) THEN
         DO i=1,Nt
@@ -168,7 +168,7 @@ c these transformations only rely on one call.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEOGSW_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
@@ -206,19 +206,19 @@ c these transformations only rely on one call.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          CALL SMGSW_08(indatav(1,1),indatav(1,2),indatav(1,3),
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         END IF
 
@@ -234,13 +234,13 @@ c these transformations only rely on one call.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+     *                  indatav(1,1),indatav(1,2),indatav(1,3),-1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           END DO
         END IF
 
@@ -257,7 +257,7 @@ c these transformations only rely on one call.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEOMAG_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
@@ -301,7 +301,7 @@ c these transformations only rely on one call.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GSWGSE_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GSWGSE_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
@@ -340,19 +340,19 @@ c these transformations only rely on one call.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+          CALL MAGSM_08(indatav(1,1),indatav(1,2),indatav(1,3),
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         END IF
 
@@ -361,19 +361,19 @@ c these transformations only rely on one call.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
+     *                  indatav(1,1),indatav(1,2),indatav(1,3),-1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           END DO
         END IF
 
@@ -385,25 +385,25 @@ C these transformations rely on multiple calls.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   xtmp, ytmp, ztmp, 1)
+     *                  xtmp, ytmp, ztmp, 1)
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   xtmp, ytmp, ztmp, 1)
+          CALL MAGSM_08(indatav(1,1),indatav(1,2),indatav(1,3),
+     *                  xtmp, ytmp, ztmp, 1)
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   xtmp, ytmp, ztmp, 1)
+     *                  xtmp, ytmp, ztmp, 1)
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         END IF
 
@@ -412,24 +412,24 @@ C these transformations rely on multiple calls.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   xtmp, ytmp, ztmp,-1)
+     *                  xtmp, ytmp, ztmp,-1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   xtmp, ytmp, ztmp,-1)
+     *                  xtmp, ytmp, ztmp,-1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL SMGSW_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
-     *                   xtmp, ytmp, ztmp,-1)
+     *                  xtmp, ytmp, ztmp,-1)
           END DO
         END IF
 
@@ -447,7 +447,7 @@ C these transformations rely on multiple calls.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEIGEO_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GEOMAG_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
@@ -474,7 +474,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GEOMAG_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -496,20 +496,20 @@ C these transformations rely on multiple calls.
           CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEOMAG_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         ELSE
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
-          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEOMAG_08(indatav(i,1),indatav(i,2),indatav(i,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL MAGSM_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
@@ -520,7 +520,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -528,7 +528,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -536,7 +536,7 @@ C these transformations rely on multiple calls.
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL GEOMAG_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -557,7 +557,7 @@ C these transformations rely on multiple calls.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL SMGSW_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
@@ -566,7 +566,7 @@ C these transformations rely on multiple calls.
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL SMGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
-     *                   xtmp, ytmp, ztmp, 1)
+     *                  xtmp, ytmp, ztmp, 1)
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
@@ -584,7 +584,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL SMGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -613,7 +613,7 @@ C these transformations rely on multiple calls.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEOGSW_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEOGSW_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
@@ -640,7 +640,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEOGSW_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -670,7 +670,7 @@ C these transformations rely on multiple calls.
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
-          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEIGEO_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GEOGSW_08(xtmp, ytmp, ztmp,
      *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
@@ -697,7 +697,7 @@ C these transformations rely on multiple calls.
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GEOGSW_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
      *                   xtmp, ytmp, ztmp,-1)
           END DO
@@ -726,7 +726,7 @@ C start of three subroutine calls for transformations
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
-          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEIGEO_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GEOMAG_08(xtmp, ytmp, ztmp,
      *                   xtmp2, ytmp2, ztmp2,1)
@@ -741,7 +741,7 @@ C start of three subroutine calls for transformations
           CALL GEOMAG_08(xtmp, ytmp, ztmp,
      *                   xtmp2, ytmp2, ztmp2,1)
           CALL MAGSM_08(xtmp2, ytmp2, ztmp2,
-     *                   outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
+     *                  outdatav(i,1),outdatav(i,2),outdatav(i,3),1)
           END DO
         END IF
       ELSE IF (trans=='SMtoGEI') THEN
@@ -749,7 +749,7 @@ C start of three subroutine calls for transformations
           DO i=1,Nv
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
      *                   xtmp, ytmp, ztmp,-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
@@ -759,7 +759,7 @@ C start of three subroutine calls for transformations
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
      *                   xtmp, ytmp, ztmp,-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
@@ -769,7 +769,7 @@ C start of three subroutine calls for transformations
           CALL RECALC_08_W (datetime(1,:))
           DO i=1,Nv
           CALL MAGSM_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                  indatav(i,1),indatav(i,2),indatav(i,3),-1)
           CALL GEOMAG_08(xtmp2, ytmp2, ztmp2,
      *                   xtmp, ytmp, ztmp,-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
@@ -793,7 +793,7 @@ C start of three subroutine calls for transformations
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
-          CALL GEIGEO_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL GEIGEO_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL GEOGSW_08(xtmp, ytmp, ztmp,
      *                   xtmp2, ytmp2, ztmp2,1)
@@ -826,7 +826,7 @@ C start of three subroutine calls for transformations
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL GEOGSW_08(xtmp2, ytmp2, ztmp2,
      *                   xtmp, ytmp, ztmp,-1)
           CALL GEIGEO_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),
@@ -859,7 +859,7 @@ C start of three subroutine calls for transformations
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
-          CALL MAGSM_08(indatav(i,1),indatav(i,2),indatav(i,3),
+          CALL MAGSM_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL SMGSW_08(xtmp, ytmp, ztmp,
      *                   xtmp2, ytmp2, ztmp2,1)
@@ -892,7 +892,7 @@ C start of three subroutine calls for transformations
           DO i=1,Nt
           CALL RECALC_08_W (datetime(i,:))
           CALL GSWGSE_08(xtmp, ytmp, ztmp,
-     *                   indatav(i,1),indatav(i,2),indatav(i,3),-1)
+     *                   indatav(1,1),indatav(1,2),indatav(1,3),-1)
           CALL SMGSW_08(xtmp2, ytmp2, ztmp2,
      *                   xtmp, ytmp, ztmp,-1)
           CALL MAGSM_08(outdatav(i,1),outdatav(i,2),outdatav(i,3),

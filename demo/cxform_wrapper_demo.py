@@ -36,7 +36,7 @@ ret = libcxform.cxform(
 		ctypes.c_double(es),
 		v_in.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),
 		v_out.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-	) 
+	)
 
 xprint(time)
 xprint(v_in)

@@ -1,17 +1,30 @@
-import os
-from inspect import stack
+def xprint(msg: str):
+  """Print to console and log file based on calling script name.
 
-class Xprint:
-  """Print to console and logfile based on calling script name."""
+  The first call from myscript.py will create (or overwrite) myscript.log.
 
-  def __init__(self):
-    fname = stack()[1][1]
-    logfile = os.path.realpath(fname[0:-2]) + "log"
-    with open(logfile, "w") as f: pass
-    self.logfile = logfile
+  Subsequent calls will append to myscript.log.
 
-  def xprint(self, msg, precision=8):
+  Example
+  --------
+  >>> from hxform import xprint
+  >>> xprint("Log message")
+  """
 
-    print(msg)
-    with open(self.logfile, "a") as f:
-      f.write(str(msg) + "\n")
+  import os
+  from inspect import stack
+
+  fname = stack()[1][1]
+  logfile = os.path.realpath(fname[0:-2]) + "log"
+
+  if not 'counter' in xprint.__dict__:
+    xprint.counter = {fname: 0}
+
+  if xprint.counter[fname] == 0:
+    if os.path.isfile(logfile):
+      os.remove(logfile)
+
+  xprint.counter[fname] += 1
+  print(msg)
+  with open(logfile, "a") as f:
+    f.write(str(msg) + "\n")

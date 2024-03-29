@@ -28,6 +28,8 @@ name_map = {
 time = "2010-12-30T00:00"
 initial = 'GSM'
 final = 'GSE'
+initial = 'GEI'
+final = 'GSM'
 
 R_E = astropy.constants.R_earth
 # TODO: Use
@@ -45,4 +47,7 @@ kwargs = {
 coord = astropy.coordinates.SkyCoord(**kwargs)
 
 xprint(coord.cartesian/R_E)
+# (1., 1., 1.)
+
 xprint(coord.transform_to(name_map[final]).cartesian/R_E)
+# (-7.77573385e-12, 6.76429888e-12, 5.27573112e-12) AU / m

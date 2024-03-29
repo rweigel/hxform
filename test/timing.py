@@ -1,52 +1,48 @@
 import time
+
 import numpy as np
 from numpy import matlib
+
 from hxform import hxform as hx
+from hxform import xprint # print to console and timing.log
 
-import warnings
-# Suppress SpacePy warning
-warnings.filterwarnings("ignore", message="Leapseconds.*")
+N = 100
 
-from hxform.xprint import Xprint as Xp
-xp = Xp() # Print to console and log file
+libs = hx.known_libs(info=False)
+libs.remove('sscweb')
 
-N = 10000
-libs = ['spacepy','cxform','geopack_08_dp']
+p_in = np.random.random((N, 3))
+t = np.array([2001, 1, 1, 0, 0, 0])
+kwargs = {
+  'csys_in': 'GSM',
+  'csys_out': 'GSE',
+  'ctype_in': 'car',
+  'ctype_out': 'car'
+}
 
-p_in = np.random.random((N,3))
-t = np.array([2001,1,1,0,0,0])
 
-xp.xprint(60*'-')
-xp.xprint('t.size = (1, 6); p_in.size = ({0:d}, 3)'.format(N))
-xp.xprint('time     lib')
+xprint(60*'-')
+xprint(f'# 1 time value; {N} vectors')
+xprint('time     lib')
 for lib in libs:
-    tic = time.time()
-    p_out = hx.MAGtoGSM(p_in, t, ctype_in='car', ctype_out='car', lib=lib)
-    toc = time.time()
-    xp.xprint('{0:.4f}   {1:s}'.format(toc-tic, lib))
+  tic = time.time()
+  kwargs['lib'] = lib
+  p_out = hx.transform(p_in, t, **kwargs)
+  toc = time.time()
+  xprint('{0:2.4f}   {1:s}'.format(toc-tic, lib))
 
-xp.xprint(60*'-')
-xp.xprint('t.size = ({0:d}, 6); p_in.size = ({0:d}, 3)'.format(N))
-xp.xprint('time     lib')
+
+xprint(60*'-')
+xprint(f'# {N} time value; {N} vectors')
+xprint('time     lib')
 
 t = matlib.repmat(t, N, 1)
 
 for lib in libs:
-    tic = time.time()
-    p_out = hx.MAGtoGSM(p_in, t, ctype_in='car', ctype_out='car', lib=lib)
-    toc = time.time()
-    xp.xprint('{0:.4f}   {1:s}'.format(toc-tic, lib))
+  tic = time.time()
+  kwargs['lib'] = lib
+  p_out = hx.transform(p_in, t, **kwargs)
+  toc = time.time()
+  xprint('{0:2.4f}   {1:s}'.format(toc-tic, lib))
 
-if False:
-    xp.xprint(60*'-')
-    xp.xprint('t.size = ({0:d}, 6); p_in.size = (1, 3)'.format(N))
-    xp.xprint('time     lib')
-    t = np.matlib.repmat(t, N, 3)
-    p_in = p_in[0] # Error
-    for lib in libs:
-        tic = time.time()
-        p_out = hx.MAGtoGSM(p_in, t, ctype_in='car', ctype_out='car', lib=lib)
-        toc = time.time()
-        xp.xprint('{0:.3f}   {1:s}'.format(toc-tic, lib))
-
-xp.xprint(60*'-')
+xprint(60*'-')

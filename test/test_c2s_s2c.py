@@ -12,6 +12,7 @@ def test_basic():
     for i in range(3):
         np.testing.assert_allclose(car0[:,i], car[i], atol=0.0, rtol=1e-10)
 
+
 def test_simple_values():
 
     # x = 1., y = 0., z = 0.
@@ -51,9 +52,9 @@ def test_simple_values():
 
 
 def test_r_equal_zero():
-    car0 = np.array([0., 0., 0.])
-    with pytest.raises(AssertionError):
-        sph = hx.CtoS(*car0)
+  car0 = np.array([0., 0., 0.])
+  with pytest.raises(AssertionError):
+    hx.CtoS(*car0)
 
 
 def test_random_values():
@@ -64,12 +65,12 @@ def test_random_values():
     car = hx.StoC(sph[0], sph[1], sph[2])
 
     for i in range(3):
-        np.testing.assert_allclose(car0[:,i], car[i], atol=1e-12, rtol=0.0)
+      np.testing.assert_allclose(car0[:,i], car[i], atol=1e-12, rtol=0.0)
 
 
 if __name__ == '__main__':
-    # Could use: https://stackoverflow.com/a/28643737 to call all functions.
-    test_basic()
-    test_simple_values()
-    test_r_equal_zero()
-    test_random_values()
+  # Could use: https://stackoverflow.com/a/28643737 to call all functions.
+  test_basic()
+  test_simple_values()
+  test_r_equal_zero()
+  test_random_values()

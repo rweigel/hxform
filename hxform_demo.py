@@ -7,10 +7,10 @@ time1 = [1997, 1, 1]
 time1 = [2010, 12, 30, 0, 0, 0]
 input1 = [1., 1., 1.]
 
-libs = ['sscweb','cxform','geopack_08_dp','spacepy','spacepy-irbem','sunpy','spiceypy']
+libs = ['cxform','geopack_08_dp','spacepy','spacepy-irbem','spiceypy','sscweb','sunpy']
 
-initial = 'GSM'
-final = 'GSE'
+initial = 'GEI'
+final = 'GSM'
 
 xprint(f"Time: {time1}")
 xprint(f"Transform: {initial} => {final}")
@@ -19,13 +19,13 @@ xprint("Output:\n" + 48*"-")
 
 ml = max([len(lib) for lib in libs]) # Max length of lib name
 
-outputs = np.full((len(libs),3), fill_value=np.nan)
+outputs = np.full((len(libs), 3), fill_value=np.nan)
 
 # Single time, single vector
 for i, lib in enumerate(libs):
   output = hx.transform(input1, time1, initial, final, lib=lib)
   outputs[i,:] = np.array(output)
-  xprint("{}:{}   {:11.8f} {:11.8f} {:11.8f}".format(lib, (ml-len(lib)+5)*" ",*output))
+  xprint("{} {}   {:11.8f} {:11.8f} {:11.8f}".format(lib, (ml-len(lib)+5)*" ",*output))
 
 max, min = np.max(outputs, axis=0), np.min(outputs, axis=0)
 xprint("\n")
@@ -34,5 +34,3 @@ xprint("100*|max-min|/|max|:   {:10.4f}% {:10.4f}% {:10.4f}%".format(*(100*np.ab
 
 time2 = [time1, time1]
 input2 = [input1, input1]
-
-
