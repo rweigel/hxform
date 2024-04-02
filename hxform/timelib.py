@@ -1,5 +1,5 @@
 def tpad(time, length=7):
-  """Pad list with 3 or more elements with zeros.
+  """Pad list or array with 3 or more elements with zeros.
 
   Example:
   --------
@@ -27,14 +27,14 @@ def tpad(time, length=7):
       time = time[:,0:length]
     else:
       pad = length - len(time)
-      time = np.pad(time, ((0, 0),(0, pad)), 'constant', constant_values=0)
+      time = np.pad(time, ((0, 0), (0, pad)), 'constant', constant_values=0)
 
   if in_type == np.ndarray:
     return time
   elif in_type == tuple:
-    return tuple(map(tuple,time))
+    return tuple(map(tuple, time))
   else:
-    return list(map(list,time))
+    return list(time)
 
 
 def is_leap_year(year):
@@ -113,6 +113,7 @@ def ints2doy(t):
 
 
 def iso2ints(isostr):
+
   import re
   tmp = re.split("-|:|T|Z", isostr)
   if len(tmp) > 6:

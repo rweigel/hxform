@@ -1,5 +1,5 @@
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='cxform'):
-  """Transform between coordinates systems using cxform, Geopack, SpacePy, SSCWeb, or SunPy.
+  """Transform between coordinates systems using cxform, Geopack, SpacePy, SpiceyPy, SSCWeb, or SunPy.
 
   Parameters
   ----------
@@ -79,46 +79,54 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
   """
   import numpy as np
-  from hxform import timelib
+  import hxform
 
-  assert lib in known_libs(), 'lib must be one of {}'.format(known_libs())
+  assert lib in hxform.info.known_libs(), 'lib must be one of {}'.format(hxform.info.known_libs())
   assert ctype_in in ['car', 'sph'], 'ctype_in must be one of ["car", "sph"]'
   assert ctype_out in ['car', 'sph'], 'ctype_out must be one of ["car", "sph"]'
 
-  info = lib_info(lib)
+  info = hxform.info.lib_info(lib)
   assert csys_in in info['systems'], 'For lib={}, csys_in must be one of {}'.format(lib, info['systems'])
   assert csys_out in info['systems'], 'For lib={}, csys_out must be one of {}'.format(lib, info['systems'])
-
-  if isinstance(time, str):
-    time = timelib.iso2ints(time)
 
   v_outertype = type(v)
   v_innertype = type(v[0])
 
   v = np.array(v, dtype=np.double)
-  time = np.array(time, dtype=np.int32)
+  try:
+    time = np.array(time, dtype=np.int32)
+  except:
+    # This will occur for input of the form [[2000, 1, 1], [2000, 1, 1, 1]]
+    # where not all time values have the same number of elements.
+    for i in range(len(time)):
+      print(hxform.timelib.tpad(time[i], length=6))
+      time[i] = hxform.timelib.tpad(time[i], length=6)
+    time = np.array(time, dtype=np.int32)
 
   if len(time.shape) == 1:
     time = np.array([time])
   if len(v.shape) == 1:
     v = np.array([v])
 
-  Nv = v.shape[0]
-  Nt = time.shape[0]
+  Nv = v.shape[0]     # Number of vectors
+  Nt = time.shape[0]  # Number of times
 
+  assert(len(v[0]) == 3)
   assert(len(time.shape) == 2 and len(v.shape) == 2)
   assert(Nv == Nt or Nt == 1 or Nv == 1)
 
-  if csys_in == csys_out or lib.startswith('spacepy') or lib == 'spiceypy' or lib == 'sscweb':
+  if csys_in == csys_out or lib.startswith('spacepy') or lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sunpy':
+    # TODO: Could avoid expanding time or v by putting logic to test for
+    # Nt == 1 or Nv == 1 in transform loops for each lib.
     from numpy import matlib
-    if time.shape[0] == 1 and v.shape[0] > 1:
-      time = matlib.repmat(time, v.shape[0], 1)
+    if Nt == 1 and Nv > 1:
+      time = matlib.repmat(time, Nv, 1)
 
-    if v.shape[0] == 1 and time.shape[0] > 1:
-      v = matlib.repmat(v, time.shape[0], 1)
+    if Nv == 1 and Nt > 1:
+      v = matlib.repmat(v, Nt, 1)
 
   # vp means "v prime", which is vector v in cys_in transformed to csys_out
-  if lib == 'spiceypy' or lib == 'sscweb' or lib == 'sunpy':
+  if lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sscweb' or lib == 'sunpy':
     vp = np.full(v.shape, np.nan)
 
   if ctype_in == 'sph' and lib != 'sscweb':
@@ -169,7 +177,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     import hxform.geopack_08_dp as geopack_08_dp
     trans = csys_in + 'to' + csys_out
-    dtime = np.array(timelib.ints2doy(time))
+    dtime = np.array(hxform.timelib.ints2doy(time))
 
     if v.shape[0] <= time.shape[0]:
       outsize = time.shape[0]
@@ -195,11 +203,11 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     if len(time.shape) == 1:
       # SpacePy requires time values to be strings with 1-second precision
-      t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(timelib.tpad(time, length=6))
+      t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time, length=6))
     else:
       t_str = []
       for i in range(time.shape[0]):
-        t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(timelib.tpad(time[i,:], length=6)))
+        t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6)))
       t_str = np.array(t_str)
 
     cvals.ticks = Ticktock(t_str, 'ISO')
@@ -223,25 +231,17 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       # when https://github.com/sunpy/sunpy/pull/7530 is merged.
       units = [one, one, one]
 
-
-    if len(time.shape) == 1:
-      obstimes = ['%04d-%02d-%02dT%02d:%02d:%02d' % tuple(timelib.tpad(time, length=6))]
-    else:
-      obstimes = []
-      for i in range(time.shape[0]):
-        obstimes.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(timelib.tpad(time[i,:], length=6)))
-
     frame_in = info['system_aliases'][csys_in]
     frame_out = info['system_aliases'][csys_out]
 
-    #import pdb; pdb.set_trace()
-    if len(obstimes) == 1:
+    if Nt == 1:
+      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[0,:], length=6))
       kwargs = {
         "x": v[:,0]*units[0],
         "y": v[:,1]*units[1],
         "z": v[:,2]*units[2],
         "frame": frame_in,
-        "obstime": obstimes[0],
+        "obstime": obstime,
         "representation_type": representation_type
       }
       coord = astropy.coordinates.SkyCoord(**kwargs)
@@ -251,33 +251,30 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       if ctype_out == 'sph':
         coord = coord.transform_to(frame_out).spherical/one
 
-      vp[:,0] = coord.x.value
-      vp[:,1] = coord.y.value
-      vp[:,2] = coord.z.value
-    else:
-      for i in range(len(obstimes)):
+      vp = coord.xyz.decompose().value.transpose()
 
+    else:
+      for i in range(Nt):
+        obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
         kwargs = {
           "x": v[i,0]*units[0],
           "y": v[i,1]*units[1],
           "z": v[i,2]*units[2],
           "frame": frame_in,
-          "obstime": obstimes[i],
+          "obstime": obstime,
           "representation_type": representation_type
         }
 
-        coord = astropy.coordinates.SkyCoord(**kwargs)
+        coord_in = astropy.coordinates.SkyCoord(**kwargs)
 
         if ctype_out == 'car':
-          coord = coord.transform_to(frame_out).cartesian/one
+          coord_out = coord_in.transform_to(frame_out).cartesian/one
         if ctype_out == 'sph':
-          coord = coord.transform_to(frame_out).spherical/one
+          coord_out = coord_in.transform_to(frame_out).spherical/one
 
-        vp[i,0] = coord.x.value
-        vp[i,1] = coord.y.value
-        vp[i,2] = coord.z.value
+        vp[i,:] = coord_out.xyz.decompose().value
 
-  if lib == 'spiceypy':
+  if lib.startswith('spiceypy'):
 
     import os
     import spiceypy
@@ -288,9 +285,8 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       kernel_file = os.path.join(os.path.dirname(__file__), rel_path)
       spiceypy.furnsh(kernel_file)
 
-    vp = np.full((time.shape[0], 3), np.nan)
     for i in range(time.shape[0]):
-      time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(timelib.tpad(time[i,:], length=6))
+      time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
       et = spiceypy.str2et(time_str)
       matrix = spiceypy.pxform(csys_in, csys_out, et)
       vp[i,:] = spiceypy.mxv(matrix, v[i,:])
@@ -309,7 +305,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
       time_.sleep(0.1)
       year = time[i][0]
-      doy_ = timelib.doy(time[i][0:3])
+      doy_ = hxform.timelib.doy(time[i][0:3])
       time_str = f'{year}-{doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
       url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
       if csys_in in ['GEO', 'GM']:
@@ -394,87 +390,6 @@ def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
   b2 = transform(np.array([0., 1., 0.]), time, csys_in, csys_out, **kwargs)
   b3 = transform(np.array([0., 0., 1.]), time, csys_in, csys_out, **kwargs)
   return np.column_stack([b1, b2, b3])
-
-
-def lib_info(lib):
-  infos = known_libs(info=True)
-  for info in infos:
-    if info['name'] == lib:
-      return info
-      break
-
-
-def known_transforms(lib):
-  return lib_info(lib)["systems"]
-
-
-def known_libs(info=False):
-  import sunpy
-  import spacepy
-  import spiceypy
-
-  # https://spacepy.github.io/coordinates.html
-  systems_spacepy = ["ECI2000", "ECIMOD", "ECITOD", "GEI", "GSE", "GSM", "GEO", "SM", "MAG"] 
-
-  knowns = [
-            {
-              'name': 'cxform',
-              'version': None, # TODO: Use commit hash.
-              'version_info': None,
-              'systems': ["J2000", "GEI", "GEO", "GSE", "GSM", "SM", "MAG", "RTN", "GSEQ", "HEE", "HAE", "HEEQ"]
-            },
-            {
-              'name': 'geopack_08_dp',
-              'version': None,
-              'version_info': None,
-              'systems': ["GEI", "GEO", "GSE", "GSM", "SM", "MAG"] # More are available, but not listed here.
-            },
-            {
-              'name': 'spacepy',
-              'version': spacepy.__version__,
-              'version_info': None,
-              'systems': systems_spacepy
-            },
-            {
-              'name': 'spacepy-irbem',
-              'version': spacepy.__version__,
-              'version_info': None,
-              'systems': systems_spacepy
-            },
-            {
-              'name': 'spiceypy',
-              'version': spiceypy.__version__,
-              'version_info': None,
-              'systems': ["GEI", "GEI_TOD", "GEI_MOD", "MEAN_ECLIP", "GEO", "GSE", "GSM", "MAG", "SM"],
-              'kernels': ['naif0012.tls', 'rbsp_general011.tf', 'de440s.bsp', 'pck00011.tpc']
-            },
-            {
-              'name': 'sunpy',
-              'version': sunpy.__version__,
-              'version_info': None,
-              'systems': ["GEI", "GEO", "GSE", "GSM", "SM", "MAG"],
-              'system_aliases': {
-                "GEI": "geocentricearthequatorial",
-                "GSE": "geocentricsolarecliptic",
-                "GSM": "geocentricsolarmagnetospheric",
-                "GEO": "itrs",
-                "SM": "solarmagnetic",
-                "MAG": "geomagnetic"
-              }
-            },
-            {
-              'name': 'sscweb',
-              'version': None, # TODO: Use current date?
-              'version_info': None,
-              'notes': 'https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.shtml',
-              'systems': ["GEI", "GEO", "GM", "GSE", "GSM", "J2000", "SM"]
-            }
-  ]
-
-  if info == True:
-    return knowns
-  else:
-    return [x['name'] for x in knowns]
 
 
 def CtoS(x, y, z):

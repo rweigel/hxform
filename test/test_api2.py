@@ -1,3 +1,4 @@
+# API Test
 # Test that the output is the same for single and multiple times and vectors
 # for all transforms available in each library.
 
@@ -11,13 +12,6 @@ time1  = [2010, 12, 30, 0, 0, 0]
 input1 = [1., 1., 1.]
 time2  = [time1, time1]
 input2 = [input1, input1]
-
-# With
-# csys_in = 'GSM'
-# csys_out = 'GSE'
-# geopack_08_dp gives error for
-#  assert(output12[0] == output11)
-#  assert(output12[1] == output11)
 
 libs = hx.known_libs(info=False)
 
@@ -36,10 +30,11 @@ for lib in libs:
 
       # Single time, single vector
       output11 = hx.transform(input1, time1, csys_in, csys_out, lib=lib)
-      assert(output11 == output11)
+      #print(output11)
 
       # Multiple times, single vector
       output12 = hx.transform(input1, time2, csys_in, csys_out, lib=lib)
+      #print(output12)
       assert(output12[0] == output11)
       assert(output12[1] == output11)
 

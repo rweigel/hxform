@@ -7,9 +7,9 @@ time1 = [1997, 1, 1]
 time1 = [2010, 12, 30, 0, 0, 0]
 input1 = [1., 1., 1.]
 
-libs = ['cxform','geopack_08_dp','spacepy','spacepy-irbem','spiceypy','sscweb','sunpy']
+libs = hx.known_libs(info=False)
 
-initial = 'GEI'
+initial = 'GSE'
 final = 'GSM'
 
 xprint(f"Time: {time1}")
@@ -31,6 +31,3 @@ max, min = np.max(outputs, axis=0), np.min(outputs, axis=0)
 xprint("\n")
 xprint("max-min:              {:11.8f} {:11.8f} {:11.8f}".format(*(max-min)))
 xprint("100*|max-min|/|max|:   {:10.4f}% {:10.4f}% {:10.4f}%".format(*(100*np.abs(max-min)/np.abs(max))))
-
-time2 = [time1, time1]
-input2 = [input1, input1]

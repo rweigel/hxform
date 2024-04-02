@@ -1,14 +1,33 @@
 # hxform
 
-Heliophysics coordinate transforms in Python
+Heliophysics coordinate transforms in Python using various libraries and packages
+
+# Motivation
+
+Over time, we have needed to use various coordinate transform libraries in Python. Multiple libraries have been used because
+
+1. not all libraries had all needed transforms,
+2. some libraries were too slow for application,
+3. some libraries had bugs, and
+4. some libraries did not interface with ParaView's Python (they ship their own version of Python).
+
+To facilitate comparison, we have developed a single interface. To transform a vector `v` at time `t` from coordinate system `csys_in` to `csys_out`, using library `lib`, use
+
+```python
+vp = hxform.transform(v, t, csys_in, csys_out, lib=...)
+```
+
+See the files name `hxform_demo_*.py` for example usage.
 
 # Overview
+
+This package is a wrapper to libraries that perform coordinate transforms.
 
 This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contains magnetospheric coordinate tranformation functions. 
 
 To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
-`hxform` also contains a wrapper to [SpacePy's coordinate tranformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
+`hxform` also contains a wrapper to [SpacePy's coordinate transformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
 
 # Install
 
@@ -33,8 +52,8 @@ See the files in the [test](https://github.com/rweigel/hxform/tree/master/test).
 To run, execute
 
 ```bash
-python test/hxform_test1.py
-python test/hxform_test2.py
+python test/api_test1.py
+python test/api_test2.py
 ```
 
 # Development

@@ -2,18 +2,20 @@
 # 1 time value; 100 vectors
 time     lib
 0.0011   cxform
-0.0054   geopack_08_dp
-0.0295   spacepy
-0.1361   spacepy-irbem
-0.0463   spiceypy
-0.6910   sunpy
+0.0049   geopack_08_dp
+0.0256   spacepy
+0.1353   spacepy-irbem
+0.0409   spiceypy1
+0.0311   spiceypy2
+0.6276   sunpy
 ------------------------------------------------------------
 # 100 time value; 100 vectors
 time     lib
-0.0002   cxform
-0.0003   geopack_08_dp
-0.0068   spacepy
+0.0003   cxform
+0.0002   geopack_08_dp
+0.0070   spacepy
 0.0021   spacepy-irbem
-0.0510   spiceypy
-1.2331   sunpy
+0.0490   spiceypy1
+0.0312   spiceypy2
+1.2565   sunpy
 ------------------------------------------------------------

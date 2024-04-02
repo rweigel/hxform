@@ -20,9 +20,7 @@ kwargs = {
   'ctype_out': 'car'
 }
 
-# TODO: Transforms using native Python libraries can be sped up for the case
-# of one time and multiple vectors by computing the rotation matrix once and
-# then applying it to all the vectors. This is not currently implemented.
+
 xprint(60*'-')
 xprint(f'# 1 time value; {N} vectors')
 xprint('time     lib')

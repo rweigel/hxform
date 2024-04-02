@@ -36,18 +36,27 @@ R_E = astropy.constants.R_earth
 #   R_E = astropy.units.m
 # when https://github.com/sunpy/sunpy/pull/7530 is merged.
 kwargs = {
-  "x": R_E,
-  "y": R_E,
-  "z": R_E,
+  "x": [R_E,R_E],
+  "y": [R_E,R_E],
+  "z": [R_E,R_E],
   "frame": name_map[initial],
   "obstime": time,
   "representation_type": "cartesian"
 }
 
-coord = astropy.coordinates.SkyCoord(**kwargs)
+coord_in = astropy.coordinates.SkyCoord(**kwargs)
 
-xprint(coord.cartesian/R_E)
-# (1., 1., 1.)
+coord_out = coord_in.transform_to(name_map[final]).cartesian/R_E
 
-xprint(coord.transform_to(name_map[final]).cartesian/R_E)
-# (-7.77573385e-12, 6.76429888e-12, 5.27573112e-12) AU / m
+vout = coord_out.xyz.decompose()
+xprint('Using sunpy directly')
+xprint(vout.value.transpose())
+
+import numpy as np
+xtime = np.array([2010, 12, 30, 0, 0, 0])
+v = np.array([[1,1,1],[1,1,1]])
+from hxform import hxform as hx
+vp = hx.transform(v, xtime, initial, final, lib='sunpy')
+xprint('Using hxform wrapper')
+xprint(vp)
+
