@@ -6,7 +6,7 @@ from numpy import matlib
 import hxform
 from hxform import xprint # print to console and timing.log
 
-N = 100
+N = 1000
 
 libs = hxform.info.known_libs(info=False)
 libs.remove('sscweb')
