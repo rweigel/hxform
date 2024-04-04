@@ -1,4 +1,5 @@
 import numpy as np
+import hxform
 from hxform import hxform as hx
 from hxform import xprint
 
@@ -7,7 +8,7 @@ time1 = [1997, 1, 1]
 time1 = [2010, 12, 30, 0, 0, 0]
 input1 = [1., 1., 1.]
 
-libs = hx.known_libs(info=False)
+libs = hxform.info.known_libs(info=False)
 
 initial = 'GSE'
 final = 'GSM'

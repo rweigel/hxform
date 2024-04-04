@@ -213,8 +213,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     cvals.ticks = Ticktock(t_str, 'ISO')
     vp = cvals.convert(csys_out, ctype_out).data
 
-    #vp = newcoord.data
-
   if lib == 'sunpy':
 
     import astropy.coordinates
@@ -306,7 +304,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       time_.sleep(0.1)
       year = time[i][0]
       doy_ = hxform.timelib.doy(time[i][0:3])
-      time_str = f'{year}-{doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
+      time_str = f'{year} {doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
       url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
       if csys_in in ['GEO', 'GM']:
         url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={csys_in}"
@@ -383,7 +381,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     return vp.tolist()
 
 
-def get_transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
+def transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
   import numpy as np
   kwargs = {'ctype_in': 'car', ctype_out: 'car', 'lib': lib}
   b1 = transform(np.array([1., 0., 0.]), time, csys_in, csys_out, **kwargs)

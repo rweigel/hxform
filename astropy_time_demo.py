@@ -6,6 +6,17 @@ from hxform import xprint # print to console and astropy_time_demo.log
 time_string = '2009-06-17T12:00Z'
 time_object = Time(time_string, precision=9)
 
+# Leap seconds - google smearing; using 60th second;
+# can be important for some applications; differences in length of second
+# Look into assumptions made in different libraries
+
+# Ask students to ask what impact handling of leap seconds has on their results
+# Also about other assumptions that go into scales.
+# Rebecca edge case in SpacePy
+# Look into SpacePy issue tracker for ideas
+# https://github.com/spacepy/spacepy/issues/673
+# Find Angel or Gary's post to SpacePy issue tracker
+
 if False:
   # Basic usage
   t = t.tt   # https://docs.astropy.org/en/stable/time/index.html#id6
