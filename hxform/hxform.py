@@ -255,6 +255,8 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       vp = coord.xyz.decompose().value.transpose()
 
     else:
+      execution_start = time_.time()
+
       for i in range(Nt):
         obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
         kwargs = {
