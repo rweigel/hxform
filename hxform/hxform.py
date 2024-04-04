@@ -133,7 +133,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
   import time as time_
-  execution_start = time_.time()
 
   if lib == 'cxform':
     import os
@@ -155,6 +154,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if time.shape[1] < 3:
       raise ValueError("At least year, month, and day must be given for time.")
 
+    execution_start = time_.time()
     nz = time.shape[1]
     if nz != 6:
       # Pad time. TODO: Do this in wrapper so extra memory is not needed.
@@ -175,6 +175,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
             ctypes.c_int(v.shape[0]),
             ctypes.c_int(int(Nt))
         )
+    execution_stop = time_.time()
 
   if lib == 'geopack_08_dp':
 
@@ -190,7 +191,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if ctype_in == 'sph':
       v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
+    execution_start = time_.time()
     vp = geopack_08_dp.transform(v, trans, dtime, outsize)
+    execution_stop = time_.time()
 
     if ctype_out == 'sph':
       vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
@@ -198,11 +201,6 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   if lib.startswith('spacepy'):
     import spacepy.coordinates as sc
     from spacepy.time import Ticktock
-
-    if lib.endswith('-irbem'):
-      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=True)
-    else:
-      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=False)
 
     if len(time.shape) == 1:
       # SpacePy requires time values to be strings with 1-second precision
@@ -213,8 +211,15 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6)))
       t_str = np.array(t_str)
 
+    execution_start = time_.time()
+    if lib.endswith('-irbem'):
+      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=True)
+    else:
+      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=False)
+
     cvals.ticks = Ticktock(t_str, 'ISO')
     vp = cvals.convert(csys_out, ctype_out).data
+    execution_stop = time_.time()
 
   if lib == 'sunpy':
 
@@ -237,6 +242,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     if Nt == 1:
       obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[0,:], length=6))
+      execution_start = time_.time()
       kwargs = {
         "x": v[:,0]*units[0],
         "y": v[:,1]*units[1],
@@ -259,13 +265,18 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       for i in range(Nt):
         obstimes.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6)))
 
+      v = v*units[0]
+      execution_start = time_.time()
       for i in range(Nt):
         #obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
         obstime = obstimes[i]
         kwargs = {
-          "x": v[i,0]*units[0],
-          "y": v[i,1]*units[1],
-          "z": v[i,2]*units[2],
+          #"x": v[i,0]*units[0],
+          #"y": v[i,1]*units[1],
+          #"z": v[i,2]*units[2],
+          "x": v[i,0],
+          "y": v[i,1],
+          "z": v[i,2],
           "frame": frame_in,
           "obstime": obstime,
           "representation_type": representation_type
@@ -279,6 +290,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
           coord_out = coord_in.transform_to(frame_out).spherical/one
 
         vp[i,:] = coord_out.xyz.decompose().value
+    execution_stop = time_.time()
 
   if lib.startswith('spiceypy'):
 
@@ -291,11 +303,13 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       kernel_file = os.path.join(os.path.dirname(__file__), rel_path)
       spiceypy.furnsh(kernel_file)
 
+    execution_start = time_.time()
     for i in range(time.shape[0]):
       time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
       et = spiceypy.str2et(time_str)
       matrix = spiceypy.pxform(csys_in, csys_out, et)
       vp[i,:] = spiceypy.mxv(matrix, v[i,:])
+    execution_stop = time_.time()
 
     spiceypy.kclear()
 
@@ -307,6 +321,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     if csys_in in ['GEO', 'GM'] and ctype_in == 'car':
       v[:,0], v[:,1], v[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
 
+    execution_start = time_.time()
     for i in range(time.shape[0]):
 
       time_.sleep(0.1)
@@ -373,11 +388,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         vp[i][0] = result[csys_out]['R']
         vp[i][1] = result[csys_out]['Lat']
         vp[i][2] = result[csys_out]['Long']
+    execution_stop = time_.time()
+
+  transform.execution_time = execution_stop - execution_start
 
   if ctype_out == 'sph' and lib != 'sscweb':
     vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
-
-  transform.execution_time = time_.time() - execution_start
 
   if issubclass(v_outertype, np.ndarray):
     if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):
