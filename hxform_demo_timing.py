@@ -3,12 +3,12 @@ import time
 import numpy as np
 from numpy import matlib
 
-from hxform import hxform as hx
+import hxform
 from hxform import xprint # print to console and timing.log
 
 N = 100
 
-libs = hx.known_libs(info=False)
+libs = hxform.info.known_libs(info=False)
 libs.remove('sscweb')
 
 p_in = np.random.random((N, 3))
@@ -20,29 +20,27 @@ kwargs = {
   'ctype_out': 'car'
 }
 
+# This is done to avoid the overhead of internal imports
+for lib in libs:
+  kwargs['lib'] = lib
+  p_out = hxform.transform(p_in, t, **kwargs)
 
 xprint(60*'-')
 xprint(f'# 1 time value; {N} vectors')
 xprint('time     lib')
 for lib in libs:
-  tic = time.time()
   kwargs['lib'] = lib
-  p_out = hx.transform(p_in, t, **kwargs)
-  toc = time.time()
-  xprint('{0:2.4f}   {1:s}'.format(toc-tic, lib))
-
+  p_out = hxform.transform(p_in, t, **kwargs)
+  xprint('{0:2.4f}   {1:s}'.format(hxform.transform.execution_time, lib))
 
 xprint(60*'-')
 xprint(f'# {N} time value; {N} vectors')
 xprint('time     lib')
 
 t = matlib.repmat(t, N, 1)
-
 for lib in libs:
-  tic = time.time()
   kwargs['lib'] = lib
-  p_out = hx.transform(p_in, t, **kwargs)
-  toc = time.time()
-  xprint('{0:2.4f}   {1:s}'.format(toc-tic, lib))
+  p_out = hxform.transform(p_in, t, **kwargs)
+  xprint('{0:2.4f}   {1:s}'.format(hxform.transform.execution_time, lib))
 
 xprint(60*'-')

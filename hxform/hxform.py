@@ -132,11 +132,14 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   if ctype_in == 'sph' and lib != 'sscweb':
     v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
 
+  import time as time_
+  execution_start = time_.time()
+
   if lib == 'cxform':
     import os
     import glob
     import ctypes
-    this_script = os.path.join(os.path.dirname(__file__), "../hxform/cxform_wrapper*")
+    this_script = os.path.join(os.path.dirname(__file__), "..", "hxform", "cxform_wrapper*")
 
     for lib_file in glob.glob(this_script):
       # The name of the .so or .dll file will not be the same on all
@@ -368,6 +371,8 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
   if ctype_out == 'sph' and lib != 'sscweb':
     vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
+
+  transform.execution_time = time_.time() - execution_start
 
   if issubclass(v_outertype, np.ndarray):
     if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):
