@@ -33,12 +33,12 @@ ext2 = Extension('hxform.cxform_wrapper',
 
 setup(
     name='hxform',
-    version='0.0.4',
+    version='0.0.5',
     author='Angel Gutarra-Leon, Bob Weigel, Gary Quaresima',
     author_email='rweigel@gmu.edu',
     packages=find_packages(),
     description='Heliophysical coordinate transformations using various libraries',
-    setup_requires=['numpy'],
+    setup_requires=['numpy', 'sunpy', 'spacepy', 'spiceypy'],
     install_requires=install_requires,
     ext_modules=[ext1, ext2]
 )
