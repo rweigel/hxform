@@ -5,13 +5,13 @@ try:
   # This script depends on numpy, which may not be installed.
   # The following line installs it. (try/except because
   # if already installed, an error is thrown.)
-  dist.Distribution().fetch_build_eggs(['numpy>=1.23.0'])
+  dist.Distribution().fetch_build_eggs(['numpy'])
 except:
   pass
 
 from numpy.distutils.core import setup, Extension
 
-install_requires = ["numpy"]
+install_requires = ["numpy", 'sunpy', 'spacepy', 'spiceypy', 'python-dateutil']
 
 # https://gist.github.com/johntut/1d8edea1fd0f5f1c057c
 # https://github.com/PyCOMPLETE/pypkgexample
@@ -38,7 +38,7 @@ setup(
     author_email='rweigel@gmu.edu',
     packages=find_packages(),
     description='Heliophysical coordinate transformations using various libraries',
-    setup_requires=['numpy', 'sunpy', 'spacepy', 'spiceypy'],
+    setup_requires=['numpy'],
     install_requires=install_requires,
     ext_modules=[ext1, ext2]
 )

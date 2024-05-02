@@ -336,10 +336,11 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
       # This is likely to fail if many requests are made.
       try:
-        r = requests.get(url)
+        r = requests.get(url, timeout=2)
       except:
-        raise Exception(f"Failed to fetch URL: {url}.")
-        return None
+        #raise Exception(f"Failed to fetch URL: {url}.")
+        vp[i] = np.full((1, 3), np.nan)
+        continue
 
       if r.status_code != 200:
         raise Exception(f"Failed to fetch URL: {url}. Status code: {r.status_code}.")
@@ -359,7 +360,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
           break
 
       if start is None:
-        raise Exception(f"Failed to find start of table in URL: {url}. Returned HTML:\n{text}")
+        #raise Exception(f"Failed to find start of table in URL: {url}. Returned HTML:\n{text}")
+        vp[i] = np.full((1, 3), np.nan)
+        continue
 
       # Extract the table lines
       R = float(lines[start].split()[2].strip())

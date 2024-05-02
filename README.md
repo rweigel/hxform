@@ -31,6 +31,10 @@ To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.f
 
 # Install
 
+Requires Anaconda and a Fortran compiler.
+
+Tested with Python 3.9.12. Have encountered install failures due to deprecations for Python 3.12.
+
 ```bash
 git clone https://github.com/rweigel/hxform
 cd hxform;
