@@ -5,9 +5,11 @@ try:
   # This script depends on numpy, which may not be installed.
   # The following line installs it. (try/except because
   # if already installed, an error is thrown.)
-  dist.Distribution().fetch_build_eggs(['numpy'])
+  # This no longer seems to work. NumPy must be installed before running setup.py.
+  #dist.Distribution().fetch_build_eggs(['numpy'])
+  import numpy
 except:
-  pass
+  raise ImportError("NumPy must be installed before running setup.py")
 
 from numpy.distutils.core import setup, Extension
 
