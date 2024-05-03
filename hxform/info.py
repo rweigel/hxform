@@ -3,7 +3,7 @@ def lib_info(lib):
   for info in infos:
     if info['name'] == lib:
       return info
-      break
+  return None
 
 
 def known_transforms(lib):
