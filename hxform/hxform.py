@@ -115,7 +115,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   assert(len(time.shape) == 2 and len(v.shape) == 2)
   assert(Nv == Nt or Nt == 1 or Nv == 1)
 
-  if csys_in == csys_out or lib.startswith('spacepy') or lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sunpy':
+  if csys_in == csys_out or lib.startswith('spacepy') or lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sunpy' or lib == 'pyspedas':
     # TODO: Could avoid expanding time or v by putting logic to test for
     # Nt == 1 or Nv == 1 in transform loops for each lib.
     from numpy import matlib
@@ -197,6 +197,21 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     if ctype_out == 'sph':
       vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
+
+  if lib == 'pyspedas':
+    import os
+    os.environ["PYSPEDAS_LOGGING_LEVEL"] = "error"
+    from pyspedas import cotrans
+    from pyspedas import time_double
+
+    time_in = []
+    for i in range(time.shape[0]):
+      tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
+      time_in.append(time_double(tstr))
+
+    execution_start = time_.time()
+    vp = cotrans(time_in=time_in, data_in=v, coord_in=csys_in, coord_out=csys_out)
+    execution_stop = time_.time()
 
   if lib.startswith('spacepy'):
     import spacepy.coordinates as sc
@@ -328,6 +343,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
       year = time[i][0]
       doy_ = hxform.timelib.doy(time[i][0:3])
       time_str = f'{year} {doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
+      # TODO: Document why SSCWeb Python client was not used.
       url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
       if csys_in in ['GEO', 'GM']:
         url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={csys_in}"

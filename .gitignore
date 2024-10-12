@@ -4,3 +4,5 @@ hxform.egg-info
 hxform/__pycache__/
 hxform/*.so
 hxform/*.dll
+notes/hapicache/
+notes/nc/

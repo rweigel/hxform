@@ -64,6 +64,7 @@ def compare(v, time, frame_in, frame_out, rep_in='car', rep_out='car', libs='all
   min_diff = np.min(outputs, axis=0)
   write("\n")
   write("max-min:              {:11.8f} {:11.8f} {:11.8f} {:11.8f} {:11.8f}".format(*(max_diff-min_diff)))
-  write("100*|max-min|/|max|:   {:10.4f}% {:10.4f}% {:10.4f}% {:10.4f}% {:10.4f}%".format(*(100*np.abs(max_diff-min_diff)/np.abs(max_diff))))
+  templ = "100*|max-min|/|max|:   {:10.4f}% {:10.4f}% {:10.4f}% {:10.4f}% {:10.4f}%"
+  write(templ.format(*(100*np.abs(max_diff-min_diff)/np.abs(max_diff))))
 
   return results

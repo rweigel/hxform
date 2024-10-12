@@ -1,0 +1,56 @@
+---
+title: GSW coordinate system
+---
+
+:::info SHORT EXPLANATION
+The Geocentric Solar Wind (GSW) coordinate system takes into account the actual direction of the solar wind at the Earth's location. 
+The GSW system differs from the standard GSM only in that its $X$-axis is directed anti-parallel to the observed solar wind flow, 
+rather than to Sun's center, which more accurately takes into account the aberration effect. 
+
+## Difference between the GSM and GSW coordinate systems
+
+The most frequently used coordinate system in solar-terrestrial physics is the Geocentric Solar 
+Magnetospheric (GSM) system. The standard GSM has its $X$-axis pointing toward the Sun, the $Z$-axis is 
+perpendicular to $X$ and belongs a plane formed by the $X$-axis and the Earth's dipole axis, and the $Y$ 
+completes a right-handed orthogonal set.
+
+To be more precise, one should also take into account that the solar wind does not arrive radially but approaches 
+from $\alpha^{\circ}$ west of the Sun due to the Earth's orbital motion, where $\alpha=\arctan(V_E/V_{SW})$ and 
+$V_E=29.77$ km/s. On average, $\alpha$ is equal to $\sim 4^{\circ}$ assuming the solar wind speed $V_{SW}\sim 425$ km/s. 
+Here we should note that [the OMNI data](https://omniweb.gsfc.nasa.gov/form/omni_min.html) are provided with the 
+already removed aberration from the solar wind velocity component (the correction $V_Y=-29.77$ km/s introduced).
+
+If the actual direction of the solar wind is known, then even more precise Geocentric Solar Wind (GSW) coordinate system 
+may be used. It differs from the GSM system only in that $X_{GSW}$ axis is directed anti-parallel to the observed solar 
+wind flow, which more accurately takes into account the variable aberration effect. The GSW system was first introduced 
+and described by [Hones et al. (1986)](https://www.sciencedirect.com/science/article/abs/pii/0032063386900012).
+
+## GSM to GSW
+
+Below you can find an example of recalculating the GSM coordinates to the GSW coordinates using the Geopack-2008 subroutines.
+
+ATTENTION: this example is for the single-precision version of Geopack, in case of the double-precision version, one should 
+replace the corresponding lines with: implicit real*8 (a-h,o-z) and CALL RECALC_08 (IYEAR,IDY,IHOUR,MIN,ISEC,-400.d0,0.d0,0.d0).
+
+```fortran
+c     !Here we have the GSM Cartesian coordinates XGSM,YGSM,ZGSM (float);
+c     !we know the date and UT (IYEAR,IDY,IHOUR,MIN,ISEC - all integers);
+c     !and we know the solar wind velocity components in the GSE system (VX,VY,VZ)
+
+      implicit real*4 (a-h,o-z)
+      COMMON /GEOPACK1/ AAAA(15),PS,BBBB(28)  ! Common block should be placed
+C                             ! in the beggining of the program to use the Geopack properly
+
+      ...
+
+      CALL RECALC_08 (IYEAR,IDY,IHOUR,MIN,ISEC,-400.,0.,0.)    !1st step: call RECALC_08 with
+c                                  ! the radial SW direction, i.e., VX0=-400., VY0=VZ0=0 km/s
+      CALL GSWGSE_08 (XGSM,YGSM,ZGSM,XGSE,YGSE,ZGSE,1)         !2nd step: convert GSM to GSE
+
+      CALL RECALC_08 (IYEAR,IDY,IHOUR,MIN,ISEC,VX,VY,VZ)       !3rd step: call RECALC_08 with
+c                                                          ! an actual SW direction VX, VY,VZ
+      CALL GSWGSE_08 (XGSW,YGSW,ZGSW,XGSE,YGSE,ZGSE,-1)        !4th step: convert GSE to GSW
+
+      ...
+
+```
