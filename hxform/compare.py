@@ -1,4 +1,5 @@
 import sys
+
 def compare(v, time, frame_in, frame_out, rep_in='car', rep_out='car', libs='all', libs_exclude=None, io=sys.stdout):
 
   def write(msg):

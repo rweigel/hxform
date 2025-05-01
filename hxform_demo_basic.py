@@ -21,7 +21,7 @@ xprint(f"Input:  {input1}")
 output = hxform.transform(input1, time1, initial, final, lib=lib)
 xprint(f"Output: {output}\n")
 
-# Transform input at two different times
+# Transform single input at two different times
 xprint("")
 xprint(f"Transform: {initial} => {final}")
 xprint(f"Time:   {[time1, time2]}")
