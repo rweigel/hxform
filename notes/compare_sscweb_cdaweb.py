@@ -13,6 +13,16 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.rcParams['figure.figsize'] = (8.5, 11)
 
+legend_kwargs = {
+  'loc': 'upper center',
+  'markerscale': 3,
+  'borderaxespad': 0,
+  'framealpha': 1,
+  'fontsize': 12,
+  'frameon': True,
+  'ncol': 3
+}
+
 # Earth radius in km used by SSCWeb. See
 # https://sscweb.gsfc.nasa.gov/users_guide/Users_Guide_pt1.html#1.3
 R_E = 6378.16 # km
@@ -219,9 +229,9 @@ def compute_diffs(info_cdaweb, info_sscweb):
     info_sscweb['time'] = common_times
 
   print("  Computing differences")
-  r_cdaweb = np.linalg.norm(info_cdaweb['xyz'], axis=1)
-  r_diff = np.diff(r_cdaweb)/R_E
-  t_diff = info_cdaweb['time'][1:]
+  #r_cdaweb = np.linalg.norm(info_cdaweb['xyz'], axis=1)
+  #r_diff = np.diff(r_cdaweb)/R_E
+  #t_diff = info_cdaweb['time'][1:]
 
   nt = len(info_cdaweb['time'])
   Δθ = np.full(nt, np.nan)
@@ -229,6 +239,7 @@ def compute_diffs(info_cdaweb, info_sscweb):
   Δr_rel = np.full(nt, np.nan)
   t = np.empty(nt, dtype='datetime64[ns]')
   t[:] = np.datetime64('NaT')
+  r = compute_r(info_cdaweb, info_sscweb)
 
   info_cdaweb['time'] = [t.replace(tzinfo=None) for t in info_cdaweb['time']]
 
@@ -237,9 +248,7 @@ def compute_diffs(info_cdaweb, info_sscweb):
     t[i] = np.datetime64(info_cdaweb['time'][i])
     Δr[i] = np.linalg.norm(info_cdaweb['xyz'][i] - info_sscweb['xyz'][i])
 
-    # Δr_rel[i] = diff in dist relative to the dist from the center of the Earth
-    r = np.linalg.norm(info_cdaweb['xyz'][i])
-    Δr_rel[i] = Δr[i]/r
+    Δr_rel[i] = Δr[i]/r[i]
 
     # d = denominator for angle calculation
     # Δθ[i] = arccos [ (a·b)/(|a|*|b|) ] = arccos (n/d)
@@ -262,25 +271,22 @@ def compute_diffs(info_cdaweb, info_sscweb):
       t_str = info_cdaweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
       print(f"t = {t_str} | Δr = {Δr[i]:.5f} [R_E] | Δ∠: {Δθ[i]:.5f}°")
 
-  return t, Δr, Δr_rel, Δθ, t_diff, r_diff
+  return t, Δr, Δr_rel, Δθ
 
-def adjust_y_range(ax, bottom=None):
+def adjust_y_range(ax, gap_fraction=0.25, bottom=None):
   # Adjust the y-axis range to add a gap at the top so legend does not overlap
   # with the data. Seems that the needed gap could be computed.
   ylim = ax.get_ylim()
   yticks = ax.get_yticks()
-  gap = 0.75 * (yticks[1] - yticks[0])
+  gap = gap_fraction * (yticks[1] - yticks[0])
   if bottom is None:
     bottom = ylim[0]
   ax.set_ylim(bottom, ylim[1] + gap)
 
-legend_kwargs = {
-  'loc': 'upper left',
-  'markerscale': 3,
-  'fontsize': 12,
-  'frameon': True,
-  'ncol': 3
-}
+def compute_r(info_cdaweb, info_sscweb):
+  ra = np.linalg.norm(info_cdaweb['xyz'], axis=1)
+  rb = np.linalg.norm(info_sscweb['xyz'], axis=1)
+  return (ra + rb)/2
 
 def plot_xyz(ax, info_cdaweb, info_sscweb):
   colors = ['r', 'g', 'b']
@@ -290,21 +296,29 @@ def plot_xyz(ax, info_cdaweb, info_sscweb):
     ax.plot(info_cdaweb['time'], info_cdaweb['xyz'][:,c], label=f'CDAWeb/{component[c]}', lw=2, linestyle='-', color=colors[c])
     ax.plot(info_sscweb['time'], info_sscweb['xyz'][:,c], label=f'SSCWeb/{component[c]}', lw=3, linestyle='--', color=colors[c])
 
-  adjust_y_range(ax)
-  ax.set_ylabel('$R_E$', fontsize=12)
+  r = compute_r(info_cdaweb, info_sscweb)
+  ax.plot(info_cdaweb['time'], r, label='$\\overline{r}$', lw=2, linestyle='-', color='k')
+
+  adjust_y_range(ax, gap_fraction=0.75)
+  ax.set_ylabel('$R_E$', fontsize=12, rotation=0)
   ax.grid()
-  ax.legend(**legend_kwargs)
+  ax.legend(**{**legend_kwargs, 'ncol': 4})
+  #ax.legend(**{**legend_kwargs, 'ncol': 4})
   ax.set_xticklabels([])
 
 def plot_diffs(ax, info_cdaweb, info_sscweb):
   print("  Computing differences")
-  t, Δr, Δr_rel, Δθ, t_diff, r_diff  = compute_diffs(info_cdaweb, info_sscweb)
+  t, Δr, Δr_rel, Δθ  = compute_diffs(info_cdaweb, info_sscweb)
 
   lw = 2 # line width
 
-  ax.plot(t, Δr, 'k-', lw=lw, label='$Δr/R_E$')
+  Δr_rel_max = np.nanmax(Δr_rel)
+  print(f"  Δr_max = {Δr_rel_max:.5f} [R_E]")
+  A = f'{Δr_rel_max:.1e}'.split('e')[0]
+  Δr_rel_max_str = f"{A}·10^{{{int(np.floor(np.log10(Δr_rel_max)))}}}"  # Convert to 10^ notation
+  ax.plot(t, Δr, 'r-', lw=lw, label='$Δr/R_E$')
   ax.plot(t, Δθ, 'g-', lw=lw, label='$Δθ$ [deg]')
-  ax.plot(t, Δr_rel, 'b-', lw=lw, label='$Δr/r$')
+  ax.plot(t, Δr_rel, 'b-', lw=lw, label=f'$Δr/\\overline{{r}}$  (max = ${Δr_rel_max_str}$)')
 
   adjust_y_range(ax, bottom=0)
   ax.legend(**legend_kwargs)
@@ -322,7 +336,7 @@ for i in range(len(infos_cdaweb)):
     # Shorten name for MMS
     b = f"CDAWeb/{info_cdaweb['parameter']}"
   print(f"Comparing\n{a}\nwith\n{b}")
-  title = f"{a} vs {b}"
+  title = f"{a} vs. {b}"
 
   info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb, logging=hapi_logging)
   info_cdaweb['time'], info_cdaweb['xyz'] = cdaweb(info_cdaweb, logging=hapi_logging)
@@ -333,12 +347,32 @@ for i in range(len(infos_cdaweb)):
   axes = gs.subplots(sharex=True)
   axes[0].set_title(title, fontsize=12)
 
+  for ax in axes:
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.tick_params(axis='y', which='minor', length=0)  # Remove minor tick lines next to y-axis numbers
+    ax.tick_params(axis='y', length=0)  # Remove tick lines next to y-axis numbers
+
+    for ax in axes:
+      ax.grid(which='minor', linestyle=':', linewidth=0.5, color=[0.75]*3)
+      ax.minorticks_on()
   print("  Plotting xyz")
   plot_xyz(axes[0], info_cdaweb, info_sscweb)
   print("  Plotting difs")
   plot_diffs(axes[1], info_cdaweb, info_sscweb)
 
+  from datetime import timedelta
+  # Add 1 minute to the x-axis limits to make sure the last tick is shown
+  axes[0].set_xlim(info_cdaweb['time'][0], info_cdaweb['time'][-1] + timedelta(minutes=1))
+  axes[1].set_xlim(info_cdaweb['time'][0], info_cdaweb['time'][-1] + timedelta(minutes=1))
   hapiplot.plot.datetick.datetick(dir='x')
+
+  labels = axes[1].get_xticklabels()
+  if labels:
+    labels[0].set_horizontalalignment('left')
+    labels[-1].set_horizontalalignment('right')
 
   fname = f'figures/{info_sscweb['dataset']}_{info_sscweb['frame']}'
   #plt.savefig(f'{fname}.svg', bbox_inches='tight')
