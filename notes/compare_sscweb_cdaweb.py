@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 
@@ -8,12 +10,20 @@ import hapiplot
 
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'cm'
+plt.rcParams['figure.constrained_layout.use'] = True
+plt.rcParams['figure.figsize'] = (8.5, 11)
 
 # Earth radius in km used by SSCWeb. See
 # https://sscweb.gsfc.nasa.gov/users_guide/Users_Guide_pt1.html#1.3
 R_E = 6378.16 # km
-satellite = 'mms'
-satellite = 'geotail'
+satellite = '' # Set to '' to run all
+#satellite = 'mms'
+#satellite = 'geotail'
+satellite = 'themis'
+hapi_logging = True
+interp_times = True
+print_vals = False
+print_first = True
 
 """
 SSCWeb provides TOD, J2K, GEO, GM, GSE, and SM
@@ -34,36 +44,66 @@ SSCWeb provides TOD, J2K, GEO, GM, GSE, and SM
   Based on the above quote, we treat GCI from CDAWeb as the same as GEI from SSCWeb.
 """
 
-if satellite == 'mms':
+infos_cdaweb = []
+infos_sscweb = []
 
-  mms   = 'mms1'
-  frame = 'GSE'
-  #frame = 'GSM'
-
+if satellite == '' or satellite == 'themis':
+  themis = 'themisa'
   start = '2016-09-01T00:00:00Z'
   stop  = '2016-09-02T00:00:00Z'
+  for frame in ['GSE', 'GSM', 'GEI']:
+    if frame == 'GEI':
+      parameter = f'th{themis[-1]}_pos'
+    else:
+      parameter = f'th{themis[-1]}_pos_{frame.lower()}'
 
-  info_cdaweb = {
-    'dataset': 'MMS1_EPD-EIS_SRVY_L2_ELECTRONENERGY',
-    'parameter': f'mms1_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
-    'start': start,
-    'stop':  stop
-  }
+    infos_cdaweb.append({
+      'dataset': f'TH{themis[-1].upper()}_L1_STATE@0',
+      'parameter': parameter,
+      'start': start,
+      'stop':  stop
+    })
 
-  info_sscweb = {
-    'dataset': 'mms1',
-    'frame': frame,
-    'start': start,
-    'stop':  stop
-  }
+    if frame == 'GEI':
+      frame = 'TOD'
 
-if satellite == 'geotail':
+    infos_sscweb.append({
+      'dataset': themis,
+      'frame': frame,
+      'start': start,
+      'stop':  stop
+    })
+
+if satellite == '' or satellite == 'mms':
+
+  mms   = 'mms1'
+  start = '2016-09-01T00:00:00Z'
+  stop  = '2016-09-02T00:00:00Z'
+  for frame in ['GSE', 'GSM']:
+    infos_cdaweb.append({
+      'dataset': f'{mms.upper()}_EPD-EIS_SRVY_L2_ELECTRONENERGY',
+      'parameter': f'mms1_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
+      'start': start,
+      'stop':  stop
+    })
+
+    infos_sscweb.append({
+      'dataset': mms,
+      'frame': frame,
+      'start': start,
+      'stop':  stop
+    })
+
+if satellite == '' or satellite == 'geotail':
+
+  # https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html
+  # https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
+  # CDAWeb dataset has
+  #   GCI, GSE, GSM, HEC
 
   start      = '2021-11-25T00:00:00Z'
   stop       = '2021-12-05T00:00:00Z'
 
-  infos_cdaweb = []
-  infos_sscweb = []
   for frame in ['GSE', 'GSM', 'GCI']:
     infos_cdaweb.append({
       'dataset': 'GE_OR_DEF',
@@ -82,12 +122,7 @@ if satellite == 'geotail':
       'stop':  stop
     })
 
-  # https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html
-  # https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
-  # CDAWeb dataset has
-  #   GCI, GSE, GSM, HEC
-
-def sscweb(info_sscweb):
+def sscweb(info_sscweb, logging=False):
   dataset    = info_sscweb['dataset']
   frame      = info_sscweb['frame']
   start      = info_sscweb['start']
@@ -95,7 +130,7 @@ def sscweb(info_sscweb):
   server = 'http://hapi-server.org/servers/SSCWeb/hapi'
   parameters = f'X_{frame},Y_{frame},Z_{frame}'
 
-  opts       = {'logging': True, 'usecache': True, 'cachedir': './hapicache'}
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
 
   data, meta = hapi(server, dataset, parameters, start, stop, **opts)
 
@@ -106,13 +141,13 @@ def sscweb(info_sscweb):
 
   return time, xyz
 
-def cdaweb(info_cdaweb):
+def cdaweb(info_cdaweb, logging=False):
   dataset    = info_cdaweb['dataset']
   parameter  = info_cdaweb['parameter']
   start      = info_cdaweb['start']
   stop       = info_cdaweb['stop']
   server     = 'https://cdaweb.gsfc.nasa.gov/hapi'
-  opts       = {'logging': True, 'usecache': True, 'cachedir': './hapicache'}
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
 
   data, meta = hapi(server, dataset, parameter, start, stop, **opts)
 
@@ -125,22 +160,21 @@ def cdaweb(info_cdaweb):
 
   return time, xyz
 
-def print_first(time_cdaweb, time_sscweb, xyz_cdaweb, xyz_sscweb):
-  time_cdaweb0 = time_cdaweb[0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-  time_sscweb0 = time_sscweb[0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-  # https://sscweb.gsfc.nasa.gov/sscweb_data_provenance.html
-  u = '[R_E]'
-  print('        {0:13s} {1:13s} {2:13s}'.format(f'X_{frame_cdaweb} {u}', f'Y_{frame_cdaweb} {u}', f'Z_{frame_cdaweb} {u}'))
-  print('CDAWeb: {0:<13.3f} {1:<13.3f} {2:<13.3f} {3:s} (Using {4:s}/{5:s})'.format(*xyz_cdaweb[0,:], time_cdaweb0, dataset_cdaweb, frame_cdaweb))
-  print('SSCWeb: {0:<13.3f} {1:<13.3f} {2:<13.3f} {3:s} (Using {4:s}/{5:s})'.format(*xyz_sscweb[0,:], time_sscweb0, dataset_sscweb, frame_sscweb))
-  dr = np.linalg.norm(xyz_cdaweb[0,:] - xyz_sscweb[0,:])
-  d = np.linalg.norm(xyz_cdaweb[0,:])*np.linalg.norm(xyz_sscweb[0,:])
-  angle = (180/np.pi)*np.arccos(np.dot(xyz_cdaweb[0,:], xyz_sscweb[0,:])/d)
-  #print(f"Δr = {dr/R_E:.3f} R_E = {dr:.0f} [km]; ∠: {angle:.3f}°")
-  print(f"Δr = {dr:.3f} R_E; ∠: {angle:.3f}°")
-  #        X_GSE [R_E]  Y_GSE [R_E]  Z_GSE [R_E]
-  #SSCWeb: 243.36926843 1.43711310   13.03130715  	 on 2021-11-25T00:00:00.000000Z
-  #CDAWeb: 243.63903103 1.46400240   13.05533682  	 on 2021-11-25T00:00:00.000Z
+def print_first_(info_cdaweb, info_sscweb):
+  if not print_first:
+    return
+
+  frame = info_sscweb['frame']
+  xyz_cdaweb0 = info_cdaweb['xyz'][0]
+  xyz_sscweb0 = info_sscweb['xyz'][0]
+  time_cdaweb0 = info_cdaweb['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+  time_sscweb0 = info_sscweb['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+  u = 'R_E'
+  print(f'  First values in {u}:')
+  print('            {0:7s} {1:7s} {2:7s}'.format(f'X_{frame}', f'Y_{frame}', f'Z_{frame}'))
+  print('    CDAWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_cdaweb0, time_cdaweb0))
+  print('    SSCWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_sscweb0, time_sscweb0))
 
 def interp(timei, time, xyz):
   # Interpolate CDAWeb data onto the union of timestamps
@@ -156,123 +190,161 @@ def interp(timei, time, xyz):
 
 def compute_diffs(info_cdaweb, info_sscweb):
 
-  interp_times = True
   if interp_times:
-    # Create a union of timestamps from both CDAWeb and SSCWeb
-    union_times = sorted(set(info_cdaweb['time']).union(set(info_sscweb['time'])))
+    print("  Computing union of timestamps.")
+    # Union of timestamps from CDAWeb and SSCWeb
+    union_times = set(info_cdaweb['time']).union(set(info_sscweb['time']))
+    union_times = sorted(union_times)
 
+    print(f"  Interpolating to {len(union_times)} timestamps.")
     info_cdaweb['xyz'] = interp(union_times, info_cdaweb['time'], info_cdaweb['xyz'])
     info_cdaweb['time'] = union_times
-
-    info_sscweb['xyz'] = interp(union_times, info_cdaweb['time'], info_sscweb['xyz'])
+    info_sscweb['xyz'] = interp(union_times, info_sscweb['time'], info_sscweb['xyz'])
     info_sscweb['time'] = union_times
+  else:
+    # Common timestamps
+    print("  Computing common timestamps.")
+    common_times = set(info_cdaweb['time']).intersection(set(info_sscweb['time']))
+    common_times = sorted(common_times)
+    common_times = sorted(common_times)
+    print(f"  {len(common_times)} common timestamps.")
 
-  # Find common timestamps
-  common_times = set(info_cdaweb['time']).intersection(set(info_sscweb['time']))
-  common_times = sorted(common_times)
-  print(f"Common timestamps: {len(common_times)} found.")
+    # Find the indices of common times
+    idx_cdaweb = np.nonzero(np.isin(info_cdaweb['time'], common_times))[0]
+    idx_sscweb = np.nonzero(np.isin(info_sscweb['time'], common_times))[0]
 
+    info_cdaweb['xyz'] = np.array(info_cdaweb['xyz'][idx_cdaweb])
+    info_cdaweb['time'] = common_times
+    info_sscweb['xyz'] = np.array(info_sscweb['xyz'][idx_sscweb])
+    info_sscweb['time'] = common_times
+
+  print("  Computing differences")
   r_cdaweb = np.linalg.norm(info_cdaweb['xyz'], axis=1)
   r_diff = np.diff(r_cdaweb)/R_E
   t_diff = info_cdaweb['time'][1:]
 
-  Δθ = np.full(len(common_times), np.nan)
-  Δr = np.full(len(common_times), np.nan)
-  Δr2 = np.full(len(common_times), np.nan)
-  t = np.empty(len(common_times), dtype='datetime64[ns]')
+  nt = len(info_cdaweb['time'])
+  Δθ = np.full(nt, np.nan)
+  Δr = np.full(nt, np.nan)
+  Δr_rel = np.full(nt, np.nan)
+  t = np.empty(nt, dtype='datetime64[ns]')
   t[:] = np.datetime64('NaT')
 
-  for i, tc in enumerate(common_times):
+  info_cdaweb['time'] = [t.replace(tzinfo=None) for t in info_cdaweb['time']]
 
-    # Find the index of common times
-    idx_cdaweb = np.where(info_cdaweb['time'] == tc)[0][0]
-    idx_sscweb = np.where(info_sscweb['time'] == tc)[0][0]
+  for i in range(nt):
+    # Remove timezone from info_cdaweb['time']
+    t[i] = np.datetime64(info_cdaweb['time'][i])
+    Δr[i] = np.linalg.norm(info_cdaweb['xyz'][i] - info_sscweb['xyz'][i])
 
-    xyz_cdaweb = np.array(info_cdaweb['xyz'][idx_cdaweb])
-    xyz_sscweb = np.array(info_sscweb['xyz'][idx_sscweb])
-
-    t[i] = np.datetime64(info_cdaweb['time'][idx_cdaweb])
-    Δr[i] = np.linalg.norm(xyz_cdaweb - xyz_sscweb)#/R_E
-    r2 = np.linalg.norm(xyz_cdaweb)
-    Δr2[i] = np.linalg.norm(xyz_cdaweb - xyz_sscweb)/r2
-    #Δr2[i] = np.linalg.norm(xyz_cdaweb)/R_E
+    # Δr_rel[i] = diff in dist relative to the dist from the center of the Earth
+    r = np.linalg.norm(info_cdaweb['xyz'][i])
+    Δr_rel[i] = Δr[i]/r
 
     # d = denominator for angle calculation
-    d = np.linalg.norm(xyz_cdaweb)*np.linalg.norm(xyz_sscweb)
-    Δθ[i] = (180/np.pi)*np.arccos(np.dot(xyz_cdaweb, xyz_sscweb)/d)
+    # Δθ[i] = arccos [ (a·b)/(|a|*|b|) ] = arccos (n/d)
+    n = np.dot(info_cdaweb['xyz'][i], info_sscweb['xyz'][i])
+    d = np.linalg.norm(info_cdaweb['xyz'][i])*np.linalg.norm(info_sscweb['xyz'][i])
+    if np.abs(n) > np.abs(d):
+      if np.abs(n - d) > 1e-10:
+        raise ValueError(f"n > d. n = {n:.16f} d = {d:.16f}, n-d = {n-d:.16f}")
+      wmsg = f"  Warning: {t[i]}:\n    |n| > |d| in Δθ[i] = arccos [ (a·b)/(|a|*|b|) ]"
+      wmsg += f" = arccos (n/d)\n    n = {n:.16f}, n-d = {n-d:.16f}"
+      print(wmsg)
+      # If n == d, then the angle is 0 degrees, but numpy gives
+      # RuntimeWarning: invalid value encountered in arccos. Did rounding
+      # cause n > d?
+      Δθ[i] = 0
+    else:
+      Δθ[i] = (180/np.pi)*np.arccos(n/d)
 
-    t_str = info_cdaweb['time'][idx_cdaweb].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    if print_vals:
+      t_str = info_cdaweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+      print(f"t = {t_str} | Δr = {Δr[i]:.5f} [R_E] | Δ∠: {Δθ[i]:.5f}°")
 
-    print(f"t = {t_str} | Δr = {Δr[i]:.5f} [R_E] | Δ∠: {Δθ[i]:.5f}°")
+  return t, Δr, Δr_rel, Δθ, t_diff, r_diff
 
-  return t, Δr, Δθ, t_diff, r_diff, Δr2
+def adjust_y_range(ax, bottom=None):
+  # Adjust the y-axis range to add a gap at the top so legend does not overlap
+  # with the data. Seems that the needed gap could be computed.
+  ylim = ax.get_ylim()
+  yticks = ax.get_yticks()
+  gap = 0.75 * (yticks[1] - yticks[0])
+  if bottom is None:
+    bottom = ylim[0]
+  ax.set_ylim(bottom, ylim[1] + gap)
 
-def plot_xyz(info_cdaweb, info_sscweb, title):
+legend_kwargs = {
+  'loc': 'upper left',
+  'markerscale': 3,
+  'fontsize': 12,
+  'frameon': True,
+  'ncol': 3
+}
+
+def plot_xyz(ax, info_cdaweb, info_sscweb):
   colors = ['r', 'g', 'b']
   component = ['X', 'Y', 'Z']
 
   for c in range(3):
-    plt.plot(info_cdaweb['time'], info_cdaweb['xyz'][:,c], label=f'CDAWeb/{component[c]}', lw=1, linestyle='-', color=colors[c])
-    plt.plot(info_sscweb['time'], info_sscweb['xyz'][:,c], label=f'SSCWeb/{component[c]}', lw=2, linestyle='--', color=colors[c])
+    ax.plot(info_cdaweb['time'], info_cdaweb['xyz'][:,c], label=f'CDAWeb/{component[c]}', lw=2, linestyle='-', color=colors[c])
+    ax.plot(info_sscweb['time'], info_sscweb['xyz'][:,c], label=f'SSCWeb/{component[c]}', lw=3, linestyle='--', color=colors[c])
 
-  plt.title(title, fontsize=12)
-  plt.grid()
-  plt.legend()
-  hapiplot.plot.datetick.datetick(dir='x')
+  adjust_y_range(ax)
+  ax.set_ylabel('$R_E$', fontsize=12)
+  ax.grid()
+  ax.legend(**legend_kwargs)
+  ax.set_xticklabels([])
 
-  fname = f'figures/{info_sscweb['dataset']}_{info_sscweb['frame']}'
-  print(f"Writing {fname}.{{svg,png}}")
-  plt.savefig(f'{fname}.svg', bbox_inches='tight')
-  plt.savefig(f'{fname}.png', dpi=300, bbox_inches='tight')
-  plt.close()
+def plot_diffs(ax, info_cdaweb, info_sscweb):
+  print("  Computing differences")
+  t, Δr, Δr_rel, Δθ, t_diff, r_diff  = compute_diffs(info_cdaweb, info_sscweb)
 
-def plot_diffs(info_cdaweb, info_sscweb, title):
-  t, Δr, Δθ, t_diff, r_diff, Δr2 = compute_diffs(info_cdaweb, info_sscweb)
+  lw = 2 # line width
 
-  #bbox=dict(facecolor='white', edgecolor='none', boxstyle='square,pad=0.1')
-  bbox = None
-  ms = 2
-  plt.title(title, fontsize=12)
+  ax.plot(t, Δr, 'k-', lw=lw, label='$Δr/R_E$')
+  ax.plot(t, Δθ, 'g-', lw=lw, label='$Δθ$ [deg]')
+  ax.plot(t, Δr_rel, 'b-', lw=lw, label='$Δr/r$')
 
-  plt.plot(t, Δr, 'k-', ms=ms, label='$Δr/R_E$')
-  #plt.text(t[-1], Δr[-1], '  $Δr/R_E$', color='k', fontsize=12, bbox=bbox)
-
-  plt.plot(t, Δθ, 'g-', ms=ms, label='$Δθ$ [deg]')
-  #plt.text(t[-1], Δθ[-1], '  $Δθ$ [deg]', color='g', fontsize=12, bbox=bbox)
-
-  #plt.plot(t_diff, np.abs(r_diff), 'r.', ms=ms, label='$|r_{t+1}-r_t|/R_E$')
-  #plt.text(t_diff[-1], np.abs(r_diff[-1]), '  $|r_{t+1}-r_t|/R_E$', color='r', fontsize=12, bbox=bbox, ha='left', va='top')
-
-  plt.plot(t, 10*Δr2, 'b-', ms=ms, label='$10Δr/r$')
-  #plt.text(t[-1], 10*Δr2[-1], '  $10Δr/r$', color='b', fontsize=12, bbox=bbox)
-
-  #ax = plt.gca()
-  #ax.spines['top'].set_visible(False)
-  #ax.spines['right'].set_visible(False)
-  plt.legend(loc='upper left', markerscale=3, fontsize=12, scatterpoints=3, frameon=True, ncol=3)
-  plt.grid()
-  hapiplot.plot.datetick.datetick(dir='x')
-
-  ylim = plt.gca().get_ylim()
-  yticks = plt.gca().get_yticks()
-  half_width = (yticks[1] - yticks[0]) / 2
-  plt.ylim(0, ylim[1] + half_width)
-
-  fname = f'figures/{info_sscweb['dataset']}_{info_sscweb['frame']}-diffs'
-  print(f"Writing {fname}.{{svg,png}}")
-  plt.savefig(f'{fname}.svg', bbox_inches='tight')
-  plt.savefig(f'{fname}.png', dpi=300, bbox_inches='tight')
-
+  adjust_y_range(ax, bottom=0)
+  ax.legend(**legend_kwargs)
+  ax.grid()
 
 for i in range(len(infos_cdaweb)):
+
   info_cdaweb = infos_cdaweb[i]
   info_sscweb = infos_sscweb[i]
 
-  info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb)
-  info_cdaweb['time'], info_cdaweb['xyz'] = cdaweb(info_cdaweb)
+  info_cdaweb['dataset']
+  a = f"SSCWeb/{info_sscweb['dataset']}/{info_sscweb['frame']}"
+  b = f"CDAWeb/{info_cdaweb['dataset'].split('@')[0]}/{info_cdaweb['parameter']}"
+  if info_sscweb['dataset'].startswith('mms'):
+    # Shorten name for MMS
+    b = f"CDAWeb/{info_cdaweb['parameter']}"
+  print(f"Comparing\n{a}\nwith\n{b}")
+  title = f"{a} vs {b}"
 
-  title = f"SSCWeb/{info_sscweb['dataset']}/{info_sscweb['frame']} | "
-  title += f"CDAWeb/{info_cdaweb['dataset']}/{info_cdaweb['parameter']}"
+  info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb, logging=hapi_logging)
+  info_cdaweb['time'], info_cdaweb['xyz'] = cdaweb(info_cdaweb, logging=hapi_logging)
 
-  plot_xyz(info_cdaweb, info_sscweb, title)
-  plot_diffs(info_cdaweb, info_sscweb, title)
+  print_first_(info_cdaweb, info_sscweb)
+
+  gs = plt.gcf().add_gridspec(2)
+  axes = gs.subplots(sharex=True)
+  axes[0].set_title(title, fontsize=12)
+
+  print("  Plotting xyz")
+  plot_xyz(axes[0], info_cdaweb, info_sscweb)
+  print("  Plotting difs")
+  plot_diffs(axes[1], info_cdaweb, info_sscweb)
+
+  hapiplot.plot.datetick.datetick(dir='x')
+
+  fname = f'figures/{info_sscweb['dataset']}_{info_sscweb['frame']}'
+  #plt.savefig(f'{fname}.svg', bbox_inches='tight')
+  #plt.savefig(f'{fname}.png', dpi=300, bbox_inches='tight')
+  print(f"  Writing {fname}.pdf")
+  plt.savefig(f'{fname}.pdf', bbox_inches='tight')
+  plt.close()
+
+  print("")
