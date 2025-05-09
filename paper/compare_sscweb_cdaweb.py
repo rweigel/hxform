@@ -18,7 +18,7 @@ R_E = 6378.16 # km
 ################################################################################
 satellite = '' # Set to '' to run all
 #satellite = 'mms'
-satellite = 'geotail'
+#satellite = 'geotail'
 #satellite = 'themis'
 
 hapi_logging = True
@@ -51,23 +51,13 @@ def infos(satellite):
     (The reason the HAPI server uses TOD for GEI is that "TOD" is the 
     POST query parameter names used to request data in GEI is "TOD" and not GEI
     and consistency in the query parameters was sought).
-
-    From https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html, 
-    "Geocentric Equatorial Inertial system. This system has X-axis
-    pointing from the Earth toward the first point of Aries (the position of
-    the Sun at the vernal equinox). This direction is the intersection of the
-    Earth's equatorial plane and the ecliptic plane and thus the X-axis lies
-    in both planes. The Z-axis is parallel to the rotation axis of the Earth,
-    and y completes the right-handed orthogonal set (Y = Z * X). Geocentric
-    Inertial (GCI) and Earth-Centered Inertial (ECI) are the same as GEI."
-
-    Based on the above quote, we treat GCI from CDAWeb as the same as GEI from SSCWeb.
   """
 
   infos_cdaweb = []
   infos_sscweb = []
 
   if satellite == '' or satellite == 'themis':
+
     themis = 'themisa'
     start = '2016-09-01T00:00:00Z'
     stop  = '2016-09-02T00:00:00Z'
@@ -85,7 +75,7 @@ def infos(satellite):
       })
 
       if frame == 'GEI':
-        frame = 'TOD'
+        frame = 'J2K'
 
       infos_sscweb.append({
         'dataset': themis,
@@ -93,6 +83,10 @@ def infos(satellite):
         'start': start,
         'stop':  stop
       })
+
+    infos_cdaweb.append(infos_cdaweb[-1])
+    infos_sscweb.append(infos_sscweb[-1])
+    infos_sscweb[-1]['frame'] = 'TOD'
 
   if satellite == '' or satellite == 'mms':
 
@@ -115,11 +109,21 @@ def infos(satellite):
       })
 
   if satellite == '' or satellite == 'geotail':
+    """
+    From https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html, 
+    "Geocentric Equatorial Inertial system. This system has X-axis
+    pointing from the Earth toward the first point of Aries (the position of
+    the Sun at the vernal equinox). This direction is the intersection of the
+    Earth's equatorial plane and the ecliptic plane and thus the X-axis lies
+    in both planes. The Z-axis is parallel to the rotation axis of the Earth,
+    and y completes the right-handed orthogonal set (Y = Z * X). Geocentric
+    Inertial (GCI) and Earth-Centered Inertial (ECI) are the same as GEI."
 
-    # https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html
-    # https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
-    # CDAWeb dataset has
-    #   GCI, GSE, GSM, HEC
+    Based on the above quote, we treat GCI from CDAWeb as the same as GEI from SSCWeb.
+
+    https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
+    CDAWeb dataset has GCI, GSE, GSM, HEC
+    """
 
     start      = '2021-11-25T00:00:00Z'
     stop       = '2021-12-05T00:00:00Z'
@@ -133,7 +137,7 @@ def infos(satellite):
       })
 
       if frame == 'GCI':
-        frame = 'TOD'
+        frame = 'J2K'
 
       infos_sscweb.append({
         'dataset': 'geotail',
@@ -141,6 +145,10 @@ def infos(satellite):
         'start': start,
         'stop':  stop
       })
+
+    infos_cdaweb.append(infos_cdaweb[-1])
+    infos_sscweb.append(infos_sscweb[-1])
+    infos_sscweb[-1]['frame'] = 'TOD'
 
   return infos_cdaweb, infos_sscweb
 
@@ -333,12 +341,20 @@ def plot_diffs(ax, info_cdaweb, info_sscweb):
   lw = 2 # line width
 
   Δr_rel_max = np.nanmax(Δr_rel)
-  print(f"  Δr_max = {Δr_rel_max:.5f} [R_E]")
-  A = f'{Δr_rel_max:.1e}'.split('e')[0]
-  Δr_rel_max_str = f"{A}·10^{{{int(np.floor(np.log10(Δr_rel_max)))}}}"  # Convert to 10^ notation
-  ax.plot(t, Δr, 'r-', lw=lw, label='$Δr/R_E$')
+  #A = f'{Δr_rel_max:.1e}'.split('e')[0]
+  #e = str(int(np.floor(np.log10(Δr_rel_max))))
+  #Δr_rel_max_str = f" ($Δr_{{\\rm{{max}}}}/\\overline{{r}}$ = {A}·$10^{{{e}}}$)"
+  Δr_rel_max_str = f" (max= 1/{1/Δr_rel_max:.0f})"
+
+  Δr_max = np.nanmax(Δr)
+  Δr_max_str = f'($Δr_{{\\rm{{max}}}} = {Δr_max*R_E:.1f}$ [km])'
+
+  print(f"  Δr_max = {Δr_max:.5f} [R_E]")
+  print(f"  Δr_max = {Δr_max*R_E:.1f} [km]")
+
+  ax.plot(t, Δr, 'r-', lw=lw, label=f'$Δr/R_E$ {Δr_max_str}')
+  ax.plot(t, Δr_rel, 'b-', lw=lw, label=f'$Δr/\\overline{{r}}$ {Δr_rel_max_str}')
   ax.plot(t, Δθ, 'g-', lw=lw, label='$Δθ$ [deg]')
-  ax.plot(t, Δr_rel, 'b-', lw=lw, label=f'$Δr/\\overline{{r}}$  (max = ${Δr_rel_max_str}$)')
 
   adjust_y_range(ax, bottom=0)
   ax.legend(**legend_kwargs)
@@ -351,13 +367,15 @@ for i in range(len(infos_cdaweb)):
   info_cdaweb = infos_cdaweb[i]
   info_sscweb = infos_sscweb[i]
 
+  frame = info_sscweb['frame'].replace('TOD', 'GEI')
+
   info_cdaweb['dataset']
-  a = f"SSCWeb/{info_sscweb['dataset']}/{info_sscweb['frame']}"
+  a = f"SSCWeb/{info_sscweb['dataset']}/{frame}"
   b = f"CDAWeb/{info_cdaweb['dataset'].split('@')[0]}/{info_cdaweb['parameter']}"
   if info_sscweb['dataset'].startswith('mms'):
     # Shorten name for MMS
     b = f"CDAWeb/{info_cdaweb['parameter']}"
-  print(f"Comparing\n{a}\nwith\n{b}")
+  print(f"Comparing\n  {a}\n  with\n  {b}")
   title = f"{a} vs. {b}"
 
   info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb, logging=hapi_logging)
@@ -374,8 +392,10 @@ for i in range(len(infos_cdaweb)):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
-    ax.tick_params(axis='y', which='minor', length=0)  # Remove minor tick lines next to y-axis numbers
-    ax.tick_params(axis='y', length=0)  # Remove tick lines next to y-axis numbers
+    # Remove minor tick lines next to y-axis numbers
+    ax.tick_params(axis='y', which='minor', length=0)
+    # Remove tick lines next to y-axis numbers
+    ax.tick_params(axis='y', length=0)
     ax.grid(which='minor', linestyle=':', linewidth=0.5, color=[0.75]*3)
     ax.minorticks_on()
 
@@ -388,7 +408,8 @@ for i in range(len(infos_cdaweb)):
   # Subtract 1 minute to the x-axis limits to make sure the first tick is shown
   m = timedelta(minutes=1)
   # Round to the next hour + 1 minute
-  last = info_cdaweb['time'][-1].replace(minute=0, second=0, microsecond=0) + timedelta(hours=1, minutes=1)
+  hm = timedelta(hours=1, minutes=1)
+  last = info_cdaweb['time'][-1].replace(minute=0, second=0, microsecond=0) + hm
   axes[0].set_xlim(info_cdaweb['time'][0] - m, last)
   axes[1].set_xlim(info_cdaweb['time'][0] - m, last)
   hapiplot.plot.datetick.datetick(dir='x')
@@ -400,7 +421,7 @@ for i in range(len(infos_cdaweb)):
 
   for dir in ['svg', 'png', 'pdf']:
     os.makedirs(f'figures/{dir}', exist_ok=True)
-    fname = f'figures/{dir}/{info_sscweb['dataset']}_{info_sscweb['frame']}'
+    fname = f'figures/{dir}/{info_sscweb['dataset']}_{frame}'
     print(f"  Writing figures/{dir}/{fname}.{dir}")
     kwargs = {'bbox_inches': 'tight'}
     if dir == 'png':
