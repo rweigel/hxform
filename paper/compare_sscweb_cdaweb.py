@@ -1,17 +1,30 @@
+import os
+
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 
+import hapiplot
 from hapiclient import hapi
 from hapiclient import hapitime2datetime
-import hapiplot
 
-plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['mathtext.fontset'] = 'cm'
-plt.rcParams['figure.constrained_layout.use'] = True
-plt.rcParams['figure.figsize'] = (8.5, 11)
+# Earth radius in km used by SSCWeb. See
+# https://sscweb.gsfc.nasa.gov/users_guide/Users_Guide_pt1.html#1.3
+R_E = 6378.16 # km
+
+################################################################################
+# Options
+################################################################################
+satellite = '' # Set to '' to run all
+#satellite = 'mms'
+satellite = 'geotail'
+#satellite = 'themis'
+
+hapi_logging = True
+interp_times = True
+print_vals = False
+print_first_last = True
 
 legend_kwargs = {
   'loc': 'upper center',
@@ -23,121 +36,121 @@ legend_kwargs = {
   'ncol': 3
 }
 
-# Earth radius in km used by SSCWeb. See
-# https://sscweb.gsfc.nasa.gov/users_guide/Users_Guide_pt1.html#1.3
-R_E = 6378.16 # km
-satellite = '' # Set to '' to run all
-#satellite = 'mms'
-#satellite = 'geotail'
-satellite = 'themis'
-hapi_logging = True
-interp_times = True
-print_vals = False
-print_first = True
+matplotlib.use('Agg')
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'cm'
+plt.rcParams['figure.constrained_layout.use'] = True
+plt.rcParams['figure.figsize'] = (8.5, 11)
+################################################################################
 
-"""
-SSCWeb provides TOD, J2K, GEO, GM, GSE, and SM
-  TOD in SSCWeb HAPI server is same as GEI from SSCWeb.
-  (The reason the HAPI server uses TOD for GEI is that "TOD" is the 
-  POST query parameter names used to request data in GEI is "TOD" and not GEI
-  and consistency in the query parameters was sought).
+def infos(satellite):
 
-  From https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html, 
-  "Geocentric Equatorial Inertial system. This system has X-axis
-  pointing from the Earth toward the first point of Aries (the position of
-  the Sun at the vernal equinox). This direction is the intersection of the
-  Earth's equatorial plane and the ecliptic plane and thus the X-axis lies
-  in both planes. The Z-axis is parallel to the rotation axis of the Earth,
-  and y completes the right-handed orthogonal set (Y = Z * X). Geocentric
-  Inertial (GCI) and Earth-Centered Inertial (ECI) are the same as GEI."
+  """
+  SSCWeb provides TOD, J2K, GEO, GM, GSE, and SM
+    TOD in SSCWeb HAPI server is same as GEI from SSCWeb.
+    (The reason the HAPI server uses TOD for GEI is that "TOD" is the 
+    POST query parameter names used to request data in GEI is "TOD" and not GEI
+    and consistency in the query parameters was sought).
 
-  Based on the above quote, we treat GCI from CDAWeb as the same as GEI from SSCWeb.
-"""
+    From https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html, 
+    "Geocentric Equatorial Inertial system. This system has X-axis
+    pointing from the Earth toward the first point of Aries (the position of
+    the Sun at the vernal equinox). This direction is the intersection of the
+    Earth's equatorial plane and the ecliptic plane and thus the X-axis lies
+    in both planes. The Z-axis is parallel to the rotation axis of the Earth,
+    and y completes the right-handed orthogonal set (Y = Z * X). Geocentric
+    Inertial (GCI) and Earth-Centered Inertial (ECI) are the same as GEI."
 
-infos_cdaweb = []
-infos_sscweb = []
+    Based on the above quote, we treat GCI from CDAWeb as the same as GEI from SSCWeb.
+  """
 
-if satellite == '' or satellite == 'themis':
-  themis = 'themisa'
-  start = '2016-09-01T00:00:00Z'
-  stop  = '2016-09-02T00:00:00Z'
-  for frame in ['GSE', 'GSM', 'GEI']:
-    if frame == 'GEI':
-      parameter = f'th{themis[-1]}_pos'
-    else:
-      parameter = f'th{themis[-1]}_pos_{frame.lower()}'
+  infos_cdaweb = []
+  infos_sscweb = []
 
-    infos_cdaweb.append({
-      'dataset': f'TH{themis[-1].upper()}_L1_STATE@0',
-      'parameter': parameter,
-      'start': start,
-      'stop':  stop
-    })
+  if satellite == '' or satellite == 'themis':
+    themis = 'themisa'
+    start = '2016-09-01T00:00:00Z'
+    stop  = '2016-09-02T00:00:00Z'
+    for frame in ['GSE', 'GSM', 'GEI']:
+      if frame == 'GEI':
+        parameter = f'th{themis[-1]}_pos'
+      else:
+        parameter = f'th{themis[-1]}_pos_{frame.lower()}'
 
-    if frame == 'GEI':
-      frame = 'TOD'
+      infos_cdaweb.append({
+        'dataset': f'TH{themis[-1].upper()}_L1_STATE@0',
+        'parameter': parameter,
+        'start': start,
+        'stop':  stop
+      })
 
-    infos_sscweb.append({
-      'dataset': themis,
-      'frame': frame,
-      'start': start,
-      'stop':  stop
-    })
+      if frame == 'GEI':
+        frame = 'TOD'
 
-if satellite == '' or satellite == 'mms':
+      infos_sscweb.append({
+        'dataset': themis,
+        'frame': frame,
+        'start': start,
+        'stop':  stop
+      })
 
-  mms   = 'mms1'
-  start = '2016-09-01T00:00:00Z'
-  stop  = '2016-09-02T00:00:00Z'
-  for frame in ['GSE', 'GSM']:
-    infos_cdaweb.append({
-      'dataset': f'{mms.upper()}_EPD-EIS_SRVY_L2_ELECTRONENERGY',
-      'parameter': f'mms1_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
-      'start': start,
-      'stop':  stop
-    })
+  if satellite == '' or satellite == 'mms':
 
-    infos_sscweb.append({
-      'dataset': mms,
-      'frame': frame,
-      'start': start,
-      'stop':  stop
-    })
+    mms   = 'mms1'
+    start = '2016-09-01T00:00:00Z'
+    stop  = '2016-09-02T00:00:00Z'
+    for frame in ['GSE', 'GSM']:
+      infos_cdaweb.append({
+        'dataset': f'{mms.upper()}_EPD-EIS_SRVY_L2_ELECTRONENERGY',
+        'parameter': f'mms1_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
+        'start': start,
+        'stop':  stop
+      })
 
-if satellite == '' or satellite == 'geotail':
+      infos_sscweb.append({
+        'dataset': mms,
+        'frame': frame,
+        'start': start,
+        'stop':  stop
+      })
 
-  # https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html
-  # https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
-  # CDAWeb dataset has
-  #   GCI, GSE, GSM, HEC
+  if satellite == '' or satellite == 'geotail':
 
-  start      = '2021-11-25T00:00:00Z'
-  stop       = '2021-12-05T00:00:00Z'
+    # https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.html
+    # https://cdaweb.gsfc.nasa.gov/misc/NotesG.html#GE_OR_DEF
+    # CDAWeb dataset has
+    #   GCI, GSE, GSM, HEC
 
-  for frame in ['GSE', 'GSM', 'GCI']:
-    infos_cdaweb.append({
-      'dataset': 'GE_OR_DEF',
-      'parameter': f'{frame}_POS',
-      'start': start,
-      'stop':  stop
-    })
+    start      = '2021-11-25T00:00:00Z'
+    stop       = '2021-12-05T00:00:00Z'
 
-    if frame == 'GCI':
-      frame = 'TOD'
+    for frame in ['GSE', 'GSM', 'GCI']:
+      infos_cdaweb.append({
+        'dataset': 'GE_OR_DEF',
+        'parameter': f'{frame}_POS',
+        'start': start,
+        'stop':  stop
+      })
 
-    infos_sscweb.append({
-      'dataset': 'geotail',
-      'frame': frame,
-      'start': start,
-      'stop':  stop
-    })
+      if frame == 'GCI':
+        frame = 'TOD'
+
+      infos_sscweb.append({
+        'dataset': 'geotail',
+        'frame': frame,
+        'start': start,
+        'stop':  stop
+      })
+
+  return infos_cdaweb, infos_sscweb
 
 def sscweb(info_sscweb, logging=False):
+
+  server     = 'http://hapi-server.org/servers/SSCWeb/hapi'
   dataset    = info_sscweb['dataset']
   frame      = info_sscweb['frame']
   start      = info_sscweb['start']
   stop       = info_sscweb['stop']
-  server = 'http://hapi-server.org/servers/SSCWeb/hapi'
   parameters = f'X_{frame},Y_{frame},Z_{frame}'
 
   opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
@@ -152,11 +165,12 @@ def sscweb(info_sscweb, logging=False):
   return time, xyz
 
 def cdaweb(info_cdaweb, logging=False):
+
+  server     = 'https://cdaweb.gsfc.nasa.gov/hapi'
   dataset    = info_cdaweb['dataset']
   parameter  = info_cdaweb['parameter']
   start      = info_cdaweb['start']
   stop       = info_cdaweb['stop']
-  server     = 'https://cdaweb.gsfc.nasa.gov/hapi'
   opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
 
   data, meta = hapi(server, dataset, parameter, start, stop, **opts)
@@ -170,21 +184,25 @@ def cdaweb(info_cdaweb, logging=False):
 
   return time, xyz
 
-def print_first_(info_cdaweb, info_sscweb):
-  if not print_first:
+def print_first_last_(info_cdaweb, info_sscweb):
+  if not print_first_last:
     return
 
   frame = info_sscweb['frame']
-  xyz_cdaweb0 = info_cdaweb['xyz'][0]
-  xyz_sscweb0 = info_sscweb['xyz'][0]
-  time_cdaweb0 = info_cdaweb['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-  time_sscweb0 = info_sscweb['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+  for i in [0, -1]:
+    xyz_cdaweb0 = info_cdaweb['xyz'][i]
+    xyz_sscweb0 = info_sscweb['xyz'][i]
+    time_cdaweb0 = info_cdaweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    time_sscweb0 = info_sscweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
-  u = 'R_E'
-  print(f'  First values in {u}:')
-  print('            {0:7s} {1:7s} {2:7s}'.format(f'X_{frame}', f'Y_{frame}', f'Z_{frame}'))
-  print('    CDAWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_cdaweb0, time_cdaweb0))
-  print('    SSCWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_sscweb0, time_sscweb0))
+    u = 'R_E'
+    if i == 0:
+      print(f'  First values in {u}:')
+    else:
+      print(f'  Last values in {u}:')
+    print('            {0:7s} {1:7s} {2:7s}'.format(f'X_{frame}', f'Y_{frame}', f'Z_{frame}'))
+    print('    CDAWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_cdaweb0, time_cdaweb0))
+    print('    SSCWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_sscweb0, time_sscweb0))
 
 def interp(timei, time, xyz):
   # Interpolate CDAWeb data onto the union of timestamps
@@ -286,7 +304,9 @@ def adjust_y_range(ax, gap_fraction=0.25, bottom=None):
 def compute_r(info_cdaweb, info_sscweb):
   ra = np.linalg.norm(info_cdaweb['xyz'], axis=1)
   rb = np.linalg.norm(info_sscweb['xyz'], axis=1)
-  return (ra + rb)/2
+  # TODO: Interpolation to common times
+  #return (ra + rb)/2
+  return ra
 
 def plot_xyz(ax, info_cdaweb, info_sscweb):
   colors = ['r', 'g', 'b']
@@ -324,6 +344,8 @@ def plot_diffs(ax, info_cdaweb, info_sscweb):
   ax.legend(**legend_kwargs)
   ax.grid()
 
+infos_cdaweb, infos_sscweb = infos(satellite)
+
 for i in range(len(infos_cdaweb)):
 
   info_cdaweb = infos_cdaweb[i]
@@ -341,7 +363,7 @@ for i in range(len(infos_cdaweb)):
   info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb, logging=hapi_logging)
   info_cdaweb['time'], info_cdaweb['xyz'] = cdaweb(info_cdaweb, logging=hapi_logging)
 
-  print_first_(info_cdaweb, info_sscweb)
+  print_first_last_(info_cdaweb, info_sscweb)
 
   gs = plt.gcf().add_gridspec(2)
   axes = gs.subplots(sharex=True)
@@ -354,19 +376,21 @@ for i in range(len(infos_cdaweb)):
     ax.spines['left'].set_visible(False)
     ax.tick_params(axis='y', which='minor', length=0)  # Remove minor tick lines next to y-axis numbers
     ax.tick_params(axis='y', length=0)  # Remove tick lines next to y-axis numbers
+    ax.grid(which='minor', linestyle=':', linewidth=0.5, color=[0.75]*3)
+    ax.minorticks_on()
 
-    for ax in axes:
-      ax.grid(which='minor', linestyle=':', linewidth=0.5, color=[0.75]*3)
-      ax.minorticks_on()
   print("  Plotting xyz")
   plot_xyz(axes[0], info_cdaweb, info_sscweb)
   print("  Plotting difs")
   plot_diffs(axes[1], info_cdaweb, info_sscweb)
 
   from datetime import timedelta
-  # Add 1 minute to the x-axis limits to make sure the last tick is shown
-  axes[0].set_xlim(info_cdaweb['time'][0], info_cdaweb['time'][-1] + timedelta(minutes=1))
-  axes[1].set_xlim(info_cdaweb['time'][0], info_cdaweb['time'][-1] + timedelta(minutes=1))
+  # Subtract 1 minute to the x-axis limits to make sure the first tick is shown
+  m = timedelta(minutes=1)
+  # Round to the next hour + 1 minute
+  last = info_cdaweb['time'][-1].replace(minute=0, second=0, microsecond=0) + timedelta(hours=1, minutes=1)
+  axes[0].set_xlim(info_cdaweb['time'][0] - m, last)
+  axes[1].set_xlim(info_cdaweb['time'][0] - m, last)
   hapiplot.plot.datetick.datetick(dir='x')
 
   labels = axes[1].get_xticklabels()
@@ -374,11 +398,14 @@ for i in range(len(infos_cdaweb)):
     labels[0].set_horizontalalignment('left')
     labels[-1].set_horizontalalignment('right')
 
-  fname = f'figures/{info_sscweb['dataset']}_{info_sscweb['frame']}'
-  #plt.savefig(f'{fname}.svg', bbox_inches='tight')
-  #plt.savefig(f'{fname}.png', dpi=300, bbox_inches='tight')
-  print(f"  Writing {fname}.pdf")
-  plt.savefig(f'{fname}.pdf', bbox_inches='tight')
+  for dir in ['svg', 'png', 'pdf']:
+    os.makedirs(f'figures/{dir}', exist_ok=True)
+    fname = f'figures/{dir}/{info_sscweb['dataset']}_{info_sscweb['frame']}'
+    print(f"  Writing figures/{dir}/{fname}.{dir}")
+    kwargs = {'bbox_inches': 'tight'}
+    if dir == 'png':
+      kwargs['dpi'] = 300
+    plt.savefig(f'{fname}.{dir}', bbox_inches='tight')
   plt.close()
 
   print("")
