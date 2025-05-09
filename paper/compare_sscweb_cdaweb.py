@@ -19,7 +19,7 @@ R_E = 6378.16 # km
 satellite = '' # Set to '' to run all
 #satellite = 'mms'
 #satellite = 'geotail'
-#satellite = 'themis'
+satellite = 'themis'
 
 hapi_logging = True
 interp_times = True
@@ -84,8 +84,8 @@ def infos(satellite):
         'stop':  stop
       })
 
-    infos_cdaweb.append(infos_cdaweb[-1])
-    infos_sscweb.append(infos_sscweb[-1])
+    infos_cdaweb.append(infos_cdaweb[-1].copy())
+    infos_sscweb.append(infos_sscweb[-1].copy())
     infos_sscweb[-1]['frame'] = 'TOD'
 
   if satellite == '' or satellite == 'mms':
@@ -146,8 +146,8 @@ def infos(satellite):
         'stop':  stop
       })
 
-    infos_cdaweb.append(infos_cdaweb[-1])
-    infos_sscweb.append(infos_sscweb[-1])
+    infos_cdaweb.append(infos_cdaweb[-1].copy())
+    infos_sscweb.append(infos_sscweb[-1].copy())
     infos_sscweb[-1]['frame'] = 'TOD'
 
   return infos_cdaweb, infos_sscweb
