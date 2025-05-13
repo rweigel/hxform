@@ -16,10 +16,12 @@ R_E = 6378.16 # km
 ################################################################################
 # Options
 ################################################################################
-satellite = '' # Set to '' to run all
-#satellite = 'mms'
-#satellite = 'geotail'
-satellite = 'themis'
+#satellites = '_all_' 
+#satellites = ['cluster', 'dscovr', 'geotail', 'themis', 'mms']
+satellites = ['cluster']
+
+#import sunpy
+#sunpy.log.setLevel('DEBUG')
 
 hapi_logging = True
 interp_times = True
@@ -31,19 +33,19 @@ legend_kwargs = {
   'markerscale': 3,
   'borderaxespad': 0,
   'framealpha': 1,
-  'fontsize': 12,
   'frameon': True,
   'ncol': 3
 }
 
 matplotlib.use('Agg')
 plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 14
 plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.rcParams['figure.figsize'] = (8.5, 11)
 ################################################################################
 
-def infos(satellite):
+def infos(satellite, source):
 
   """
   SSCWeb provides TOD, J2K, GEO, GM, GSE, and SM
@@ -55,6 +57,33 @@ def infos(satellite):
 
   infos_cdaweb = []
   infos_sscweb = []
+  infos_amda = []
+
+  if satellite == '' or satellite == 'dscovr':
+    start = '2021-11-25T00:00:00Z'
+    stop  = '2021-12-05T00:00:00Z'
+
+    for frame in ['GSE', 'GCI']:
+      infos_cdaweb.append({
+        'dataset': 'DSCOVR_ORBIT_PRE',
+        'parameter': f'{frame}_POS',
+        'start': start,
+        'stop':  stop
+      })
+
+      if frame == 'GCI':
+        frame = 'J2K'
+
+      infos_sscweb.append({
+          'dataset': 'dscovr',
+          'frame': frame,
+          'start': start,
+          'stop':  stop
+        })
+
+    infos_cdaweb.append(infos_cdaweb[-1].copy())
+    infos_sscweb.append(infos_sscweb[-1].copy())
+    infos_sscweb[-1]['frame'] = 'GEI'
 
   if satellite == '' or satellite == 'themis':
 
@@ -148,51 +177,173 @@ def infos(satellite):
 
     infos_cdaweb.append(infos_cdaweb[-1].copy())
     infos_sscweb.append(infos_sscweb[-1].copy())
-    infos_sscweb[-1]['frame'] = 'TOD'
+    infos_sscweb[-1]['frame'] = 'GEI'
 
-  return infos_cdaweb, infos_sscweb
+  if satellite == '' or satellite == 'cluster':
 
-def sscweb(info_sscweb, logging=False):
+    sc = '1'
+    dataset = f'C{sc}_CP_FGM_5VPS'
+    start = '2010-09-01T09:09:00.100Z'
+    stop  = '2010-09-02T00:00:00.000Z'
+
+    for frame in ['GSE']:
+      infos_cdaweb.append({
+        'dataset': dataset,
+        'parameter': f'sc_pos_xyz_{frame.lower()}__{dataset}',
+        'start': start,
+        'stop':  stop
+      })
+
+      infos_sscweb.append({
+        'dataset': f'cluster{sc}',
+        'frame': frame,
+        'start': start,
+        'stop':  stop
+      })
+
+      infos_amda.append({
+        'dataset': f'clust{sc}-orb-all',
+        'parameter': f'c{sc}_xyz_{frame.lower()}',
+        'start': start,
+        'stop':  stop
+      })
+
+    if source == 'sscweb':
+      return infos_sscweb
+    if source == 'cdaweb':
+      return infos_cdaweb
+    if source == 'amda':
+      return infos_amda
+
+def jpl(info_sscweb, logging=False):
+  import pickle
+
+  from sunpy.coordinates import get_horizons_coord
+
+  # No 'GSM' b/c https://github.com/sunpy/sunpy/issues/8188
+  if info_sscweb['frame'] not in ['GSE', 'GEI']:
+    return None
+
+  # To find ids, see https://ssd.jpl.nasa.gov/horizons/app.html#/
+  # and edit the "Target Body" field to find the id. Does not seem possible
+  # to query for list of Target Body ids.
+  # Note: No Geotail or themis{a,d}
+  known_ids = {
+    'ace': -92,
+    'dscovr': -78,
+    'mms1': -140482,
+    'mms2': -140483,
+    'mms3': -140484,
+    'mms4': -140485,
+    'themisb': -192,
+    'themisc': -193
+  }
+
+  if info_sscweb['dataset'] not in known_ids:
+    return None
+  satellite_id = known_ids[info_sscweb['dataset']]
+
+  to = info_sscweb['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+  tf = info_sscweb['time'][-1].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+  cache_file = f"jpl/jpl-{info_sscweb['dataset']}-{info_sscweb['frame']}-{to}-{tf}.pkl"
+
+  if False and os.path.exists(cache_file):
+    print(f"  Saved pickle file: {cache_file}")
+    with open(cache_file, 'rb') as f:
+      return pickle.load(f)
+
+  #solar_system_ephemeris.set('de432s')
+  #solar_system_ephemeris.set('de440s')
+  xyz = np.full((len(info_sscweb['time']), 3), np.nan)
+  dt = info_sscweb['time'][1] - info_sscweb['time'][0]
+  # Using, e.g., 60s gives error: https://github.com/sunpy/sunpy/issues/8188
+  step_min = int(dt.total_seconds()/60)
+  t = {
+    "start": info_sscweb['time'][0],
+    "stop": info_sscweb['time'][-1],
+    "step": f'{step_min}m' 
+  }
+
+  if info_sscweb['frame'] == 'GSE':
+    data_jpl = get_horizons_coord(satellite_id, t).geocentricsolarecliptic.cartesian.xyz.to('km')
+  if info_sscweb['frame'] == 'GEI':
+    data_jpl = get_horizons_coord(satellite_id, t).geocentricearthequatorial.cartesian.xyz.to('km')
+  if info_sscweb['frame'] == 'GSM':
+    data_jpl = get_horizons_coord(satellite_id, t).geocentricsolarmagnetospheric.cartesian.xyz.to('km')
+
+  xyz = data_jpl.value.T/R_E
+  with open(cache_file, 'wb') as f:
+    pickle.dump({'time': info_sscweb['time'], 'xyz': info_sscweb['xyz']}, f)
+    print(f"  Saved pickle file: {cache_file}")
+
+  return {'time': info_sscweb['time'], 'xyz': xyz}
+
+def sscweb(info, logging=False):
 
   server     = 'http://hapi-server.org/servers/SSCWeb/hapi'
-  dataset    = info_sscweb['dataset']
-  frame      = info_sscweb['frame']
-  start      = info_sscweb['start']
-  stop       = info_sscweb['stop']
+  dataset    = info['dataset']
+  frame      = info['frame'].replace('GEI', 'TOD')
+  start      = info['start']
+  stop       = info['stop']
   parameters = f'X_{frame},Y_{frame},Z_{frame}'
 
   opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
 
   data, meta = hapi(server, dataset, parameters, start, stop, **opts)
 
-  xyz = np.column_stack((data[f'X_{frame}'], data[f'Y_{frame}'], data[f'Z_{frame}']))
+  info['xyz'] = np.column_stack((data[f'X_{frame}'], data[f'Y_{frame}'], data[f'Z_{frame}']))
 
   # Convert from YYYY-DOY to YYYY-MM-DD date format
-  time = hapitime2datetime(data['Time'])
+  info['time'] = hapitime2datetime(data['Time'])
 
-  return time, xyz
+  # Return not needed b/c info is modified in place. Keep for clarity.
+  return info
 
-def cdaweb(info_cdaweb, logging=False):
+def cdaweb(info, logging=False):
 
   server     = 'https://cdaweb.gsfc.nasa.gov/hapi'
-  dataset    = info_cdaweb['dataset']
-  parameter  = info_cdaweb['parameter']
-  start      = info_cdaweb['start']
-  stop       = info_cdaweb['stop']
+  dataset    = info['dataset']
+  parameter  = info['parameter']
+  start      = info['start']
+  stop       = info['stop']
   opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
 
   data, meta = hapi(server, dataset, parameter, start, stop, **opts)
 
   xyz = data[parameter]
-  xyz = xyz/R_E # Convert from km to R_E
+  info['xyz'] = xyz/R_E # Convert from km to R_E
   # THe HAPI SSCWeb server provides ephemeris as three separate parameters. Here
   # we combine parameters into a list. SSCWeb reports in R_E while CDAWeb in km.
   # Convert CDAWeb data to R_E.
-  time = hapitime2datetime(data['Time'])
+  info['time'] = hapitime2datetime(data['Time'])
 
-  return time, xyz
+  # Return not needed b/c info is modified in place. Keep for clarity.
+  return info
 
-def print_first_last_(info_cdaweb, info_sscweb):
+def amda(info, logging=False):
+
+  server     = 'https://amda.irap.omp.eu/service/hapi'
+  dataset    = info['dataset']
+  parameter  = info['parameter']
+  start      = info['start']
+  stop       = info['stop']
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
+
+  data, meta = hapi(server, dataset, parameter, start, stop, **opts)
+
+  # https://amda.irap.omp.eu/service/hapi/info?id=clust1-orb-all
+  # the referenced SPASE record says
+  #"Units": "Re",
+  #"UnitsConversion": "6.4e6>m"
+  xyz = data[parameter]
+  info['xyz'] = xyz*6.4e3/R_E # Convert from AMDA Re to SSCWeb R_E
+  #info['xyz'] = xyz # Gives better match to CDAWeb
+  info['time'] = hapitime2datetime(data['Time'])
+
+  # Return not needed b/c info is modified in place. Keep for clarity.
+  return info
+
+def print_first_last_(info_cdaweb, info_sscweb, info_amda=None, info_jpl=None):
   if not print_first_last:
     return
 
@@ -200,9 +351,16 @@ def print_first_last_(info_cdaweb, info_sscweb):
   for i in [0, -1]:
     xyz_cdaweb0 = info_cdaweb['xyz'][i]
     xyz_sscweb0 = info_sscweb['xyz'][i]
+    if info_jpl is not None:
+      xyz_jpl0 = info_jpl['xyz'][i]
+    if info_amda is not None:
+      xyz_amda0 = info_amda['xyz'][i]
     time_cdaweb0 = info_cdaweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
     time_sscweb0 = info_sscweb['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-
+    if info_jpl is not None:
+      time_jpl0 = info_jpl['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    if info_amda is not None:
+      time_amda0 = info_amda['time'][i].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
     u = 'R_E'
     if i == 0:
       print(f'  First values in {u}:')
@@ -211,6 +369,10 @@ def print_first_last_(info_cdaweb, info_sscweb):
     print('            {0:7s} {1:7s} {2:7s}'.format(f'X_{frame}', f'Y_{frame}', f'Z_{frame}'))
     print('    CDAWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_cdaweb0, time_cdaweb0))
     print('    SSCWeb: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_sscweb0, time_sscweb0))
+    if info_jpl is not None:
+      print('       JPL: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_jpl0, time_jpl0))
+    if info_amda is not None:
+      print('      AMDA: {0:<7.3f} {1:<7.3f} {2:<7.3f} {3:s}'.format(*xyz_amda0, time_amda0))
 
 def interp(timei, time, xyz):
   # Interpolate CDAWeb data onto the union of timestamps
@@ -316,22 +478,28 @@ def compute_r(info_cdaweb, info_sscweb):
   #return (ra + rb)/2
   return ra
 
-def plot_xyz(ax, info_cdaweb, info_sscweb):
+def plot_xyz(ax, info_cdaweb, info_sscweb, info_jpl=None):
   colors = ['r', 'g', 'b']
   component = ['X', 'Y', 'Z']
 
   for c in range(3):
-    ax.plot(info_cdaweb['time'], info_cdaweb['xyz'][:,c], label=f'CDAWeb/{component[c]}', lw=2, linestyle='-', color=colors[c])
-    ax.plot(info_sscweb['time'], info_sscweb['xyz'][:,c], label=f'SSCWeb/{component[c]}', lw=3, linestyle='--', color=colors[c])
+    ax.plot(info_cdaweb['time'], info_cdaweb['xyz'][:,c],
+            label=f'CDAWeb/{component[c]}', lw=2, linestyle='-', color=colors[c])
+    ax.plot(info_sscweb['time'], info_sscweb['xyz'][:,c],
+            label=f'SSCWeb/{component[c]}', lw=3, linestyle='--', color=colors[c])
+    if info_jpl is not None:
+      ax.plot(info_jpl['time'], info_jpl['xyz'][:,c],
+              label=f'JPL/{component[c]}', lw=1, linestyle=':', color=colors[c])
 
   r = compute_r(info_cdaweb, info_sscweb)
-  ax.plot(info_cdaweb['time'], r, label='$\\overline{r}$', lw=2, linestyle='-', color='k')
+  ax.plot(info_cdaweb['time'], r,
+          label='$\\overline{r}$', lw=2, linestyle='-', color='k')
 
-  adjust_y_range(ax, gap_fraction=0.75)
-  ax.set_ylabel('$R_E$', fontsize=12, rotation=0)
+  adjust_y_range(ax, gap_fraction=1)
+  ax.set_ylabel('$R_E$', rotation=0)
   ax.grid()
+
   ax.legend(**{**legend_kwargs, 'ncol': 4})
-  #ax.legend(**{**legend_kwargs, 'ncol': 4})
   ax.set_xticklabels([])
 
 def plot_diffs(ax, info_cdaweb, info_sscweb):
@@ -352,40 +520,16 @@ def plot_diffs(ax, info_cdaweb, info_sscweb):
   print(f"  Δr_max = {Δr_max:.5f} [R_E]")
   print(f"  Δr_max = {Δr_max*R_E:.1f} [km]")
 
-  ax.plot(t, Δr, 'r-', lw=lw, label=f'$Δr/R_E$ {Δr_max_str}')
-  ax.plot(t, Δr_rel, 'b-', lw=lw, label=f'$Δr/\\overline{{r}}$ {Δr_rel_max_str}')
+  ax.plot(t, Δr, 'r-', lw=lw, label=f'$|Δr|/R_E$ {Δr_max_str}')
+  ax.plot(t, Δr_rel, 'b-', lw=lw, label=f'$|Δr|/\\overline{{r}}$ {Δr_rel_max_str}')
   ax.plot(t, Δθ, 'g-', lw=lw, label='$Δθ$ [deg]')
 
-  adjust_y_range(ax, bottom=0)
+  adjust_y_range(ax, bottom=0, gap_fraction=1)
   ax.legend(**legend_kwargs)
   ax.grid()
 
-infos_cdaweb, infos_sscweb = infos(satellite)
-
-for i in range(len(infos_cdaweb)):
-
-  info_cdaweb = infos_cdaweb[i]
-  info_sscweb = infos_sscweb[i]
-
-  frame = info_sscweb['frame'].replace('TOD', 'GEI')
-
-  info_cdaweb['dataset']
-  a = f"SSCWeb/{info_sscweb['dataset']}/{frame}"
-  b = f"CDAWeb/{info_cdaweb['dataset'].split('@')[0]}/{info_cdaweb['parameter']}"
-  if info_sscweb['dataset'].startswith('mms'):
-    # Shorten name for MMS
-    b = f"CDAWeb/{info_cdaweb['parameter']}"
-  print(f"Comparing\n  {a}\n  with\n  {b}")
-  title = f"{a} vs. {b}"
-
-  info_sscweb['time'], info_sscweb['xyz'] = sscweb(info_sscweb, logging=hapi_logging)
-  info_cdaweb['time'], info_cdaweb['xyz'] = cdaweb(info_cdaweb, logging=hapi_logging)
-
-  print_first_last_(info_cdaweb, info_sscweb)
-
-  gs = plt.gcf().add_gridspec(2)
-  axes = gs.subplots(sharex=True)
-  axes[0].set_title(title, fontsize=12)
+def _annotate(axes):
+  axes[0].set_title(title)
 
   for ax in axes:
     ax.spines['bottom'].set_visible(True)
@@ -399,34 +543,66 @@ for i in range(len(infos_cdaweb)):
     ax.grid(which='minor', linestyle=':', linewidth=0.5, color=[0.75]*3)
     ax.minorticks_on()
 
-  print("  Plotting xyz")
-  plot_xyz(axes[0], info_cdaweb, info_sscweb)
-  print("  Plotting difs")
-  plot_diffs(axes[1], info_cdaweb, info_sscweb)
-
-  from datetime import timedelta
-  # Subtract 1 minute to the x-axis limits to make sure the first tick is shown
-  m = timedelta(minutes=1)
-  # Round to the next hour + 1 minute
-  hm = timedelta(hours=1, minutes=1)
-  last = info_cdaweb['time'][-1].replace(minute=0, second=0, microsecond=0) + hm
-  axes[0].set_xlim(info_cdaweb['time'][0] - m, last)
-  axes[1].set_xlim(info_cdaweb['time'][0] - m, last)
-  hapiplot.plot.datetick.datetick(dir='x')
-
-  labels = axes[1].get_xticklabels()
-  if labels:
-    labels[0].set_horizontalalignment('left')
-    labels[-1].set_horizontalalignment('right')
-
+def _savefigs(dir, dataset, frame):
   for dir in ['svg', 'png', 'pdf']:
     os.makedirs(f'figures/{dir}', exist_ok=True)
-    fname = f'figures/{dir}/{info_sscweb['dataset']}_{frame}'
+    fname = f"figures/{dir}/{infos_sscweb[i]['dataset']}_{frame}"
     print(f"  Writing figures/{dir}/{fname}.{dir}")
     kwargs = {'bbox_inches': 'tight'}
     if dir == 'png':
       kwargs['dpi'] = 300
     plt.savefig(f'{fname}.{dir}', bbox_inches='tight')
   plt.close()
+
+for satellite in satellites:
+
+  infos_cdaweb = infos(satellite, 'cdaweb')
+  infos_sscweb = infos(satellite, 'sscweb')
+  infos_amda = infos(satellite, 'amda')
+  print(infos_amda)
+  for i in range(len(infos_cdaweb)):
+    frame = infos_sscweb[i]['frame']
+
+    a = f"SSCWeb/{infos_sscweb[i]['dataset']}/{frame}"
+    b = f"CDAWeb/{infos_cdaweb[i]['dataset'].split('@')[0]}/{infos_cdaweb[i]['parameter']}"
+    if infos_sscweb[i]['dataset'].startswith('mms'):
+      # Shorten name for MMS
+      b = f"CDAWeb/{infos_cdaweb[i]['parameter']}"
+    print(f"Comparing\n  {a}\n  with\n  {b}")
+    title = f"{a} vs. {b}"
+
+    # Adds xyz and time to info dict
+    infos_sscweb[i] = sscweb(infos_sscweb[i], logging=hapi_logging)
+    infos_cdaweb[i] = cdaweb(infos_cdaweb[i], logging=hapi_logging)
+    infos_amda[i] = amda(infos_amda[i], logging=hapi_logging)
+
+    info_jpl = jpl(infos_sscweb[i], logging=hapi_logging)
+    print_first_last_(infos_cdaweb[i], infos_sscweb[i], info_amda=infos_amda[i], info_jpl=info_jpl)
+
+    gs = plt.gcf().add_gridspec(2)
+    axes = gs.subplots(sharex=True)
+    _annotate(axes)
+
+    print("  Plotting xyz")
+    plot_xyz(axes[0], infos_cdaweb[i], infos_sscweb[i], info_jpl=info_jpl)
+    print("  Plotting diffs")
+    plot_diffs(axes[1], infos_cdaweb[i], infos_sscweb[i])
+
+    from datetime import timedelta
+    # Subtract 1 minute to the x-axis limits to make sure the first tick is shown
+    m = timedelta(minutes=1)
+    # Round to the next hour + 1 minute
+    hm = timedelta(hours=1, minutes=1)
+    last = infos_cdaweb[i]['time'][-1].replace(minute=0, second=0, microsecond=0) + hm
+    axes[0].set_xlim(infos_cdaweb[i]['time'][0] - m, last)
+    axes[1].set_xlim(infos_cdaweb[i]['time'][0] - m, last)
+    hapiplot.plot.datetick.datetick(dir='x')
+
+    labels = axes[1].get_xticklabels()
+    if labels:
+      labels[0].set_horizontalalignment('left')
+      labels[-1].set_horizontalalignment('right')
+
+    _savefigs(dir, infos_sscweb[i]['dataset'], frame)
 
   print("")

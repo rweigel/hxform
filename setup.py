@@ -1,4 +1,10 @@
-from setuptools import dist, setup, find_packages
+import sys
+from setuptools import setup, find_packages
+
+# https://numpy.org/doc/stable/reference/distutils_status_migration.html#distutils-status-migration
+# Ensure the Python version is compatible
+if sys.version_info >= (3, 12, 0):
+  raise RuntimeError("Python 3.11 or lower is required due to numpy.distutils deprecation.")
 
 try:
   # https://stackoverflow.com/a/60740731/18433855
