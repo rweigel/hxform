@@ -1,3 +1,5 @@
+# Needs SunPy 6.1.0 or later
+# https://github.com/sunpy/sunpy/pull/8193
 import os
 
 import numpy as np
@@ -25,7 +27,7 @@ R_E_AMDA = 6.4e3 # km
 # Options
 ################################################################################
 satellites_only = [] # Run all satellites
-#satellites_only = ['dscovr']
+satellites_only = ['MMS']
 
 hapi_logging = False
 cos_warnings = False
@@ -227,7 +229,7 @@ def jpl(info, logging=False):
   from sunpy.coordinates import get_horizons_coord
 
   # No 'GSM' b/c https://github.com/sunpy/sunpy/issues/8188
-  if info['frame'] not in ['GSE', 'GEI']:
+  if info['frame'] not in ['GSE', 'GEI', 'GSM']:
     return None
 
   # To find ids, see https://ssd.jpl.nasa.gov/horizons/app.html#/
