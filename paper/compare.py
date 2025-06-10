@@ -30,11 +30,15 @@ R_E_AMDA = 6378.137 # km
 # Options
 ################################################################################
 satellites_only = [] # Run all satellites
+<<<<<<< HEAD
 #satellites_only = ['THEMIS-A','THEMIS-B','THEMIS-C','THEMIS-D']
 #satellites_only = ['Cluster-1', 'Cluster-2', 'Cluster-3', 'Cluster-4']
 #satellites_only = ['MMS-1','MMS-2','MMS-3','MMS-4']
 #satellites_only = ['DSCOVR']
 #satellites_only = ['Cluster-4']
+=======
+satellites_only = ['MMS']
+>>>>>>> fdc790d9b61b6ed7189714a8a916b29f20e081dc
 
 hapi_logging = False
 cos_warnings = False
@@ -251,6 +255,10 @@ def jpl(info, logging=False):
 
   from sunpy.coordinates import get_horizons_coord
 
+<<<<<<< HEAD
+=======
+  # No 'GSM' b/c https://github.com/sunpy/sunpy/issues/8188
+>>>>>>> fdc790d9b61b6ed7189714a8a916b29f20e081dc
   if info['frame'] not in ['GSE', 'GEI', 'GSM']:
     return None
 
