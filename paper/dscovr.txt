@@ -1,0 +1,55 @@
+<class 'netCDF4._netCDF4.Dataset'>
+root group (NETCDF3_CLASSIC data model, file format NETCDF3):
+    Conventions: ACDD-1.3, Spase v2.2.3
+    title: Spacecraft ephemeris
+    id: oe_pop_dscovr_s20211125000000_e20211125235959_p20211126022149_pub.nc
+    naming_authority: gov.noaa.swpc
+    program: DSCOVR
+    summary: Spacecraft ephemeris
+    keywords: position, ephemeris
+    keywords_vocabulary: Spase v2.2.2
+    references: TBD; GSE TO GSM COORDINATE TRANSFORMATION ALGORITHM THEORETICAL BASIS DOCUMENT v2.1
+    metadata_link: http://www.ngdc.noaa.gov/docucomp/page?xml=NOAA/NESDIS/NGDC/STP/Space_Weather/iso/xml/satellite-systems_dscovr.xml&view=getDataView&header=none
+    license: Spase.Access Rights.Open
+    institution: NOAA
+    source: MMFD predicted orbit product file
+    platform: Deep Space Climate Observatory (DSCOVR)
+    history: DSCOVR real-time telemetry processing system
+    processing_level: Level 0
+    processing_level_description: Spacecraft position and velocity
+    date_created: 2021-11-26T02:21:49.718Z
+    time_coverage_duration: P01D
+    time_coverage_start: 2021-11-25T00:00:00.000Z
+    time_coverage_end: 2021-11-25T23:59:59.000Z
+    time_coverage_resolution: PT1H
+    creator_name: Doug Biesecker
+    creator_type: person
+    creator_institution: DOC/NOAA/NWS/NCEP/SWPC
+    creator_email: doug.biesecker@noaa.gov
+    creator_url: http://www.swpc.noaa.gov/
+    publisher_name: National Geophysical Data Center
+    publisher_type: institution
+    publisher_institution: DOC/NOAA/NESDIS/NGDC
+    publisher_email: william.rowland@noaa.gov
+    publisher_url: http://www.ngdc.noaa.gov/dscovr/
+    records_maximum: 24
+    records_present: 48
+    records_data: 48
+    dimensions(sizes): time(48)
+    variables(dimensions): float64 time(time), int32 sat_x_gci(time), int32 sat_y_gci(time), int32 sat_z_gci(time), float32 sat_vx_gci(time), float32 sat_vy_gci(time), float32 sat_vz_gci(time), int32 sat_x_gse(time), int32 sat_y_gse(time), int32 sat_z_gse(time), float32 sat_vx_gse(time), float32 sat_vy_gse(time), float32 sat_vz_gse(time), int32 sat_x_gsm(time), int32 sat_y_gsm(time), int32 sat_z_gsm(time), float32 sat_vx_gsm(time), float32 sat_vy_gsm(time), float32 sat_vz_gsm(time)
+    groups: 
+----------------------------------------
+        X_GSE [km]    Y_GSE [km]    Z_GSE [km]   
+SSCWeb: 1552248.133   9166.137      83115.762    	
+CDAWeb: 1552224.267   9327.159      83175.551    	 on 2021-11-25T00:00:00.000Z
+NGDC:   1552252.000   1083.000      83165.000    	 on 2021-11-25T00:00:00.000000Z
+JPL:    1552224.359   9320.023      83179.984    	 on 2021-11-25T00:00:00.000000Z
+        X_J2K [km]    Y_J2K [km]    Z_J2K [km]   
+SSCWeb: -705367.236   -1301740.528  -473703.674  	
+CDAWeb: -705379.864   -1301735.314  -473634.629  	 on 2021-11-25T00:00:00.000Z
+NGDC:   -705379.000   -1301735.000  -473634.000  	 on 2021-11-25T00:00:00.000000Z
+JPL:    -705386.152   -1301734.177  -473629.329  	 on 2021-11-25T00:00:00.000000Z
+        X_GSM [km]    Y_GSM [km]    Z_GSM [km]   
+SSCWeb: 1552248.133   11623.269     82807.871    	
+NGDC:   1552252.000   3358.000      83104.000    	 on 2021-11-25T00:00:00.000000Z
+JPL:    1552224.362   11687.139     82880.469    	 on 2021-11-25T00:00:00.000000Z

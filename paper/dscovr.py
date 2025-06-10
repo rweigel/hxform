@@ -12,6 +12,12 @@ warnings.filterwarnings("ignore", message="The argument 'infer_datetime_format'"
 hapi_logging = False
 sunpy.log.setLevel('ERROR')
 
+# NGDC data
+# https://www.ngdc.noaa.gov/dscovr/portal/index.html#/download/1637802000000;1638666000000/pop
+file_id = Dataset('data/nc/oe_pop_dscovr_s20211125000000_e20211125235959_p20211126022149_pub.nc', 'r')
+print(file_id)
+print(40 * '-')
+
 for frame in ['GSE', 'J2K', 'GSM']:
 
   framelc = frame.lower()
@@ -24,10 +30,6 @@ for frame in ['GSE', 'J2K', 'GSM']:
     frame_ngdc = 'gci'
     frame_cdaweb = 'GCI'
 
-  # NGDC data
-  # https://www.ngdc.noaa.gov/dscovr/portal/index.html#/download/1637802000000;1638666000000/pop
-  file_id = Dataset('nc/oe_pop_dscovr_s20211125000000_e20211125235959_p20211126022149_pub.nc', 'r')
-  #print(file_id)
   time = file_id.variables['time'][:]
   x = file_id.variables[f'sat_x_{frame_ngdc}'][:]
   y = file_id.variables[f'sat_y_{frame_ngdc}'][:]

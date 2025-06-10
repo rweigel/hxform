@@ -1,3 +1,5 @@
+# Needs SunPy 6.1.0 or later
+# https://github.com/sunpy/sunpy/pull/8193
 import os
 
 import numpy as np
@@ -7,30 +9,37 @@ from matplotlib import pyplot as plt
 from hapiclient import hapi
 from hapiclient import hapitime2datetime
 
-
 """
 Earth radius in km used by SSCWeb. See
 https://sscweb.gsfc.nasa.gov/users_guide/Users_Guide_pt1.html#1.3
 """
 R_E = 6378.16 # km
+# Source code for SSCWeb is in private STCT Google Drive folder in file 
+# icss_rel82.tar.gz (ISTP coordinate transformation library) it is not, and cannot be publicly available).
 """
 In https://amda.irap.omp.eu/service/hapi/info?id=clust1-orb-all
 the referenced SPASE record says
 "Units": "Re",
 "UnitsConversion": "6.4e6>m"
 """
-R_E_AMDA = 6.4e3 # km
+#R_E_AMDA = R_E
+# From Vincent Génot to Weigel on 2025-05-15: SPASE is wrong; correct value is:
+R_E_AMDA = 6378.137 # km
 
 ################################################################################
 # Options
 ################################################################################
 satellites_only = [] # Run all satellites
-#satellites_only = ['dscovr']
+#satellites_only = ['THEMIS-A','THEMIS-B','THEMIS-C','THEMIS-D']
+#satellites_only = ['Cluster-1', 'Cluster-2', 'Cluster-3', 'Cluster-4']
+#satellites_only = ['MMS-1','MMS-2','MMS-3','MMS-4']
+#satellites_only = ['DSCOVR']
+#satellites_only = ['Cluster-4']
 
 hapi_logging = False
 cos_warnings = False
 interp_times = True
-print_first_last = True   # Print first and last uninterpolated values
+print_first_last = True   # Print first and last un-interpolated values
 print_interp_vals = False # Print interpolated values
 
 import warnings
@@ -60,7 +69,23 @@ plt.rcParams['figure.figsize'] = (8.5, 11)
 
 def infos(satellite=None):
 
-  satellites = ['Cluster', 'DSCOVR', 'Geotail', 'THEMIS', 'MMS']
+  # Add Polar, Swarm, and DMSP?
+  satellites = [
+                'Cluster-1',
+                'Cluster-2',
+                'Cluster-3',
+                'Cluster-4',
+                'DSCOVR',
+                'Geotail',
+                'THEMIS-A',
+                'THEMIS-B',
+                'THEMIS-C',
+                'THEMIS-D',
+                'MMS-1',
+                'MMS-2',
+                'MMS-3',
+                'MMS-4'
+              ]
   if satellite is None:
     return satellites
 
@@ -69,10 +94,10 @@ def infos(satellite=None):
 
   infos_ = {'cdaweb': [], 'sscweb': [], 'amda': []}
 
-  if satellite == '' or satellite == 'Cluster':
+  if satellite == '' or satellite.startswith('Cluster'):
 
-    sc = '1'
-    dataset = f'C{sc}_CP_FGM_5VPS'
+    sc = f'cluster{satellite[-1]}'
+    dataset = f'C{satellite[-1]}_CP_FGM_5VPS'
     start = '2010-09-01T09:09:00.100Z'
     stop  = '2010-09-02T00:00:00.000Z'
 
@@ -92,7 +117,7 @@ def infos(satellite=None):
 
       infos_['sscweb'].append({
         'name': 'SSCWeb',
-        'dataset': f'cluster{sc}',
+        'dataset': sc,
         'frame': frame,
         'start': start,
         'stop':  stop
@@ -100,8 +125,8 @@ def infos(satellite=None):
 
       infos_['amda'].append({
         'name': 'AMDA',
-        'dataset': f'clust{sc}-orb-all',
-        'parameter': f'c{sc}_xyz_{frame.lower()}',
+        'dataset': f'clust{satellite[-1]}-orb-all',
+        'parameter': f'c{satellite[-1]}_xyz_{frame.lower()}',
         'start': start,
         'stop':  stop
       })
@@ -131,29 +156,29 @@ def infos(satellite=None):
     infos_["sscweb"].append(infos_["sscweb"][-1].copy())
     infos_["sscweb"][-1]['frame'] = 'J2K'
 
-  if satellite == '' or satellite == 'THEMIS':
+  if satellite == '' or satellite.startswith('THEMIS'):
 
-    themis = 'themisa'
+    sc = f'themis{satellite[-1].lower()}'
     start = '2016-09-01T00:00:00Z'
     stop  = '2016-09-02T00:00:00Z'
     for frame in ['GSE', 'GSM', 'GEI']: # GEI must be last
       if frame == 'GEI':
         # Metadata indicates COORDINATE_SYSTEM = GEI for this parameter
-        parameter = f'th{themis[-1]}_pos'
+        parameter = f'th{sc[-1]}_pos'
       else:
-        parameter = f'th{themis[-1]}_pos_{frame.lower()}'
+        parameter = f'th{sc[-1]}_pos_{frame.lower()}'
 
       infos_['cdaweb'].append({
         'name': 'CDAWeb',
-        'dataset': f'TH{themis[-1].upper()}_L1_STATE@0',
+        'dataset': f'TH{sc[-1].upper()}_L1_STATE@0',
         'parameter': parameter,
         'start': start,
         'stop':  stop
       })
 
       infos_['sscweb'].append({
-        'name': 'CDAWeb',
-        'dataset': themis,
+        'name': 'SSCWeb',
+        'dataset': sc,
         'frame': frame,
         'start': start,
         'stop':  stop
@@ -163,23 +188,23 @@ def infos(satellite=None):
     infos_['sscweb'].append(infos_['sscweb'][-1].copy())
     infos_['sscweb'][-1]['frame'] = 'J2K'
 
-  if satellite == '' or satellite == 'MMS':
+  if satellite == '' or satellite.startswith('MMS'):
 
-    mms   = 'mms1'
+    sc   = f'mms{satellite[-1]}'
     start = '2016-09-01T00:00:00Z'
     stop  = '2016-09-02T00:00:00Z'
     for frame in ['GSE', 'GSM']:
       infos_['cdaweb'].append({
         'name': 'CDAWeb',
-        'dataset': f'{mms.upper()}_EPD-EIS_SRVY_L2_ELECTRONENERGY',
-        'parameter': f'mms1_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
+        'dataset': f'{sc.upper()}_EPD-EIS_SRVY_L2_ELECTRONENERGY',
+        'parameter': f'{sc}_epd_eis_srvy_l2_electronenergy_position_{frame.lower()}',
         'start': start,
         'stop':  stop
       })
 
       infos_['sscweb'].append({
         'name': 'SSCWeb',
-        'dataset': mms,
+        'dataset': sc,
         'frame': frame,
         'start': start,
         'stop':  stop
@@ -226,8 +251,7 @@ def jpl(info, logging=False):
 
   from sunpy.coordinates import get_horizons_coord
 
-  # No 'GSM' b/c https://github.com/sunpy/sunpy/issues/8188
-  if info['frame'] not in ['GSE', 'GEI']:
+  if info['frame'] not in ['GSE', 'GEI', 'GSM']:
     return None
 
   # To find ids, see https://ssd.jpl.nasa.gov/horizons/app.html#/
@@ -251,16 +275,15 @@ def jpl(info, logging=False):
 
   to = info['time'][0].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
   tf = info['time'][-1].strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-  cache_file = f"jpl/jpl-{info['dataset']}-{info['frame']}-{to}-{tf}.pkl"
+  cache_file = f"data/jpl/jpl-{info['dataset']}-{info['frame']}-{to}-{tf}.pkl"
 
-  if False and os.path.exists(cache_file):
+  if os.path.exists(cache_file):
     print(f"  Saved pickle file: {cache_file}")
     with open(cache_file, 'rb') as f:
       return pickle.load(f)
 
   #solar_system_ephemeris.set('de432s')
   #solar_system_ephemeris.set('de440s')
-  xyz = np.full((len(info['time']), 3), np.nan)
   dt = info['time'][1] - info['time'][0]
   # Using, e.g., 60s gives error: https://github.com/sunpy/sunpy/issues/8188
   step_min = int(dt.total_seconds()/60)
@@ -277,12 +300,12 @@ def jpl(info, logging=False):
   if info['frame'] == 'GSM':
     data_jpl = get_horizons_coord(satellite_id, t).geocentricsolarmagnetospheric.cartesian.xyz.to('km')
 
-  xyz = data_jpl.value.T/R_E
+  resp = {'name': 'JPL', 'time': info['time'], 'xyz': data_jpl.value.T/R_E}
   with open(cache_file, 'wb') as f:
-    pickle.dump({'time': info['time'], 'xyz': info['xyz']}, f)
+    pickle.dump(resp, f)
     print(f"  Saved pickle file: {cache_file}")
 
-  return {'name': 'JPL', 'time': info['time'], 'xyz': xyz}
+  return resp
 
 def sscweb(info, logging=False):
 
@@ -315,7 +338,7 @@ def sscweb(info, logging=False):
   start      = info['start']
   stop       = info['stop']
   parameters = f'X_{frame},Y_{frame},Z_{frame}'
-  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './data/hapi'}
 
   data, meta = hapi(server, dataset, parameters, start, stop, **opts)
 
@@ -337,7 +360,7 @@ def cdaweb(info, logging=False):
   parameter  = info['parameter']
   start      = info['start']
   stop       = info['stop']
-  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './data/hapi'}
 
   data, meta = hapi(server, dataset, parameter, start, stop, **opts)
 
@@ -361,7 +384,7 @@ def amda(info, logging=False):
   parameter  = info['parameter']
   start      = info['start']
   stop       = info['stop']
-  opts       = {'logging': logging, 'usecache': True, 'cachedir': './hapicache'}
+  opts       = {'logging': logging, 'usecache': True, 'cachedir': './data/hapi'}
 
   data, meta = hapi(server, dataset, parameter, start, stop, **opts)
 
@@ -630,7 +653,6 @@ def _plot(axes, satellite, frame, info1, info2):
   _savefigs(fname)
 
 satellites = infos()
-
 for satellite in satellites:
 
   if len(satellites_only) > 0 and satellite not in satellites_only:
