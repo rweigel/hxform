@@ -25,7 +25,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
           Zeros are used for any missing optional value.
 
   csys_in : str
-            One of MAG, GEI, GEO, GSE, GSM, SM
+              One of MAG, GEI, GEO, GSE, GSM, SM
 
   csys_out : str
               One of MAG, GEI, GEO, GSE, GSM, SM
@@ -107,6 +107,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     time = np.array([time])
   if len(v.shape) == 1:
     v = np.array([v])
+
+  if time.shape[1] > 6:
+    # Keep only year, month, day, hour, minute, second (drop microseconds)
+    time = time[:,0:6]
 
   Nv = v.shape[0]     # Number of vectors
   Nt = time.shape[0]  # Number of times
@@ -240,6 +244,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     import astropy.coordinates
     import sunpy.coordinates
+    # sunpy.coordinates is not used directly, but needed to register the frames.
 
     if ctype_in == 'sph':
       units = [astropy.units.m, astropy.units.deg, astropy.units.deg]
@@ -352,8 +357,10 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
       # This is likely to fail if many requests are made.
       try:
+        print(f"Fetching URL: {url}")
         r = requests.get(url, timeout=2)
-      except:
+      except Exception as e:
+        #print(e)
         #raise Exception(f"Failed to fetch URL: {url}.")
         vp[i] = np.full((1, 3), np.nan)
         continue

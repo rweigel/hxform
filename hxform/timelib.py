@@ -1,3 +1,20 @@
+def time_array(dto, dtf, dt_delta):
+  import numpy
+  import datetime
+
+  t = []
+  delta = datetime.timedelta(**dt_delta)
+  i = 0
+  while True:
+    dt = dto + i*delta
+    i = i + 1
+    t.append([dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.microsecond])
+    if dt >= dtf:
+      break
+
+  return numpy.array(t)
+
+
 def tpad(time, length=7):
   """Pad list or array with 3 or more elements with zeros.
 
@@ -77,6 +94,19 @@ def doy(date):
   return N.astype(int)
 
 
+def ints2datetime(t):
+  import datetime
+  import numpy
+
+  times = []
+  for i in range(len(t)):
+    times.append(datetime.datetime(*t[i]))
+
+  if isinstance(t, (list, tuple)):
+    return times
+
+  return numpy.array(times)
+
 def ints2doy(t):
   """Convert from [y, m, d, ...] to [y, doy, ...].
 
@@ -124,9 +154,6 @@ def iso2ints(isostr, length=None):
     return isostr
 
   tmp = re.split("-|:|T|Z", isostr)
-  if len(tmp) > 6:
-    tmp = tmp[0:5]
-
   int_list = []
   for str_int in tmp:
     if str_int != "Z" and str_int != '':

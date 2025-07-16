@@ -5,8 +5,9 @@ from hxform import xprint
 
 # time and input can be NumPy arrays
 time1 = [1997, 1, 1]
-time1 = [2010, 12, 30, 0, 0, 0]
-input1 = [1., 1., 1.]
+time1 = [2015, 12, 30, 0, 0, 0]
+#input1 = [1., 1., 1.]
+input1 = [3.46410162, 3.46410162, 3.46410162]
 
 libs = hxform.info.known_libs(info=False)
 
