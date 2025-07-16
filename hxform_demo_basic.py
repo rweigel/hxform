@@ -5,12 +5,13 @@ from hxform import xprint
 # time and input can be NumPy arrays
 time1 = hxform.timelib.iso2ints('2010-12-30T00:00:00Z')
 time2 = hxform.timelib.iso2ints('2010-12-31T01:00:00Z')
+print(time1, time2)
 input1 = [1., 1., 1.]
 input2 = [1., 0., 1.]
 initial = 'GSE'
 final = 'GSM'
 
-lib = 'spacepy'
+lib = 'sscweb'
 
 # Transform one input at one time
 xprint("")

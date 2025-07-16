@@ -21,6 +21,12 @@ from numpy.distutils.core import setup, Extension
 
 install_requires = ["numpy", 'sunpy', 'spacepy', 'spiceypy', 'python-dateutil']
 
+try:
+  # Will work if utilrsw was already installed, for example via pip install -e .
+  import utilrsw
+except:
+  install_requires.append("utilrsw @ git+https://github.com/rweigel/utilrsw")
+
 # https://gist.github.com/johntut/1d8edea1fd0f5f1c057c
 # https://github.com/PyCOMPLETE/pypkgexample
 # https://numpy.org/devdocs/f2py/distutils.html

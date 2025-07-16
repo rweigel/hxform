@@ -859,6 +859,7 @@ C start of three subroutine calls for transformations
           END DO
         ELSE IF (Nv.EQ.1) THEN
           DO i=1,Nt
+          CALL RECALC_08_W (datetime(i,:))
           CALL MAGSM_08(indatav(1,1),indatav(1,2),indatav(1,3),
      *                   xtmp, ytmp, ztmp, 1)
           CALL SMGSW_08(xtmp, ytmp, ztmp,
