@@ -19,7 +19,8 @@ except:
 
 from numpy.distutils.core import setup, Extension
 
-install_requires = ["numpy", 'sunpy', 'spacepy', 'spiceypy', 'python-dateutil']
+# sunpy>=7.0.0 due to https://github.com/sunpy/sunpy/pull/8193
+install_requires = ["numpy", 'sunpy>=7.0.0', 'spacepy', 'spiceypy', 'python-dateutil']
 
 try:
   # Will work if utilrsw was already installed, for example via pip install -e .
