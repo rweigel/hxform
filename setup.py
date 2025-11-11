@@ -20,7 +20,18 @@ except:
 from numpy.distutils.core import setup, Extension
 
 # sunpy>=7.0.0 due to https://github.com/sunpy/sunpy/pull/8193
-install_requires = ["numpy", 'sunpy>=7.0.0', 'spacepy', 'spiceypy', 'python-dateutil']
+# pyspedas>=1.7.28 due to https://github.com/spedas/pyspedas/issues/1207
+# spacepy>=0.3.0 due to addition of native python transforms and fix of
+# https://github.com/spacepy/spacepy/issues/534; see also
+# https://github.com/spacepy/spacepy/pull/536
+install_requires = [
+  "numpy==1.26.4",
+  'sunpy==7.0.0',
+  'pyspedas==1.7.28',
+  'spacepy==0.6.0',
+  'spiceypy==6.0.0',
+  'python-dateutil==2.9.0.post0'
+]
 
 try:
   # Will work if utilrsw was already installed, for example via pip install -e .
