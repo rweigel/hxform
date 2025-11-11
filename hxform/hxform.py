@@ -1,5 +1,5 @@
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='cxform'):
-  """Transform between coordinates systems using cxform, Geopack, SpacePy, SpiceyPy, SSCWeb, or SunPy.
+  """Transform between coordinates systems using cxform, Geopack-08, SpacePy, SpiceyPy, SSCWeb, or SunPy.
 
   Parameters
   ----------
@@ -338,22 +338,25 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     import requests
     import time as time_
 
-    if csys_in in ['GEO', 'GM'] and ctype_in == 'car':
+    frame_in = info['system_aliases'].get(csys_in, csys_in)
+    frame_out = info['system_aliases'].get(csys_out, csys_out)
+
+    if csys_in in ['GEO', 'MAG'] and ctype_in == 'car':
       v[:,0], v[:,1], v[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
 
     execution_start = time_.time()
     for i in range(time.shape[0]):
 
-      time_.sleep(0.1)
+      time_.sleep(0.1) # To avoid overwhelming the server with requests and getting blocked.
       year = time[i][0]
       doy_ = hxform.timelib.doy(time[i][0:3])
       time_str = f'{year} {doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
       # TODO: Document why SSCWeb Python client was not used.
       url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
-      if csys_in in ['GEO', 'GM']:
-        url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={csys_in}"
+      if csys_in in ['GEO', 'MAG']:
+        url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={frame_in}"
       else:
-        url += f"epoch={time_str}&x={v[i][0]:f}&y={v[i][1]:f}&z={v[i][2]:f}&lat=&lon=&r=&action={csys_in}"
+        url += f"epoch={time_str}&x={v[i][0]:f}&y={v[i][1]:f}&z={v[i][2]:f}&lat=&lon=&r=&action={frame_in}"
 
       # This is likely to fail if many requests are made.
       try:
@@ -407,13 +410,13 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
           result[parts[0]]["hh.hhhhh"] = float(parts[6])
 
       if ctype_out == 'car':
-        vp[i][0] = result[csys_out]['X']
-        vp[i][1] = result[csys_out]['Y']
-        vp[i][2] = result[csys_out]['Z']
+        vp[i][0] = result[frame_out]['X']
+        vp[i][1] = result[frame_out]['Y']
+        vp[i][2] = result[frame_out]['Z']
       else:
-        vp[i][0] = result[csys_out]['R']
-        vp[i][1] = result[csys_out]['Lat']
-        vp[i][2] = result[csys_out]['Long']
+        vp[i][0] = result[frame_out]['R']
+        vp[i][1] = result[frame_out]['Lat']
+        vp[i][2] = result[frame_out]['Long']
     execution_stop = time_.time()
 
   transform.execution_time = execution_stop - execution_start
@@ -428,7 +431,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   elif issubclass(v_innertype, np.ndarray):
     return v_outertype(vp)
   else:
-    if Nv == 1 and Nt == 1 and v_innertype != list:
+    if Nv == 1 and Nt == 1 and v_innertype is not list:
       return vp.tolist()[0]
     return vp.tolist()
 
