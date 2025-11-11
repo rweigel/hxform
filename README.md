@@ -7,9 +7,9 @@ Heliophysics coordinate transforms in Python using various libraries and package
 Over time, we have needed to use various coordinate transform libraries in Python. Multiple libraries have been used because
 
 1. not all libraries had all needed transforms,
-2. some libraries were too slow for application,
+2. some libraries were too slow for an application,
 3. some libraries had bugs, and
-4. some libraries did not interface with ParaView's Python (they ship their own version of Python).
+4. some libraries did not interface with ParaView's Python (they embed a version of Python).
 
 To facilitate comparison, we have developed a single interface. To transform a vector `v` at time `t` from coordinate system `csys_in` to `csys_out`, using library `lib`, use
 
@@ -17,13 +17,13 @@ To facilitate comparison, we have developed a single interface. To transform a v
 vp = hxform.transform(v, t, csys_in, csys_out, lib=...)
 ```
 
-See the files name `hxform_demo_*.py` for example usage.
+See the `demos/` directory for examples.
 
 # Overview
 
 This package is a wrapper to libraries that perform coordinate transforms.
 
-This package is a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contains magnetospheric coordinate tranformation functions. 
+This package includes a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions.
 
 To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
@@ -33,9 +33,7 @@ To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.f
 
 Requires Anaconda and a Fortran compiler.
 
-Tested with Python 3.9.12, 3.10.14, and 3.11.9.
-
-Install fails in Python 3.12 due to `numpy.distutils` and `distutils` deprecation.
+Tested with Python 3.9.12, 3.10.14, and 3.11.9. (Install fails in Python 3.12 due to `numpy.distutils` and `distutils` deprecation.)
 
 ```bash
 git clone https://github.com/rweigel/hxform
