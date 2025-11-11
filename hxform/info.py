@@ -77,7 +77,10 @@ def known_libs(info=False):
               'version': None, # TODO: Use current date?
               'version_info': None,
               'notes': 'https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.shtml',
-              'systems': ["GEI", "GEO", "GM", "GSE", "GSM", "J2000", "SM"]
+              'systems': ["GEI", "GEO", "MAG", "GSE", "GSM", "J2000", "SM"],
+              'system_aliases': {
+                'MAG': 'GM'
+              }
             },
             {
             'name': 'pyspedas',
