@@ -1,10 +1,10 @@
 '''
-API Test
+API Test 2
 For all transforms available in each library, test that the output is the
 same for single and multiple times and vectors.
 '''
 
-import hxform as hx
+import hxform
 
 skip_sscweb = True
 skip_pyspedas = True
@@ -14,7 +14,7 @@ input1 = [1., 1., 1.]
 time2  = [time1, time1]
 input2 = [input1, input1]
 
-libs = hx.libs()
+libs = hxform.libs()
 
 for lib in libs:
   if skip_pyspedas and lib == 'pyspedas':
@@ -22,31 +22,31 @@ for lib in libs:
     continue
 
   if skip_sscweb and lib == 'sscweb':
-    print("sscweb - Skipping b/c skip_sscweb=True")
+    hxform.xprint("sscweb - Skipping b/c skip_sscweb=True")
     continue
 
-  for t1 in hx.frames(lib):
-    for t2 in hx.frames(lib):
+  for t1 in hxform.frames(lib):
+    for t2 in hxform.frames(lib):
 
       csys_in = t1
       csys_out = t2
 
-      print(f'{lib} {t1} to {t2}')
+      hxform.xprint(f'{lib} {t1} to {t2}')
 
       # Single time, single vector
-      output11 = hx.transform(input1, time1, csys_in, csys_out, lib=lib)
+      output11 = hxform.transform(input1, time1, csys_in, csys_out, lib=lib)
 
       # Multiple times, single vector
-      output12 = hx.transform(input1, time2, csys_in, csys_out, lib=lib)
+      output12 = hxform.transform(input1, time2, csys_in, csys_out, lib=lib)
       assert(output12[0] == output11)
       assert(output12[1] == output11)
 
       # Single time, multiple vectors
-      output21 = hx.transform(input2, time1, csys_in, csys_out, lib=lib)
+      output21 = hxform.transform(input2, time1, csys_in, csys_out, lib=lib)
       assert(output21[0] == output11)
       assert(output21[1] == output11)
 
       # Multiple times, multiple vectors
-      output22 = hx.transform(input2, time2, csys_in, csys_out, lib=lib)
+      output22 = hxform.transform(input2, time2, csys_in, csys_out, lib=lib)
       assert(output22[0] == output11)
       assert(output22[1] == output11)

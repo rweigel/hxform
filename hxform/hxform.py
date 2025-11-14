@@ -122,19 +122,18 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   if csys_in == csys_out or lib.startswith('spacepy') or lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sunpy' or lib == 'pyspedas':
     # TODO: Could avoid expanding time or v by putting logic to test for
     # Nt == 1 or Nv == 1 in transform loops for each lib.
-    from numpy import matlib
     if Nt == 1 and Nv > 1:
-      time = matlib.repmat(time, Nv, 1)
+      time = np.tile(time, (Nv, 1))
 
     if Nv == 1 and Nt > 1:
-      v = matlib.repmat(v, Nt, 1)
+      v = np.tile(v, (Nt, 1))
 
   # vp means "v prime", which is vector v in cys_in transformed to csys_out
   if lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sscweb' or lib == 'sunpy':
     vp = np.full(v.shape, np.nan)
 
   if ctype_in == 'sph' and lib != 'sscweb':
-    v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
+    v[:,0], v[:,1], v[:,2] = sph2car(v[:,0], v[:,1], v[:,2])
 
   import time as time_
 
@@ -192,15 +191,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     else:
       outsize = v.shape[0]
 
-    if ctype_in == 'sph':
-      v[:,0], v[:,1], v[:,2] = StoC(v[:,0], v[:,1], v[:,2])
-
     execution_start = time_.time()
     vp = geopack_08_dp.transform(v, trans, dtime, outsize)
     execution_stop = time_.time()
-
-    if ctype_out == 'sph':
-      vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
 
   if lib == 'pyspedas':
     import os
@@ -235,12 +228,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     execution_start = time_.time()
     if lib.endswith('-irbem'):
-      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=True)
+      cvals = sc.Coords(v, csys_in, 'car', use_irbem=True)
     else:
-      cvals = sc.Coords(v, csys_in, ctype_in, use_irbem=False)
+      cvals = sc.Coords(v, csys_in, 'car', use_irbem=False)
 
     cvals.ticks = Ticktock(t_str, 'ISO')
-    vp = cvals.convert(csys_out, ctype_out).data
+    vp = cvals.convert(csys_out, 'car').data
     execution_stop = time_.time()
 
   if lib == 'sunpy':
@@ -249,16 +242,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     import sunpy.coordinates
     # sunpy.coordinates is not used directly, but needed to register the frames.
 
-    if ctype_in == 'sph':
-      units = [astropy.units.m, astropy.units.deg, astropy.units.deg]
-      representation_type = 'spherical'
-    else:
-      representation_type = 'cartesian'
-      one = astropy.constants.R_earth
-      # TODO: Use
-      #   one = astropy.units.m
-      # when https://github.com/sunpy/sunpy/pull/7530 is merged.
-      units = [one, one, one]
+    representation_type = 'cartesian'
+    one = astropy.constants.R_earth
+    # TODO: Use
+    #   one = astropy.units.m
+    # when https://github.com/sunpy/sunpy/pull/7530 is merged.
+    units = [one, one, one]
 
     frame_in = info['system_aliases'][csys_in]
     frame_out = info['system_aliases'][csys_out]
@@ -275,12 +264,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
         "representation_type": representation_type
       }
       coord = astropy.coordinates.SkyCoord(**kwargs)
-
-      if ctype_out == 'car':
-        coord = coord.transform_to(frame_out).cartesian/one
-      if ctype_out == 'sph':
-        coord = coord.transform_to(frame_out).spherical/one
-
+      coord = coord.transform_to(frame_out).cartesian/one
       vp = coord.xyz.decompose().value.transpose()
 
     else:
@@ -347,7 +331,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     frame_out = info['system_aliases'].get(csys_out, csys_out)
 
     if csys_in in ['GEO', 'MAG'] and ctype_in == 'car':
-      v[:,0], v[:,1], v[:,2] = CtoS(v[:,0], v[:,1], v[:,2])
+      v[:,0], v[:,1], v[:,2] = car2sph(v[:,0], v[:,1], v[:,2])
 
     execution_start = time_.time()
     for i in range(time.shape[0]):
@@ -427,7 +411,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   transform.execution_time = execution_stop - execution_start
 
   if ctype_out == 'sph' and lib != 'sscweb':
-    vp[:,0], vp[:,1], vp[:,2] = CtoS(vp[:,0], vp[:,1], vp[:,2])
+    vp[:,0], vp[:,1], vp[:,2] = car2sph(vp[:,0], vp[:,1], vp[:,2])
 
   if issubclass(v_outertype, np.ndarray):
     if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):
@@ -450,26 +434,68 @@ def transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
   return np.column_stack([b1, b2, b3])
 
 
-def CtoS(x, y, z):
-    """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
-    import numpy as np
-    r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
-    assert np.all(r > 0), 'radius must be greater than zero.'
-    lat = 90.0 - (180.0/np.pi)*np.arccos(z/r)
-    lon = (180.0/np.pi)*np.arctan2(y, x)
+def car2sph(*args):
+  """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
+  import numpy as np
 
-    return r, lat, lon
+  if len(args) == 3:
+    x = args[0]
+    y = args[1]
+    z = args[2]
+  elif len(args) == 1:
+    xyz = args[0]
+    if len(xyz.shape) != 2:
+      # 1-D array of xyz values. Convert to 2-D array with one row so columns
+      # are x, y, z.
+      xyz.shape = (1, xyz.shape[0])
+    x = xyz[:, 0]
+    y = xyz[:, 1]
+    z = xyz[:, 2]
+  else:
+    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
+
+  r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
+  assert np.all(r > 0), 'radius must be greater than zero.'
+  lat = 90.0 - (180.0/np.pi)*np.arccos(z/r)
+  lon = (180.0/np.pi)*np.arctan2(y, x)
+
+  if len(args) == 1:
+    return np.column_stack([r, lat, lon])
+
+  return r, lat, lon
 
 
-def StoC(r, lat, lon):
-    """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
-    import numpy as np
-    assert np.all(r > 0), 'radius must be greater than zero.'
-    x = r*np.cos((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
-    y = r*np.sin((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
-    z = r*np.sin((np.pi/180.0)*lat)
+def sph2car(*args):
+  """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
+  import numpy as np
 
-    return x, y, z
+  if len(args) == 3:
+    r = args[0]
+    lat = args[1]
+    lon = args[2]
+  elif len(args) == 1:
+    rtp = args[0] # r, theta, phi
+    if len(rtp.shape) != 2:
+      # 1-D array of rtp values. Convert to 2-D array with one row so columns
+      # are r, theta, phi.
+      rtp.shape = (1, rtp.shape[0])
+    r = rtp[:, 0]
+    lat = rtp[:, 1]
+    lon = rtp[:, 2]
+  else:
+    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
+
+  if not np.all(r > 0):
+    raise ValueError('radius must be greater than zero.')
+
+  x = r*np.cos((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
+  y = r*np.sin((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
+  z = r*np.sin((np.pi/180.0)*lat)
+
+  if len(args) == 1:
+    return np.column_stack([x, y, z])
+
+  return x, y, z
 
 
 def get_spherical_vector_components(v_cart, x_cart):

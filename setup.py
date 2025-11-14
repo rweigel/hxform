@@ -33,6 +33,13 @@ install_requires = [
   'python-dateutil==2.9.0.post0'
 ]
 
+# Add pytest when doing a developer/test install (e.g. `python setup.py develop` or `python setup.py test`)
+if any(cmd in sys.argv for cmd in ('develop', 'test', 'pytest')):
+  try:
+    import pytest
+  except Exception:
+    install_requires.append('pytest')
+
 try:
   # Will work if utilrsw was already installed, for example via pip install -e .
   import utilrsw

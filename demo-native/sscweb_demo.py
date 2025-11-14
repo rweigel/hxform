@@ -58,4 +58,4 @@ print(json.dumps(result, indent=2))
 
 import hxform as hx
 
-print(hx.StoC(1.0, result["GEO"]["Lat"], result["GEO"]["Long"]))
+print(hx.sph2car(1.0, result["GEO"]["Lat"], result["GEO"]["Long"]))
