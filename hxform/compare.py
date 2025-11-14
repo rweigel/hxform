@@ -10,7 +10,7 @@ def compare(v, time, frame_in, frame_out, rep_in='car', rep_out='car', libs='all
   import numpy as np
   import hxform
 
-  libs_all = hxform.info.known_libs(info=False)
+  libs_all = hxform.info.libs()
   if libs == 'all':
     libs = libs_all
   if libs_exclude is not None:

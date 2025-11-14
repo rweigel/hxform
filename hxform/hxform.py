@@ -1,5 +1,5 @@
 def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='cxform'):
-  """Transform between coordinates systems using cxform, Geopack-08, SpacePy, SpiceyPy, SSCWeb, or SunPy.
+  """Transform between coordinates frames using cxform, Geopack-08, SpacePy, SpiceyPy, SSCWeb, or SunPy.
 
   Parameters
   ----------
@@ -81,13 +81,13 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   import numpy as np
   import hxform
 
-  assert lib in hxform.info.known_libs(), 'lib must be one of {}'.format(hxform.info.known_libs())
+  assert lib in hxform.info.libs(), 'lib must be one of {}'.format(hxform.info.libs())
   assert ctype_in in ['car', 'sph'], 'ctype_in must be one of ["car", "sph"]'
   assert ctype_out in ['car', 'sph'], 'ctype_out must be one of ["car", "sph"]'
 
   info = hxform.info.lib_info(lib)
-  assert csys_in in info['systems'], 'For lib={}, csys_in must be one of {}'.format(lib, info['systems'])
-  assert csys_out in info['systems'], 'For lib={}, csys_out must be one of {}'.format(lib, info['systems'])
+  assert csys_in in info['frames'], 'For lib={}, csys_in must be one of {}'.format(lib, info['frames'])
+  assert csys_out in info['frames'], 'For lib={}, csys_out must be one of {}'.format(lib, info['frames'])
 
   v_outertype = type(v)
   v_innertype = type(v[0])
@@ -146,7 +146,7 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     for lib_file in glob.glob(this_script):
       # The name of the .so or .dll file will not be the same on all
-      # systems, so we need to find it. (For example, on one system
+      # frames, so we need to find it. (For example, on one system
       # it is cxform_wrapper.cpython-37m-darwin.so.)
       # TODO: Find a better way to do this.
       break
@@ -215,6 +215,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
     execution_start = time_.time()
     vp = cotrans(time_in=time_in, data_in=v, coord_in=csys_in, coord_out=csys_out)
+    if isinstance(vp, list):
+      # https://github.com/spedas/pyspedas/issues/1273
+      vp = np.array(vp)
     execution_stop = time_.time()
 
   if lib.startswith('spacepy'):
@@ -317,10 +320,12 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
     import os
     import spiceypy
 
-    kernels = info['kernels']
-    for kernel in kernels:
-      rel_path = os.path.join('..','demo','spiceypy', 'kernels', kernel)
-      kernel_file = os.path.join(os.path.dirname(__file__), rel_path)
+    kernel_dir = info['kernel']['dir']
+    kernel_files = info['kernel']['files']
+    for kernel in kernel_files:
+      kernel_file = os.path.join(kernel_dir, kernel)
+      if not os.path.isfile(kernel_file):
+        raise FileNotFoundError(f"Required SPICE kernel file not found: {kernel_file}")
       spiceypy.furnsh(kernel_file)
 
     execution_start = time_.time()

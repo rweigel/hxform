@@ -1,0 +1,1 @@
+rbsp_general012_mod.tf is a copy of rbsp_general012.tf with a new GSE coordinate frame added (GSE_Z_PRIMARY).
