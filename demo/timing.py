@@ -6,7 +6,7 @@ from hxform import xprint # print to console and timing.log
 
 N = 10000
 
-libs = hxform.info.known_libs(info=False)
+libs = hxform.info.libs()
 libs.remove('sscweb')
 
 p_in = np.random.random((N, 3))
