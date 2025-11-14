@@ -11,20 +11,36 @@ def xprint(msg: str):
   >>> xprint("Log message")
   """
 
+import threading
+_tls = threading.local()
+_file_lock = threading.Lock()
+
+def xprint(msg: str):
   import os
   from inspect import stack
 
   fname = stack()[1][1]
   logfile = os.path.realpath(fname[0:-2]) + "log"
 
-  if not 'counter' in xprint.__dict__:
-    xprint.counter = {fname: 0}
+  # per-thread counters dict
+  if not hasattr(_tls, "counter"):
+    _tls.counter = {}
 
-  if xprint.counter[fname] == 0:
-    if os.path.isfile(logfile):
-      os.remove(logfile)
+  if fname not in _tls.counter:
+    _tls.counter[fname] = 0
 
-  xprint.counter[fname] += 1
+  # ensure the first write for this thread removes existing logfile once,
+  # but protect filesystem operations with a lock since files are shared across threads
+  if _tls.counter[fname] == 0:
+    with _file_lock:
+      if os.path.isfile(logfile):
+        os.remove(logfile)
+
+  _tls.counter[fname] += 1
+
   print(msg)
-  with open(logfile, "a") as f:
-    f.write(str(msg) + "\n")
+
+  # appending is typically atomic for small writes on POSIX, but keep lock if you need strict ordering
+  with _file_lock:
+    with open(logfile, "a") as f:
+      f.write(str(msg) + "\n")

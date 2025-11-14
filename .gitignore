@@ -2,7 +2,7 @@
 .eggs/
 build/
 hxform.egg-info
-hxform/__pycache__/
+__pycache__/
 hxform/*.so
 hxform/*.dll
 notes/hapicache/

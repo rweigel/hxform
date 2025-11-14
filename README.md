@@ -37,15 +37,14 @@ Tested with Python 3.9.12, 3.10.14, and 3.11.9. (Install fails in Python 3.12 du
 
 ```bash
 git clone https://github.com/rweigel/hxform
-cd hxform;
-pip install numpy
+cd hxform
 pip install -e .
 ```
 
 To test if installation was successful, execute
 
 ```
-python hxform_demo.py
+python demo/basic.py
 ```
 
 See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/demo) directory. The result from executing the files is stored in a `.log` file.
@@ -57,8 +56,10 @@ See the files in the [test](https://github.com/rweigel/hxform/tree/master/test).
 To run, execute
 
 ```bash
+pip install pytest
 python test/api_test1.py
 python test/api_test2.py
+python test/api_test3.py
 ```
 
 # Development
