@@ -8,7 +8,6 @@ import numpy
 import hxform
 
 skip_sscweb = True
-skip_pyspedas = True
 
 time  = [2010, 12, 30, 0, 0, 0]
 input = numpy.array([1., 1., 1.])

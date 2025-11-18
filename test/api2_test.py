@@ -25,13 +25,13 @@ for lib in libs:
     hxform.xprint("sscweb - Skipping b/c skip_sscweb=True")
     continue
 
-  for t1 in hxform.frames(lib):
-    for t2 in hxform.frames(lib):
+  for f1 in hxform.frames(lib):
+    for f2 in hxform.frames(lib):
 
-      frame_in = t1
-      frame_out = t2
+      frame_in = f1
+      frame_out = f2
 
-      hxform.xprint(f'{lib} {t1} to {t2}')
+      hxform.xprint(f'{lib} {f1} to {f2}')
 
       # Single time, single vector
       output11 = hxform.transform(input1, time1, frame_in, frame_out, lib=lib)
