@@ -90,8 +90,8 @@ to = datetime.datetime(2010, 12, 21, 0, 0, 0)
 tf = datetime.datetime(2010, 12, 23, 0, 0, 0)
 
 kwargs = {
-  'csys_in': 'GSM',
-  'csys_out': 'GSE',
+  'frame_in': 'GSM',
+  'frame_out': 'GSE',
   'ctype_in': 'car',
   'ctype_out': 'car',
   'lib': 'geopack_08_dp'
@@ -107,12 +107,12 @@ t = hxform.time_array(to, tf, delta)
 t_dts = hxform.ints2datetime(t)
 
 gsm_z = numpy.array([0., 0., 1.])
-kwargs['csys_in'] = 'GSM'
+kwargs['frame_in'] = 'GSM'
 gsm_z_gse = hxform.transform(gsm_z, t, **kwargs)
 print(gsm_z_gse[1:5, :])
 
 mag_z = numpy.array([0., 0., 1.])
-kwargs['csys_in'] = 'MAG'
+kwargs['frame_in'] = 'MAG'
 mag_z_gse = hxform.transform(mag_z, t, **kwargs)
 print(mag_z_gse[1:5, :])
 

@@ -1,7 +1,7 @@
 '''
 API Test 3
-Test that conversions between cartesian and spherical by hxform are consistent
-with when doing the transform outside of hxform.
+Test that conversions between cartesian and spherical in hxform are consistent
+with result when doing the transform outside of hxform.
 '''
 
 import numpy
@@ -16,11 +16,11 @@ input = numpy.array([1., 1., 1.])
 libs = hxform.libs()
 
 for lib in libs:
+
   if skip_sscweb and lib == 'sscweb':
     continue
 
   #hxform.xprint(f'Testing {lib}')
-
 
   output1 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'car', lib=lib)
   output1 = hxform.car2sph(output1)
@@ -39,7 +39,6 @@ for lib in libs:
   output1 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'car', lib=lib)
   input2 = hxform.car2sph(input)
   output2 = hxform.transform(input2, time, 'GEO', 'GSE', 'sph', 'car', lib=lib)
-
   assert(numpy.all(numpy.abs(output1 - output2) < 1e-15))
 
 
