@@ -7,8 +7,6 @@ t = [2013, 12, 30, 0, 0, 0]
 kwargs = {
   "frame_in": "GSE",
   "frame_out": "GSM",
-  "rep_in": "car",
-  "rep_out": "car",
   "libs_exclude": ['sscweb', 'pyspedas']
 }
 

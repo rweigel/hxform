@@ -21,13 +21,13 @@ See the `demos/` directory for examples.
 
 # Overview
 
-This package is a wrapper to libraries that perform coordinate transforms.
+This package is a wrapper to libraries that performs reference frame transforms.
+
+The list of supported libraries are in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
 
 This package includes a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions.
 
 To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
-
-`hxform` also contains a wrapper to [SpacePy's coordinate transformation functions](https://spacepy.github.io/irbempy.html), which requires the installation of SpacePy. (SpacePy is not installed when `hxform` is installed due to issues encountered with SpacePy installation at the time of this release.)
 
 # Install
 
@@ -47,7 +47,7 @@ To test if installation was successful, execute
 python demo/basic.py
 ```
 
-See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/demo) directory. The result from executing the files is stored in a `.log` file.
+See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/demo) directory. The result from executing each file is stored in a `.log` file.
 
 # Tests
 
@@ -84,6 +84,7 @@ python demo-native/geopack_08_dp_wrapper_demo.py
 python demo-native/cxform_demo.py
 python demo-native/spacepy_demo.py
 ```
+
 # Related Code
 
 * [cxform (C)](https://github.com/edsantiago/cxform) is a library is based on the algorithms in Hapgood, 1992. Python wrappers include:
@@ -102,4 +103,3 @@ python demo-native/spacepy_demo.py
 * [Kivelson and Russell, 1995; Appendix 3](https://books.google.com/books/about/Introduction_to_Space_Physics.html?id=qWHSqXGfsfQC)
 * [Russell, 1971, Geophysical Coordinate Tranformations](http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm)
 * [SPENVIS help on coordinate transformations](https://www.spenvis.oma.be/help/background/coortran/coortran.html); includes [an animation](https://www.spenvis.oma.be/help/background/coortran/anim.html) and additional references at the bottom of the page.
-

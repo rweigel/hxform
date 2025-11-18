@@ -1,14 +1,14 @@
 import sys
 
-def compare(v, time, frame_in, frame_out, rep_in='car', rep_out='car', libs='all', libs_exclude=None, io=sys.stdout):
+def compare(v, time, frame_in, frame_out, libs='all', libs_exclude=None, io=sys.stdout):
+
+  import numpy as np
+  import hxform
 
   def write(msg):
     results["log"] += msg + "\n"
     if io is not None:
       io.write(msg + "\n")
-
-  import numpy as np
-  import hxform
 
   libs_all = hxform.info.libs()
   if libs == 'all':
@@ -22,15 +22,13 @@ def compare(v, time, frame_in, frame_out, rep_in='car', rep_out='car', libs='all
     "time": time,
     "frame_in": frame_in,
     "frame_out": frame_out,
-    "rep_in": rep_in,
-    "rep_out": rep_out,
     "v_in": v,
     "v_out": {},
     "log": ""
   }
 
   write(f"Time: {time}")
-  write(f"Transform: {frame_in} in {rep_in} => {frame_out} in {rep_out}")
+  write(f"Transform: {frame_in} => {frame_out}")
 
   ml = np.max([len(lib) for lib in libs]) # Max length of lib name
 
