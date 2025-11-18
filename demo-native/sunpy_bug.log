@@ -1,0 +1,217 @@
+7.0.0
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Pass
+frame_in = geocentricearthequatorial | frame_out = geocentricearthequatorial | one = m
+Pass
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Fail
+[-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]
+frame_in = geocentricearthequatorial | frame_out = geocentricsolarecliptic | one = m
+Fail
+[-1.22070312e-04 -6.05138092e-06 -5.65977584e-06]
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Fail
+[-7.97871763e-05  9.56339010e-05  6.06826127e-05]
+frame_in = geocentricearthequatorial | frame_out = geocentricsolarmagnetospheric | one = m
+Fail
+[-2.63585249e-04  9.17276941e-05  5.58276465e-05]
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = itrs | one = 6378100.0 m
+Fail
+[ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]
+frame_in = geocentricearthequatorial | frame_out = itrs | one = m
+Fail
+[ 2.28252254e-04 -9.81804753e-05  1.38814200e-04]
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = solarmagnetic | one = 6378100.0 m
+Fail
+[-4.54890775e-05  9.56339010e-05  8.93259022e-05]
+frame_in = geocentricearthequatorial | frame_out = solarmagnetic | one = m
+Fail
+[-2.13134907e-04  9.17276941e-05  1.64825426e-04]
+----------------------------------------
+frame_in = geocentricearthequatorial | frame_out = geomagnetic | one = 6378100.0 m
+Fail
+[1.03327178e-04 2.32076164e-05 8.93259022e-05]
+frame_in = geocentricearthequatorial | frame_out = geomagnetic | one = m
+Fail
+[0.0001366  0.00018756 0.00016483]
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Fail
+[1.19615429e-12 4.12603285e-12 2.51176857e-12]
+frame_in = geocentricsolarecliptic | frame_out = geocentricearthequatorial | one = m
+Fail
+[-3.81469727e-06  8.53501731e-05  3.32987470e-05]
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Pass
+frame_in = geocentricsolarecliptic | frame_out = geocentricsolarecliptic | one = m
+Pass
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Fail
+[5.82036507e-05 6.86123399e-05 7.72330957e-05]
+frame_in = geocentricsolarecliptic | frame_out = geocentricsolarmagnetospheric | one = m
+Fail
+[7.06379991e-06 7.11743948e-05 8.07538629e-05]
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = itrs | one = 6378100.0 m
+Fail
+[-7.76635111e-05 -8.23353464e-05  3.53488187e-05]
+frame_in = geocentricsolarecliptic | frame_out = itrs | one = m
+Fail
+[-3.18041203e-05 -8.50533465e-05  5.82349063e-05]
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = solarmagnetic | one = 6378100.0 m
+Fail
+[8.59833355e-05 6.86123399e-05 4.42660372e-05]
+frame_in = geocentricsolarecliptic | frame_out = solarmagnetic | one = m
+Fail
+[4.14547021e-05 7.11743948e-05 6.96605435e-05]
+----------------------------------------
+frame_in = geocentricsolarecliptic | frame_out = geomagnetic | one = 6378100.0 m
+Fail
+[ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]
+frame_in = geocentricsolarecliptic | frame_out = geomagnetic | one = m
+Fail
+[ 6.02412940e-05 -5.61718195e-05  6.96605435e-05]
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Fail
+[-1.21525486e-04  7.01825401e-05 -2.55709683e-05]
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricearthequatorial | one = m
+Fail
+[-1.37329102e-04  1.92374401e-04  1.66057650e-05]
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Fail
+[-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricsolarecliptic | one = m
+Fail
+[-3.05175781e-05 -1.18236570e-04 -7.50292942e-05]
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Pass
+frame_in = geocentricsolarmagnetospheric | frame_out = geocentricsolarmagnetospheric | one = m
+Pass
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = itrs | one = 6378100.0 m
+Pass
+frame_in = geocentricsolarmagnetospheric | frame_out = itrs | one = m
+Pass
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = solarmagnetic | one = 6378100.0 m
+Pass
+frame_in = geocentricsolarmagnetospheric | frame_out = solarmagnetic | one = m
+Pass
+----------------------------------------
+frame_in = geocentricsolarmagnetospheric | frame_out = geomagnetic | one = 6378100.0 m
+Pass
+frame_in = geocentricsolarmagnetospheric | frame_out = geomagnetic | one = m
+Pass
+----------------------------------------
+frame_in = itrs | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Fail
+[-8.97568392e-05  4.36774017e-05  5.42197849e-05]
+frame_in = itrs | frame_out = geocentricearthequatorial | one = m
+Fail
+[-1.06811523e-04  1.90496798e-04  9.76568263e-05]
+----------------------------------------
+frame_in = itrs | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Fail
+[-7.35480044e-05 -8.02898552e-05  3.23731048e-05]
+frame_in = itrs | frame_out = geocentricsolarecliptic | one = m
+Fail
+[-9.15527344e-05 -9.04943768e-05  2.29690801e-05]
+----------------------------------------
+frame_in = itrs | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Pass
+frame_in = itrs | frame_out = geocentricsolarmagnetospheric | one = m
+Pass
+----------------------------------------
+frame_in = itrs | frame_out = itrs | one = 6378100.0 m
+Pass
+frame_in = itrs | frame_out = itrs | one = m
+Pass
+----------------------------------------
+frame_in = itrs | frame_out = solarmagnetic | one = 6378100.0 m
+Pass
+frame_in = itrs | frame_out = solarmagnetic | one = m
+Pass
+----------------------------------------
+frame_in = itrs | frame_out = geomagnetic | one = 6378100.0 m
+Pass
+frame_in = itrs | frame_out = geomagnetic | one = m
+Pass
+----------------------------------------
+frame_in = solarmagnetic | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Fail
+[-1.28430004e-04  4.75553997e-05 -6.59251034e-05]
+frame_in = solarmagnetic | frame_out = geocentricearthequatorial | one = m
+Fail
+[-1.37329102e-04  1.53332370e-04 -4.67834991e-05]
+----------------------------------------
+frame_in = solarmagnetic | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Fail
+[-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]
+frame_in = solarmagnetic | frame_out = geocentricsolarecliptic | one = m
+Fail
+[-6.10351562e-05 -1.22570923e-04 -9.47700294e-05]
+----------------------------------------
+frame_in = solarmagnetic | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Pass
+frame_in = solarmagnetic | frame_out = geocentricsolarmagnetospheric | one = m
+Pass
+----------------------------------------
+frame_in = solarmagnetic | frame_out = itrs | one = 6378100.0 m
+Pass
+frame_in = solarmagnetic | frame_out = itrs | one = m
+Pass
+----------------------------------------
+frame_in = solarmagnetic | frame_out = solarmagnetic | one = 6378100.0 m
+Pass
+frame_in = solarmagnetic | frame_out = solarmagnetic | one = m
+Pass
+----------------------------------------
+frame_in = solarmagnetic | frame_out = geomagnetic | one = 6378100.0 m
+Pass
+frame_in = solarmagnetic | frame_out = geomagnetic | one = m
+Pass
+----------------------------------------
+frame_in = geomagnetic | frame_out = geocentricearthequatorial | one = 6378100.0 m
+Fail
+[-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]
+frame_in = geomagnetic | frame_out = geocentricearthequatorial | one = m
+Fail
+[-5.72204590e-05  9.06684778e-05  2.10319494e-05]
+----------------------------------------
+frame_in = geomagnetic | frame_out = geocentricsolarecliptic | one = 6378100.0 m
+Fail
+[ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]
+frame_in = geomagnetic | frame_out = geocentricsolarecliptic | one = m
+Fail
+[ 0.00000000e+00 -5.06113313e-05 -2.28826223e-05]
+----------------------------------------
+frame_in = geomagnetic | frame_out = geocentricsolarmagnetospheric | one = 6378100.0 m
+Pass
+frame_in = geomagnetic | frame_out = geocentricsolarmagnetospheric | one = m
+Pass
+----------------------------------------
+frame_in = geomagnetic | frame_out = itrs | one = 6378100.0 m
+Pass
+frame_in = geomagnetic | frame_out = itrs | one = m
+Pass
+----------------------------------------
+frame_in = geomagnetic | frame_out = solarmagnetic | one = 6378100.0 m
+Pass
+frame_in = geomagnetic | frame_out = solarmagnetic | one = m
+Pass
+----------------------------------------
+frame_in = geomagnetic | frame_out = geomagnetic | one = 6378100.0 m
+Pass
+frame_in = geomagnetic | frame_out = geomagnetic | one = m
+Pass

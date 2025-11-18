@@ -3,6 +3,7 @@
 * https://github.com/spacepy/spacepy/issues/534
 * https://github.com/sunpy/sunpy/issues/8189
 * https://github.com/sunpy/sunpy/issues/8188
+* https://github.com/sunpy/sunpy/issues/8406
 * https://github.com/spedas/pyspedas/issues/1207
 * https://github.com/spedas/pyspedas/issues/1273
 * https://github.com/spedas/pyspedas/issues/1274

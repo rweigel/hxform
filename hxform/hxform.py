@@ -128,14 +128,12 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   tile = tile or lib.startswith('spacepy') or lib.startswith('spiceypy')
   tile = tile or lib in ['sscweb', 'sunpy', 'pyspedas']
   if tile:
-    # TODO: Could avoid expanding t and v by putting logic to test for
-    # Nt == 1 or Nv == 1 in transform loops for each lib.
     if Nt == 1 and Nv > 1 and lib != 'sunpy':
+      # In this case, we could compute matrix once for the single time and
+      # apply it to all times. This would speed up execution time for some libs.
       t = np.tile(t, (Nv, 1))
 
     if Nv == 1 and Nt > 1:
-      # TODO: In this case, we could request only one transform and then
-      # apply it to all times. This would speed up execution time for some libs.
       v = np.tile(v, (Nt, 1))
 
   if ctype_in == 'sph':
@@ -169,6 +167,11 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   if lib == 'sscweb':
     vt, execution_time = _sscweb(v, t, frame_in, frame_out)
 
+  if False and Nt == 1 and Nv > 1:
+    matrix = hxform.matrix(t[0,:], frame_in=frame_in, frame_out=frame_out, lib=lib)
+    vt_alt = np.dot(v, matrix)
+    import pdb; pdb.set_trace()
+    print(np.max(np.abs(vt - vt_alt)))
 
   transform.execution_time = execution_time
 
@@ -358,6 +361,7 @@ def _sunpy(v, t, frame_in, frame_out):
 
   representation_type = 'cartesian'
   one = astropy.constants.R_earth
+  #one = astropy.units.m
   # TODO: Use
   #   one = astropy.units.m
   # when https://github.com/sunpy/sunpy/pull/7530 is merged.
@@ -377,10 +381,10 @@ def _sunpy(v, t, frame_in, frame_out):
       "obstime": obstime,
       "representation_type": representation_type
     }
+    import pdb; pdb.set_trace()
     coord = astropy.coordinates.SkyCoord(**kwargs)
     coord = coord.transform_to(frame_out).cartesian/one
     vt = coord.xyz.decompose().value.transpose()
-
   else:
     v = v*one
     execution_start = time.time()
@@ -399,6 +403,9 @@ def _sunpy(v, t, frame_in, frame_out):
       coord_out = coord_in.transform_to(frame_out).cartesian/one
 
       vt[i,:] = coord_out.xyz.decompose().value
+
+    print("SunPy single time execution result:")
+    print(vt)
 
   execution_stop = time.time()
 
@@ -502,13 +509,18 @@ def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
   c2 = transform(np.array([0., 1., 0.]), t, frame_in, frame_out, **kwargs)
   c3 = transform(np.array([0., 0., 1.]), t, frame_in, frame_out, **kwargs)
   if len(c1.shape) == 1:
-    return np.column_stack([c1, c2, c3])
+    m = np.column_stack([c1, c2, c3])
+    if isinstance(t, list):
+      return m.tolist()
+    return m
 
   m = np.full((t.shape[0], 3, 3), np.nan)
   for i in range(t.shape[0]):
     m[i, :, 0] = c1[i, :]
     m[i, :, 1] = c2[i, :]
     m[i, :, 2] = c3[i, :]
+  if isinstance(t, list):
+    return m.tolist()
   return m
 
 
