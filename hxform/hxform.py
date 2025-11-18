@@ -131,6 +131,7 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
     if Nt == 1 and Nv > 1 and lib != 'sunpy':
       # In this case, we could compute matrix once for the single time and
       # apply it to all times. This would speed up execution time for some libs.
+      # However, many failures in computing the matrix; see hxform/test/matrix_test.py
       t = np.tile(t, (Nv, 1))
 
     if Nv == 1 and Nt > 1:
@@ -360,6 +361,8 @@ def _sunpy(v, t, frame_in, frame_out):
   vt = np.full(v.shape, np.nan)
 
   representation_type = 'cartesian'
+
+  # Does not seem possible to transform a dimensionless vector.
   one = astropy.constants.R_earth
   #one = astropy.units.m
   # TODO: Use
@@ -370,30 +373,27 @@ def _sunpy(v, t, frame_in, frame_out):
   frame_in = info['system_aliases'][frame_in]
   frame_out = info['system_aliases'][frame_out]
 
+  execution_start = time.time()
   if t.shape[0] == 1:
-    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[0,:], length=6))
-    execution_start = time.time()
+    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[0, :], length=6))
     kwargs = {
-      "x": v[:,0]*one,
-      "y": v[:,1]*one,
-      "z": v[:,2]*one,
+      "x": v[:, 0]*one,
+      "y": v[:, 1]*one,
+      "z": v[:, 2]*one,
       "frame": frame_in,
       "obstime": obstime,
       "representation_type": representation_type
     }
-    import pdb; pdb.set_trace()
     coord = astropy.coordinates.SkyCoord(**kwargs)
     coord = coord.transform_to(frame_out).cartesian/one
     vt = coord.xyz.decompose().value.transpose()
   else:
-    v = v*one
-    execution_start = time.time()
     for i in range(t.shape[0]):
-      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6))
+      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i, :], length=6))
       kwargs = {
-        "x": v[i,0],
-        "y": v[i,1],
-        "z": v[i,2],
+        "x": v[i, 0]*one,
+        "y": v[i, 1]*one,
+        "z": v[i, 2]*one,
         "frame": frame_in,
         "obstime": obstime,
         "representation_type": representation_type
@@ -402,10 +402,7 @@ def _sunpy(v, t, frame_in, frame_out):
       coord_in = astropy.coordinates.SkyCoord(**kwargs)
       coord_out = coord_in.transform_to(frame_out).cartesian/one
 
-      vt[i,:] = coord_out.xyz.decompose().value
-
-    print("SunPy single time execution result:")
-    print(vt)
+      vt[i, :] = coord_out.xyz.decompose().value
 
   execution_stop = time.time()
 

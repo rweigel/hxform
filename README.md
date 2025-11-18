@@ -8,13 +8,13 @@ Over time, we have needed to use various coordinate transform libraries in Pytho
 
 1. not all libraries had all needed transforms,
 2. some libraries were too slow for an application,
-3. some libraries had bugs, and
-4. some libraries did not interface with ParaView's Python (they embed a version of Python).
+3. some libraries had errors for certain transforms, and
+4. some libraries did not interface with ParaView's Python.
 
-To facilitate comparison, we have developed a single interface. To transform a vector `v` at time `t` from coordinate system `csys_in` to `csys_out`, using library `lib`, use
+To facilitate comparison, we have developed a single interface. To transform a vector `v` at time `t` from frame  `frame_in` to `frame_out`, using library `LIB`, use
 
 ```python
-vp = hxform.transform(v, t, csys_in, csys_out, lib=...)
+vt = hxform.transform(v, t, frame_in, frame_out, lib=LIB)
 ```
 
 See the `demos/` directory for examples.
@@ -51,15 +51,13 @@ See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/d
 
 # Tests
 
-See the files in the [test](https://github.com/rweigel/hxform/tree/master/test). The result form executing the files is stored in a `.log` file.
+See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) directory. The result form executing the files is stored in a `.log` file.
 
 To run, execute
 
 ```bash
 pip install pytest
-python test/api_test1.py
-python test/api_test2.py
-python test/api_test3.py
+pytest # Executes files in ./test
 ```
 
 # Development
@@ -79,12 +77,12 @@ gcc -fPIC -shared -o cxform_wrapper.so cxform_wrapper.c cxform-manual.c cxform-a
 cp *.so ../../hxform
 ```
 
-The following demos show how [`hxform.py`](https://github.com/rweigel/hxform/blob/main/hxform/hxform.py) calls Geopack-08, cxform, and SpacePy. In general, you should not need to use these methods except for debugging.
+The following demos show how `hxform` calls Geopack-08, cxform, and SpacePy. In general, you should not need to use these methods except for debugging.
 
 ```bash
-python demo/geopack_08_dp_wrapper_demo.py
-python demo/cxform_demo.py
-python demo/spacepy_demo.py
+python demo-native/geopack_08_dp_wrapper_demo.py
+python demo-native/cxform_demo.py
+python demo-native/spacepy_demo.py
 ```
 # Related Code
 
