@@ -28,25 +28,25 @@ for lib in libs:
   for t1 in hxform.frames(lib):
     for t2 in hxform.frames(lib):
 
-      csys_in = t1
-      csys_out = t2
+      frame_in = t1
+      frame_out = t2
 
       hxform.xprint(f'{lib} {t1} to {t2}')
 
       # Single time, single vector
-      output11 = hxform.transform(input1, time1, csys_in, csys_out, lib=lib)
+      output11 = hxform.transform(input1, time1, frame_in, frame_out, lib=lib)
 
       # Multiple times, single vector
-      output12 = hxform.transform(input1, time2, csys_in, csys_out, lib=lib)
+      output12 = hxform.transform(input1, time2, frame_in, frame_out, lib=lib)
       assert(output12[0] == output11)
       assert(output12[1] == output11)
 
       # Single time, multiple vectors
-      output21 = hxform.transform(input2, time1, csys_in, csys_out, lib=lib)
+      output21 = hxform.transform(input2, time1, frame_in, frame_out, lib=lib)
       assert(output21[0] == output11)
       assert(output21[1] == output11)
 
       # Multiple times, multiple vectors
-      output22 = hxform.transform(input2, time2, csys_in, csys_out, lib=lib)
+      output22 = hxform.transform(input2, time2, frame_in, frame_out, lib=lib)
       assert(output22[0] == output11)
       assert(output22[1] == output11)

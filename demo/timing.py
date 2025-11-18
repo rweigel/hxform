@@ -13,8 +13,8 @@ p_in = np.random.random((N, 3))
 
 t = np.array([2001, 1, 1, 0, 0, 0])
 kwargs = {
-  'csys_in': 'GSM',
-  'csys_out': 'GSE',
+  'frame_in': 'GSM',
+  'frame_out': 'GSE',
   'ctype_in': 'car',
   'ctype_out': 'car'
 }
