@@ -1,5 +1,6 @@
 """
-Test that matrix() produces matrices that are consistent with transform().
+Test that transforming vector using dot(matrix(...), v) gives result consistent
+with transform(v, ...).
 """
 import numpy
 import hxform
@@ -9,8 +10,15 @@ v1 = numpy.array([1., 1., 1.])
 v2 = numpy.array([v1, 2*v1])
 t2 = numpy.array([t1, t1])
 
+# SSCWeb returns results to only two decimal places, leading to large
+# discrepancies when comparing matrix multiplication to transform results.
+# TODO: Compute appropriate threshold for pass.
+libs_exclude = ['sscweb']
+
+libs_only = []
+libs_only = ['sunpy']
+
 raise_on_fail = False
-fails = {}
 
 def report(test_passed, diff, raise_on_fail, key, msg):
   if not test_passed:
@@ -23,14 +31,17 @@ def report(test_passed, diff, raise_on_fail, key, msg):
       fails[key] = []
     fails[key].append({'msg': msg, 'diff': diff})
 
+
+fails = {}
 libs = hxform.libs()
 for lib in libs:
 
-  if lib == 'sscweb':
-    # SSCWeb returns results to only two decimal places, leading to large
-    # discrepancies when comparing matrix multiplication to transform results.
-    # TODO: Compute appropriate threshold for pass.
-    hxform.xprint("sscweb: Skipping due to TODO on low precision of output")
+  if libs_only and lib not in libs_only:
+    hxform.xprint(f"{lib}: Skipping tests because it is not in libs_only")
+    continue
+
+  if libs_exclude and lib in libs_exclude:
+    hxform.xprint(f"{lib}: Skipping tests because it is in libs_exclude")
     continue
 
   for f1 in hxform.frames(lib):
@@ -89,4 +100,4 @@ if len(fails) != 0:
   import json
   fails = json.dumps(fails, indent=2, default=str)
   hxform.xprint(f"Some tests failed: \n{fails}")
-  assert len(fails) != 0
+  assert len(fails) == 0, "Some tests failed."
