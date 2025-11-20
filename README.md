@@ -34,11 +34,11 @@ See the [`demo/`](https://github.com/rweigel/hxform/tree/main/demo) directory fo
 
 # Overview
 
-The list of supported libraries and frames are in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
+The list of supported libraries and frames is in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
 
 This package includes wrappers to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions.
 
-To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.c`. Arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
+To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.c`. Arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. Looping in Fortran or c is much faster than looping over an array in Python and calling an external library function on each iteration.
 
 # Install
 
@@ -52,7 +52,7 @@ cd hxform
 pip install -e .
 ```
 
-To test if installation was successful, execute
+To test if the installation was successful, execute
 
 ```
 python demo/basic.py
@@ -60,7 +60,7 @@ python demo/basic.py
 
 # Tests
 
-See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) directory. The result form executing the files is stored in a `.log` file.
+See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) directory. The result from executing the files is stored in a `.log` file.
 
 To run, execute
 
@@ -77,9 +77,9 @@ To build the libraries for testing, use
 cd src/geopack-2008
 # The following will generate many warnings
 f2py -c Geopack-2008_dp_wrapper.for \
-        Geopack-2008_dp.for \
+ Geopack-2008_dp.for \
         T96_01.for \
-        -m geopack_08_dp
+ -m geopack_08_dp
 cp *.so ../../hxform
 ```
 
@@ -100,11 +100,11 @@ Examples of using the native interface for other Python packages are in the [`de
 
 # Related Code
 
-* [cxform (C)](https://github.com/edsantiago/cxform) is a library is based on the algorithms in Hapgood, 1992. Python wrappers include:
+* [cxform (C)](https://github.com/edsantiago/cxform) is a library based on the algorithms in Hapgood, 1992. Python wrappers include:
   * https://aics.readthedocs.io/api.html
   * https://github.com/dpq/python-magnetosphere
   * https://github.com/bsd-conqueror/cxform
-* [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magentic field models. Python translations and wrappers include
+* [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magnetic field models. Python translations and wrappers include
   * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
   * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
   * [SpacePy (Python)](https://spacepy.github.io/irbempy.html), which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/).
@@ -114,5 +114,5 @@ Examples of using the native interface for other Python packages are in the [`de
 * [Laundal and Richmond, 2016, Magnetic Coordinate Systems](https://arxiv.org/ct?url=https%3A%2F%2Fdx.doi.org%2F10.1007%2Fs11214-016-0275-y&v=34afcdf3)
 * [Hapgood, 1992, Space physics coordinate transformations: A user guide](https://doi.org/10.1016/0032-0633(92)90012-D)
 * [Kivelson and Russell, 1995; Appendix 3](https://books.google.com/books/about/Introduction_to_Space_Physics.html?id=qWHSqXGfsfQC)
-* [Russell, 1971, Geophysical Coordinate Tranformations](http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm)
+* [Russell, 1971, Geophysical Coordinate Transformations](http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm)
 * [SPENVIS help on coordinate transformations](https://www.spenvis.oma.be/help/background/coortran/coortran.html); includes [an animation](https://www.spenvis.oma.be/help/background/coortran/anim.html) and additional references at the bottom of the page.
