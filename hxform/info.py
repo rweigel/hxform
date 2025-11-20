@@ -1,9 +1,16 @@
 def libs():
+  """Return list of known library ids.
+
+  Returns:
+      list: List of ids of known libraries.
+  """
   return list(lib_info().keys())
+
 
 def frames(lib):
   """Return list of frames supported by a given library."""
   return lib_info(lib)["frames"]
+
 
 def lib_info(lib=None):
   """Return list of known libraries.
@@ -99,7 +106,12 @@ def lib_info(lib=None):
       ],
       'kernel': {
         'dir': kernel_dir,
-        'files': ['naif0012.tls', 'rbsp_general011.tf', 'de440s.bsp', 'pck00011.tpc']
+        'files': [
+          'naif0012.tls',
+          'rbsp_general011.tf',
+          'de440s.bsp',
+          'pck00011.tpc'
+        ]
       }
     },
     'spiceypy2': {
@@ -120,7 +132,12 @@ def lib_info(lib=None):
       ],
       'kernel': {
         'dir': kernel_dir,
-        'files': ['naif0012.tls', 'rbsp_general012_mod.tf', 'de440s.bsp', 'pck00011.tpc']
+        'files': [
+          'naif0012.tls',
+          'rbsp_general012_mod.tf',
+          'de440s.bsp',
+          'pck00011.tpc'
+        ]
       }
     },
     'sunpy': {
