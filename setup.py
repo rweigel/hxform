@@ -64,14 +64,28 @@ ext2 = Extension('hxform.cxform_wrapper',
                             'src/cxform/cxform-auto.c'
                         ])
 
+
+from distutils.util import convert_path
+main_ns = {}
+ver_path = convert_path('hxform/__init__.py')
+with open(ver_path) as ver_file:
+    exec(ver_file.read(), main_ns)
+
+with open("README.md", "r", encoding="utf-8") as fh:
+  long_description = fh.read()
+
 setup(
-    name='hxform',
-    version='0.0.5',
-    author='Angel Gutarra-Leon, Bob Weigel, Gary Quaresima',
-    author_email='rweigel@gmu.edu',
-    packages=find_packages(),
-    description='Heliophysical coordinate transformations using various libraries',
-    setup_requires=['numpy'],
-    install_requires=install_requires,
-    ext_modules=[ext1, ext2]
+  name='hxform',
+  version=main_ns['__version__'],
+  author='Bob Weigel, Angel Gutarra-Leon, and, Gary Quaresima',
+  author_email='rweigel@gmu.edu',
+  packages=find_packages(),
+  description='Heliophysical coordinate transformations using various libraries',
+  long_description=long_description,
+  long_description_content_type='text/markdown',
+  include_package_data=True,
+  package_data={'': ['README.md']},
+  setup_requires=['numpy'],
+  install_requires=install_requires,
+  ext_modules=[ext1, ext2]
 )

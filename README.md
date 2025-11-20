@@ -1,12 +1,25 @@
 # hxform
 
-Heliophysics coordinate transforms in Python using various libraries and packages
+Heliophysics coordinate transforms in Python using various libraries, Python packages, and web services using a common interface.
+
+Libraries include 
+[`cxform`](https://github.com/edsantiago/cxform)
+and
+[`Geopack-08`](https://geo.phys.spbu.ru/~tsyganenko/empirical-models/coordinate_systems/geopack/). 
+Packages include 
+[`PySPEDAS`](https://github.com/spedas/pyspedas), 
+[`SpacePy`](https://github.com/spacepy/spacepy), 
+[`SpiceyPy`](https://github.com/AndrewAnnex/SpiceyPy), 
+and
+[`SunPy`](https://github.com/sunpy/sunpy). 
+Web services include
+[`SSCWeb Coordinate Calculator`](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi).
 
 # Motivation
 
 Over time, we have needed to use various coordinate transform libraries in Python. Multiple libraries have been used because
 
-1. not all libraries had all needed transforms,
+1. no single library had all needed transforms,
 2. some libraries were too slow for an application,
 3. some libraries had errors for certain transforms, and
 4. some libraries did not interface with ParaView's Python.
@@ -17,17 +30,15 @@ To facilitate comparison, we have developed a single interface. To transform a v
 vt = hxform.transform(v, t, frame_in, frame_out, lib=LIB)
 ```
 
-See the `demos/` directory for examples.
+See the [`demo/`](https://github.com/rweigel/hxform/tree/main/demo) directory for examples.
 
 # Overview
 
-This package is a wrapper to libraries that performs reference frame transforms.
+The list of supported libraries and frames are in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
 
-The list of supported libraries are in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
+This package includes wrappers to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions.
 
-This package includes a thin and fast wrapper to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions.
-
-To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.for`. For both wrappers, arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
+To wrap `Geopack-08`, Numpy's `f2py` is used; see `src/Geopack-2008_dp_wrapper.for`. To wrap `cxform` Python's `ctype` library is used; see `src/cxform_wrapper.c`. Arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
 # Install
 
@@ -47,8 +58,6 @@ To test if installation was successful, execute
 python demo/basic.py
 ```
 
-See also the files in the [demo](https://github.com/rweigel/hxform/tree/master/demo) directory. The result from executing each file is stored in a `.log` file.
-
 # Tests
 
 See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) directory. The result form executing the files is stored in a `.log` file.
@@ -67,7 +76,10 @@ To build the libraries for testing, use
 ```bash
 cd src/geopack-2008
 # The following will generate many warnings
-f2py -c Geopack-2008_dp_wrapper.for Geopack-2008_dp.for T96_01.for -m geopack_08_dp
+f2py -c Geopack-2008_dp_wrapper.for \
+        Geopack-2008_dp.for \
+        T96_01.for \
+        -m geopack_08_dp
 cp *.so ../../hxform
 ```
 
@@ -77,13 +89,14 @@ gcc -fPIC -shared -o cxform_wrapper.so cxform_wrapper.c cxform-manual.c cxform-a
 cp *.so ../../hxform
 ```
 
-The following demos show how `hxform` calls Geopack-08, cxform, and SpacePy. In general, you should not need to use these methods except for debugging.
+The following demos show how `hxform` calls Geopack-08 and cxform. In general, you should not need to use these methods except for debugging.
 
 ```bash
 python demo-native/geopack_08_dp_wrapper_demo.py
 python demo-native/cxform_demo.py
-python demo-native/spacepy_demo.py
 ```
+
+Examples of using the native interface for other Python packages are in the [`demo-native`](https://github.com/rweigel/hxform/tree/main/demo-native) directory.
 
 # Related Code
 
@@ -94,7 +107,7 @@ python demo-native/spacepy_demo.py
 * [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magentic field models. Python translations and wrappers include
   * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
   * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
-  * [SpacePy (Python)](https://spacepy.github.io/irbempy.html) wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/) which wraps Tsyganenko's GEOPACK (Fortran) using Python ctypes (check this). 
+  * [SpacePy (Python)](https://spacepy.github.io/irbempy.html), which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/).
 
 # References
 
