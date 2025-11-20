@@ -105,7 +105,7 @@ Examples of using the native interface for other Python packages are in the [`de
   * https://github.com/dpq/python-magnetosphere
   * https://github.com/bsd-conqueror/cxform
 * [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=Tsyganenko%20Magnetic%20Field) is a library of utility functions related to magnetospheric magnetic field models. Python translations and wrappers include
-  * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python. 
+  * [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python.
   * [PyGeopack](https://pypi.org/project/PyGeopack/) wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
   * [SpacePy (Python)](https://spacepy.github.io/irbempy.html), which wraps [IRBEM (Fortran)](https://sourceforge.net/projects/irbem/).
 
