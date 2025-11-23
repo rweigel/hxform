@@ -1,44 +1,37 @@
 import sys
-from setuptools import setup, find_packages
+import pathlib
+import warnings
+from setuptools import setup, Extension, find_packages
 
-# https://numpy.org/doc/stable/reference/distutils_status_migration.html#distutils-status-migration
-# Ensure the Python version is compatible
-if sys.version_info >= (3, 12, 0):
-  raise RuntimeError("Python 3.11 or lower is required due to numpy.distutils deprecation.")
+from setuptools.command.install import install as _install
 
-try:
-  # https://stackoverflow.com/a/60740731/18433855
-  # This script depends on numpy, which may not be installed.
-  # The following line installs it. (try/except because
-  # if already installed, an error is thrown.)
-  # This no longer seems to work. NumPy must be installed before running setup.py.
-  #dist.Distribution().fetch_build_eggs(['numpy'])
-  import numpy
-except:
-  raise ImportError("NumPy must be installed before running setup.py")
 
-from numpy.distutils.core import setup, Extension
+class CustomInstall(_install):
+  def run(self):
+    super().run()
+    # message printed at the end of the install step (will appear before pip's "Successfully installed" line)
+    sys.stdout.write('My custom post-install message!\n')
+    sys.stdout.flush()
+    #warnings.warn('This is a post-install warning.')
 
-# sunpy>=7.0.0 due to https://github.com/sunpy/sunpy/pull/8193
-# pyspedas>=1.7.28 due to https://github.com/spedas/pyspedas/issues/1207
-# spacepy>=0.3.0 due to addition of native python transforms and fix of
-# https://github.com/spacepy/spacepy/issues/534; see also
-# https://github.com/spacepy/spacepy/pull/536
+# Read version info in hxform/version.py without importing the package
+main_ns = {}
+ver_path = pathlib.Path(__file__).with_name('hxform') / 'version.py'
+with ver_path.open() as vf:
+  exec(vf.read(), main_ns)
+
+# Read README.md for long description
+readme_path = pathlib.Path(__file__).with_name('README.md')
+long_description = readme_path.read_text(encoding='utf-8') if readme_path.exists() else ''
+
 install_requires = [
-  "numpy==1.26.4",
-  'sunpy==7.0.0',
-  'pyspedas==1.7.28',
-  'spacepy==0.6.0',
-  'spiceypy==6.0.0',
-  'python-dateutil==2.9.0.post0'
+  'numpy>=1.26',
+  'sunpy>=7.0.0',
+  'spacepy>=0.6.0',
+  'spiceypy>=6.0.0',
+  'pyspedas>=1.7.28',
+  'python-dateutil>=2.9.0',
 ]
-
-# Add pytest when doing a developer/test install (e.g. `python setup.py develop` or `python setup.py test`)
-if any(cmd in sys.argv for cmd in ('develop', 'test', 'pytest')):
-  try:
-    import pytest
-  except Exception:
-    install_requires.append('pytest')
 
 try:
   # Will work if utilrsw was already installed, for example via pip install -e .
@@ -46,38 +39,112 @@ try:
 except:
   install_requires.append("utilrsw @ git+https://github.com/rweigel/utilrsw")
 
-# https://gist.github.com/johntut/1d8edea1fd0f5f1c057c
-# https://github.com/PyCOMPLETE/pypkgexample
-# https://numpy.org/devdocs/f2py/distutils.html
-ext1 = Extension(
-                'hxform.geopack_08_dp',
-                sources = [
-                            'src/geopack-2008/Geopack-2008_dp_wrapper.for',
-                            'src/geopack-2008/Geopack-2008_dp.for',
-                            'src/geopack-2008/T96_01.for'
-                        ])
+cxform_sources = [
+    'src/cxform/cxform_wrapper.c',
+    'src/cxform/cxform-manual.c',
+    'src/cxform/cxform-auto.c',
+]
+cxform_ext = Extension('hxform.cxform_wrapper',sources=cxform_sources)
 
-ext2 = Extension('hxform.cxform_wrapper',
-                sources = [
-                            'src/cxform/cxform_wrapper.c',
-                            'src/cxform/cxform-manual.c',
-                            'src/cxform/cxform-auto.c'
-                        ])
+def build_geopack():
+  """Try to build Geopack using numpy.f2py and copy the produced shared library
+  into the `hxform` package directory.
 
+  On failure return error message.
+  """
+  import os
+  import sys
+  import glob
+  import shutil
+  import tempfile
 
-from distutils.util import convert_path
-main_ns = {}
-ver_path = convert_path('hxform/__init__.py')
-with open(ver_path) as ver_file:
-    exec(ver_file.read(), main_ns)
+  def compile(src_dir):
+    import subprocess
 
-with open("README.md", "r", encoding="utf-8") as fh:
-  long_description = fh.read()
+    cmd = [
+      sys.executable,
+      '-m',
+      'numpy.f2py',
+      '-c',
+      str(src_dir / 'Geopack-2008_dp_wrapper.for'),
+      str(src_dir / 'Geopack-2008_dp.for'),
+      str(src_dir / 'T96_01.for'),
+      '-m', 'geopack_08_dp'
+    ]
+    print('Executing: ', ' '.join(cmd))
+    proc = subprocess.run(cmd, cwd=str(out_dir), capture_output=True, text=True)
+    if proc.returncode != 0:
+      emsg = f'f2py failed with code {proc.returncode}'
+      emsg += f'\nstdout:\n{proc.stdout}'
+      emsg += f'\nstderr:\n{proc.stderr}'
+      return emsg
+
+    return None
+
+  def copy(src_dir, out_dir):
+
+      # Find the produced extension file (platform-dependent suffix)
+      patterns = [str(out_dir / 'geopack_08_dp*.so'),
+                  str(out_dir / 'geopack_08_dp*.pyd'),
+                  str(out_dir / 'geopack_08_dp*.*')
+                ]
+      found = []
+      for pat in patterns:
+        found.extend(glob.glob(pat))
+
+      if not found:
+        emsg = f'No Geopack build artifact in list {patterns}'
+        raise emsg
+
+      # Copy the first matching artifact into hxform/ as geopack_08_dp<suffix>
+      target_dir = pathlib.Path(__file__).with_name('hxform')
+      target_dir.mkdir(parents=True, exist_ok=True)
+      src_art = pathlib.Path(found[0])
+      dest = target_dir / src_art.name
+      print('Copying', src_art, '->', dest)
+      shutil.copy2(src_art, dest)
+      print('Geopack extension copied to', dest)
+
+      return None
+
+  src_dir = pathlib.Path(__file__).with_name('src') / 'geopack-2008'
+  if not src_dir.exists():
+    raise "Directory src/geopack-2008 does not exist."
+
+  # get terminal width with a sensible fallback
+  try:
+    term_width = shutil.get_terminal_size(fallback=(80, 24)).columns
+  except Exception:
+    term_width = int(os.environ.get('COLUMNS', '80')) if os.environ.get('COLUMNS') else 80
+
+  print(3*"\n")
+  print(term_width*'-')
+  with tempfile.TemporaryDirectory() as out_dir:
+    out_dir = pathlib.Path(out_dir)
+
+    emsg = compile(src_dir)
+    if emsg:
+      return emsg
+
+    try:
+      copy(src_dir, out_dir)
+    except Exception as e:
+      print(term_width*'-')
+      return str(e)
+
+  print(term_width*'-')
+  print(3*"\n")
+
+  return None
+
+emsg = build_geopack()
+if emsg:
+  warnings.warn(emsg)
 
 setup(
   name='hxform',
-  version=main_ns['__version__'],
-  author='Bob Weigel, Angel Gutarra-Leon, and, Gary Quaresima',
+  version=main_ns.get('__version__', '0.0.0'),
+  author='Bob Weigel, Angel Gutarra-Leon, and Gary Quaresima',
   author_email='rweigel@gmu.edu',
   packages=find_packages(),
   description='Heliophysical coordinate transformations using various libraries',
@@ -85,7 +152,8 @@ setup(
   long_description_content_type='text/markdown',
   include_package_data=True,
   package_data={'': ['README.md']},
-  setup_requires=['numpy'],
   install_requires=install_requires,
-  ext_modules=[ext1, ext2]
+  cmdclass={'install': CustomInstall},
+  ext_modules=[cxform_ext],
 )
+

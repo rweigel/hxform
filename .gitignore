@@ -1,9 +1,11 @@
+
 .DS_Store
+*.so
+*.dll
+
 .eggs/
+dist/
 build/
-hxform.egg-info
+hxform.egg-info/
 __pycache__/
-hxform/*.so
-hxform/*.dll
-notes/hapicache/
-notes/nc/
+
