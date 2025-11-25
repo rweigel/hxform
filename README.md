@@ -38,7 +38,7 @@ The list of supported libraries and frames is in [`info.py`](https://github.com/
 
 # Install
 
-Tested with Python 3.{11,12,13}.
+Tested with Python 3.{11,12,13,14}.
 
 ```bash
 git clone https://github.com/rweigel/hxform
@@ -70,6 +70,8 @@ pytest # Executes files in ./test
 ```
 python -m pip install --upgrade 'nox[pbs]'
 nox -s tests
+# To test using only a single version of Python
+nox -s tests --python 3.12
 ```
 
 # Development

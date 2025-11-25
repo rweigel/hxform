@@ -9,8 +9,8 @@ Test using current Python version:
 
 import nox
 
+# Can't use earlier version b/c of bugs in some libs
 python = [
-  "3.10",
   "3.11",
   "3.12",
   "3.13",
@@ -34,5 +34,19 @@ def run(session):
   session.install("pip", "setuptools", "wheel", "pytest")
   session.install("-e", ".")
   pyver = session.name
-  report = f"--junitxml=test/reports/report-{pyver}.xml"
-  session.run("pytest", "--capture=tee-sys", report)
+  report = f"--junitxml=test/log/{pyver}.xml"
+  try:
+    session.run("pytest", "--capture=tee-sys", report)
+  except:
+    copy_logs(pyver)
+    raise
+
+
+def copy_logs(pyver):
+  import shutil
+  import pathlib
+  dest_dir = pathlib.Path("test/log")
+  dest_dir.mkdir(parents=True, exist_ok=True)
+  for src in pathlib.Path("test").glob("*.log"):
+    dest = dest_dir / f"{src.stem}.{pyver}.log"
+    shutil.copy2(src, dest)
