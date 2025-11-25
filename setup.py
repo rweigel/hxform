@@ -2,15 +2,9 @@ import pathlib
 import warnings
 import setuptools
 
-# Read version info in hxform/version.py without importing the package
-main_ns = {}
-ver_path = pathlib.Path(__file__).with_name('hxform') / 'version.py'
-with ver_path.open() as vf:
-  exec(vf.read(), main_ns)
-
 # Read README.md for long description
-readme_path = pathlib.Path(__file__).with_name('README.md')
-long_description = readme_path.read_text(encoding='utf-8') if readme_path.exists() else ''
+readme = pathlib.Path(__file__).with_name('README.md')
+long_description = readme.read_text(encoding='utf-8') if readme.exists() else ''
 
 # See issues/issues.md for reason for minimum SunPy, SpacePy, and PySPEDAS versions.
 # Note that numpy>=1.26 also appears in pyproject.toml and both should be same.
@@ -36,6 +30,14 @@ cxform_sources = [
     'src/cxform/cxform-auto.c',
 ]
 cxform_ext = setuptools.Extension('hxform.cxform_wrapper',sources=cxform_sources)
+
+def version(pkg):
+  # Read version info in hxform/version.py without importing the package
+  main_ns = {}
+  ver_path = pathlib.Path(__file__).with_name(pkg) / 'version.py'
+  with ver_path.open() as vf:
+    exec(vf.read(), main_ns)
+  return main_ns.get('__version__', '0.0.0')
 
 def build_geopack():
   """Try to build Geopack using numpy.f2py and copy the produced shared library
@@ -132,9 +134,10 @@ emsg = build_geopack()
 if emsg:
   warnings.warn(emsg)
 
+name = 'hxform'
 setuptools.setup(
-  name='hxform',
-  version=main_ns.get('__version__', '0.0.0'),
+  name=name,
+  version=version(name),
   author='Bob Weigel, Angel Gutarra-Leon, and Gary Quaresima',
   author_email='rweigel@gmu.edu',
   packages=setuptools.find_packages(),
