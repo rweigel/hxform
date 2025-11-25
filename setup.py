@@ -27,7 +27,7 @@ long_description = readme_path.read_text(encoding='utf-8') if readme_path.exists
 # See issues/issues.md for reason for minimum SunPy, SpacePy, and PySPEDAS versions.
 install_requires = [
   'numpy>=1.26',
-  'sunpy>=7.2.0',
+  'sunpy>=7.2.1', # Assumes https://github.com/sunpy/sunpy/issues/8406 fix in 7.2.1
   'spacepy>=0.6.0',
   'spiceypy>=6.0.0',
   'pyspedas>=1.7.28',

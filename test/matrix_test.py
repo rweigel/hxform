@@ -16,6 +16,8 @@ t2 = numpy.array([t1, t1])
 libs_exclude = ['sscweb']
 
 libs_only = []
+# If failure for SunPy, see https://github.com/sunpy/sunpy/issues/8406 and
+# update setup.py to require version with fix.
 #libs_only = ['sunpy'] # Uncomment to test only one or more specific libraries
 
 raise_on_fail = False
