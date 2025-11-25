@@ -1,5 +1,6 @@
-def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='cxform'):
-  """Transform between coordinates frames using cxform, Geopack-08, SpacePy, SpiceyPy, SSCWeb, or SunPy.
+def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='cxform'):
+  """Transform between coordinates frames using cxform, Geopack-08, PySPEDAS, 
+  SpacePy, SpiceyPy, SSCWeb, or SunPy.
 
   Parameters
   ----------
@@ -15,39 +16,42 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
 
       list of 3-element np.arrays
 
-  time : array-like
-          list of 3+ ints
-          list containing lists of 3+ ints
-          np.array of 3+ ints
-          (Nt, 3) float np.array, where Nt = 1 or Nt = Nv
+  t : array-like
 
-          The 3+ ints are [year, month, day, [hours, [minutes, [seconds]]]]
-          Zeros are used for any missing optional value.
+      list of 3+ ints ([year, month, day, [hours, [minutes, [seconds]]]])
+      Zeros are used for any missing optional value.
 
-  csys_in : str
-              One of MAG, GEI, GEO, GSE, GSM, SM
+      (Nt, 3+) float np.array, where Nt = 1 or Nt = Nv
 
-  csys_out : str
+      list containing lists of 3+ ints
+
+      np.array of 3+ ints
+
+  lib : str
+        Library to use for the transformation. See hxform.libs() for list.
+
+  frame_in : str
+             See hxform.frames(lib)
+
+  frame_out : str
               One of MAG, GEI, GEO, GSE, GSM, SM
 
   ctype_in : str
-              'car' (default) or 'sph'
-              For spherical coordinates, `v` should be in r, latitude, longitude,
-              with angles in degrees.
+            'car' (default) or 'sph'
+            For spherical coordinates, `v` is r, latitude, longitude, with
+            angles in degrees.
 
   ctype_out : str
               'car' (default) or 'sph'
 
-  lib : str
-        'cxform' (default), 'geopack_08_dp', 'spacepy', or 'spacepy-irbem'
 
   Returns
   -------
-  array-like with dimensions matching either `time` (if `Nt` != 1 and `Nv` = 1) or
+  array-like with dimensions matching either `t` (if `Nt` != 1 and `Nv` = 1) or
   `v` (if `Nv` =! 1 and `Nt` = 1). If `Nv` and `Nt` != 1, dimensions are same as `v`.
 
   Return type will match that of `v`. Note that if a list of 3-element np.arrays are
-  passed, execution time will be long. Use `np.ndarrays` for `v` and `time` for fastest
+  passed, execution time will be long. Use `np.ndarrays` for `v` and `t` for fastest
   execution time.
 
   Examples
@@ -57,9 +61,9 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   >>> v1 = [0, 0, 1]             # or np.array([0, 0, 1])
   >>> # All of the following are equivalent and return a list with three floats
   >>> from hxform import hxform as hx
-  >>> hx.transform(v1, time1, 'GSM', 'GSE')
-  >>> hx.transform(v1, time1, 'GSM', 'GSE', ctype_in='car')
-  >>> hx.transform(v1, time1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
+  >>> hx.transform(v1, t1, 'GSM', 'GSE')
+  >>> hx.transform(v1, t1, 'GSM', 'GSE', ctype_in='car')
+  >>> hx.transform(v1, t1, 'GSM', 'GSE', ctype_in='car', ctype_out='car')
 
   The following 3 calls return a list with two lists of 3 elements
 
@@ -81,357 +85,440 @@ def transform(v, time, csys_in, csys_out, ctype_in='car', ctype_out='car', lib='
   import numpy as np
   import hxform
 
-  assert lib in hxform.info.libs(), 'lib must be one of {}'.format(hxform.info.libs())
+  assert lib in hxform.libs(), f'lib must be one of {hxform.info.libs()}'
   assert ctype_in in ['car', 'sph'], 'ctype_in must be one of ["car", "sph"]'
   assert ctype_out in ['car', 'sph'], 'ctype_out must be one of ["car", "sph"]'
 
-  info = hxform.info.lib_info(lib)
-  assert csys_in in info['frames'], 'For lib={}, csys_in must be one of {}'.format(lib, info['frames'])
-  assert csys_out in info['frames'], 'For lib={}, csys_out must be one of {}'.format(lib, info['frames'])
+  info = hxform.lib_info(lib)
+  for csys in [frame_in, frame_out]:
+    emsg = f'For lib={lib}, {csys} must be one of {info["frames"]}'
+    assert frame_in in info['frames'], emsg
 
   v_outertype = type(v)
   v_innertype = type(v[0])
 
   v = np.array(v, dtype=np.double)
   try:
-    time = np.array(time, dtype=np.int32)
+    t = np.array(t, dtype=np.int32)
   except:
     # This will occur for input of the form [[2000, 1, 1], [2000, 1, 1, 1]]
     # where not all time values have the same number of elements.
-    for i in range(len(time)):
-      print(hxform.timelib.tpad(time[i], length=6))
-      time[i] = hxform.timelib.tpad(time[i], length=6)
-    time = np.array(time, dtype=np.int32)
+    for i in range(len(t)):
+      t[i] = hxform.timelib.tpad(t[i], length=6)
+    t = np.array(t, dtype=np.int32)
 
-  if len(time.shape) == 1:
-    time = np.array([time])
+  if len(t.shape) == 1:
+    t = np.array([t])
   if len(v.shape) == 1:
     v = np.array([v])
 
-  if time.shape[1] > 6:
+  if t.shape[1] > 6:
     # Keep only year, month, day, hour, minute, second (drop microseconds)
-    time = time[:,0:6]
+    t = t[:,0:6]
 
-  Nv = v.shape[0]     # Number of vectors
-  Nt = time.shape[0]  # Number of times
+  Nv = v.shape[0]  # Number of vectors
+  Nt = t.shape[0]  # Number of times
 
   assert(len(v[0]) == 3)
-  assert(len(time.shape) == 2 and len(v.shape) == 2)
+  assert(len(t.shape) == 2 and len(v.shape) == 2)
   assert(Nv == Nt or Nt == 1 or Nv == 1)
 
-  if csys_in == csys_out or lib.startswith('spacepy') or lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sunpy' or lib == 'pyspedas':
-    # TODO: Could avoid expanding time or v by putting logic to test for
-    # Nt == 1 or Nv == 1 in transform loops for each lib.
-    if Nt == 1 and Nv > 1:
-      time = np.tile(time, (Nv, 1))
+  tile = False
+  tile = frame_in == frame_out
+  tile = tile or lib.startswith('spacepy') or lib.startswith('spiceypy')
+  tile = tile or lib in ['sscweb', 'sunpy', 'pyspedas']
+  if tile:
+    if Nt == 1 and Nv > 1 and lib != 'sunpy':
+      # In this case, we could compute matrix once for the single time and
+      # apply it to all times. This would speed up execution time for some libs.
+      # However, many failures in computing the matrix; see hxform/test/matrix_test.py
+      t = np.tile(t, (Nv, 1))
 
     if Nv == 1 and Nt > 1:
       v = np.tile(v, (Nt, 1))
 
-  # vp means "v prime", which is vector v in cys_in transformed to csys_out
-  if lib.startswith('spiceypy') or lib == 'sscweb' or lib == 'sscweb' or lib == 'sunpy':
-    vp = np.full(v.shape, np.nan)
-
-  if ctype_in == 'sph' and lib != 'sscweb':
+  if ctype_in == 'sph':
     v[:,0], v[:,1], v[:,2] = sph2car(v[:,0], v[:,1], v[:,2])
 
-  import time as time_
 
   if lib == 'cxform':
-    import os
-    import glob
-    import ctypes
-    this_script = os.path.join(os.path.dirname(__file__), "..", "hxform", "cxform_wrapper*")
+    vt, execution_time = _cxform(v, t, frame_in, frame_out)
 
-    for lib_file in glob.glob(this_script):
-      # The name of the .so or .dll file will not be the same on all
-      # frames, so we need to find it. (For example, on one system
-      # it is cxform_wrapper.cpython-37m-darwin.so.)
-      # TODO: Find a better way to do this.
-      break
-    lib_path = os.path.join(lib_file)
-    lib_obj = ctypes.cdll.LoadLibrary(lib_path)
-
-    Nt = time.shape[0]
-
-    if time.shape[1] < 3:
-      raise ValueError("At least year, month, and day must be given for time.")
-
-    execution_start = time_.time()
-    nz = time.shape[1]
-    if nz != 6:
-      # Pad time. TODO: Do this in wrapper so extra memory is not needed.
-      tmp = np.zeros((time.shape[0], 6-nz), dtype=np.int32)
-      time = np.concatenate((time, tmp), 1)
-
-    if Nt == 1:
-      vp = np.full(v.shape, np.nan)
-    else:
-      vp = np.full((Nt, 3), np.nan)
-
-    ret = lib_obj.cxform_wrapper(
-            ctypes.c_void_p(v.ctypes.data),
-            ctypes.c_void_p(time.ctypes.data),
-            ctypes.c_char_p(str.encode(csys_in)),
-            ctypes.c_char_p(str.encode(csys_out)),
-            ctypes.c_void_p(vp.ctypes.data),
-            ctypes.c_int(v.shape[0]),
-            ctypes.c_int(int(Nt))
-        )
-    execution_stop = time_.time()
 
   if lib == 'geopack_08_dp':
+    vt, execution_time = _geopack_08_dp(v, t, frame_in, frame_out)
 
-    import hxform.geopack_08_dp as geopack_08_dp
-    trans = csys_in + 'to' + csys_out
-    dtime = np.array(hxform.timelib.ints2doy(time))
-
-    if v.shape[0] <= time.shape[0]:
-      outsize = time.shape[0]
-    else:
-      outsize = v.shape[0]
-
-    execution_start = time_.time()
-    vp = geopack_08_dp.transform(v, trans, dtime, outsize)
-    execution_stop = time_.time()
 
   if lib == 'pyspedas':
-    import os
-    os.environ["PYSPEDAS_LOGGING_LEVEL"] = "error"
-    from pyspedas import cotrans
-    from pyspedas import time_double
+    vt, execution_time = _pyspedas(v, t, frame_in, frame_out)
 
-    time_in = []
-    for i in range(time.shape[0]):
-      tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
-      time_in.append(time_double(tstr))
-
-    execution_start = time_.time()
-    vp = cotrans(time_in=time_in, data_in=v, coord_in=csys_in, coord_out=csys_out)
-    if isinstance(vp, list):
-      # https://github.com/spedas/pyspedas/issues/1273
-      vp = np.array(vp)
-    execution_stop = time_.time()
 
   if lib.startswith('spacepy'):
-    import spacepy.coordinates as sc
-    from spacepy.time import Ticktock
+    vt, execution_time = _spacepy(v, t, frame_in, frame_out, lib)
 
-    if len(time.shape) == 1:
-      # SpacePy requires time values to be strings with 1-second precision
-      t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time, length=6))
-    else:
-      t_str = []
-      for i in range(time.shape[0]):
-        t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6)))
-      t_str = np.array(t_str)
-
-    execution_start = time_.time()
-    if lib.endswith('-irbem'):
-      cvals = sc.Coords(v, csys_in, 'car', use_irbem=True)
-    else:
-      cvals = sc.Coords(v, csys_in, 'car', use_irbem=False)
-
-    cvals.ticks = Ticktock(t_str, 'ISO')
-    vp = cvals.convert(csys_out, 'car').data
-    execution_stop = time_.time()
 
   if lib == 'sunpy':
+    vt, execution_time = _sunpy(v, t, frame_in, frame_out)
 
-    import astropy.coordinates
-    import sunpy.coordinates
-    # sunpy.coordinates is not used directly, but needed to register the frames.
 
-    representation_type = 'cartesian'
-    one = astropy.constants.R_earth
-    # TODO: Use
-    #   one = astropy.units.m
-    # when https://github.com/sunpy/sunpy/pull/7530 is merged.
-    units = [one, one, one]
+  if lib.startswith('spiceypy'):
+    vt, execution_time = _spiceypy(v, t, frame_in, frame_out, lib)
 
-    frame_in = info['system_aliases'][csys_in]
-    frame_out = info['system_aliases'][csys_out]
 
-    if Nt == 1:
-      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[0,:], length=6))
-      execution_start = time_.time()
+  if lib == 'sscweb':
+    vt, execution_time = _sscweb(v, t, frame_in, frame_out)
+
+  if False and Nt == 1 and Nv > 1:
+    matrix = hxform.matrix(t[0,:], frame_in=frame_in, frame_out=frame_out, lib=lib)
+    vt_alt = np.dot(v, matrix)
+    import pdb; pdb.set_trace()
+    print(np.max(np.abs(vt - vt_alt)))
+
+  transform.execution_time = execution_time
+
+  if ctype_out == 'sph':
+    vt[:,0], vt[:,1], vt[:,2] = car2sph(vt[:,0], vt[:,1], vt[:,2])
+
+  if issubclass(v_outertype, np.ndarray):
+    if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):
+      return vt[0]
+    return vt
+  elif issubclass(v_innertype, np.ndarray):
+    return v_outertype(vt)
+  else:
+    if Nv == 1 and Nt == 1 and v_innertype is not list:
+      return vt.tolist()[0]
+    return vt.tolist()
+
+
+def _cxform(v, t, frame_in, frame_out):
+  import os
+  import glob
+  import ctypes
+  import time
+  import numpy as np
+
+  this_script = os.path.join(os.path.dirname(__file__), "..", "hxform", "cxform_wrapper*")
+
+  for lib_file in glob.glob(this_script):
+    # The name of the .so or .dll file will not be the same on all
+    # frames, so we need to find it. (For example, on one system
+    # it is cxform_wrapper.cpython-37m-darwin.so.)
+    # TODO: Find a better way to do this.
+    break
+  lib_path = os.path.join(lib_file)
+  lib_obj = ctypes.cdll.LoadLibrary(lib_path)
+
+  Nt = t.shape[0]
+
+  if t.shape[1] < 3:
+    raise ValueError("At least year, month, and day must be given for time.")
+
+  execution_start = time.time()
+  nz = t.shape[1]
+  if nz != 6:
+    # Pad time. TODO: Do this in wrapper so extra memory is not needed.
+    tmp = np.zeros((t.shape[0], 6-nz), dtype=np.int32)
+    t = np.concatenate((t, tmp), 1)
+
+  if Nt == 1:
+    vt = np.full(v.shape, np.nan)
+  else:
+    vt = np.full((Nt, 3), np.nan)
+
+  ret = lib_obj.cxform_wrapper(
+          ctypes.c_void_p(v.ctypes.data),
+          ctypes.c_void_p(t.ctypes.data),
+          ctypes.c_char_p(str.encode(frame_in)),
+          ctypes.c_char_p(str.encode(frame_out)),
+          ctypes.c_void_p(vt.ctypes.data),
+          ctypes.c_int(v.shape[0]),
+          ctypes.c_int(int(Nt))
+      )
+  execution_stop = time.time()
+
+  return vt, execution_stop - execution_start
+
+
+def _geopack_08_dp(v, t, frame_in, frame_out):
+  import time
+  import numpy as np
+  import hxform
+  import hxform.geopack_08_dp as geopack_08_dp
+
+  trans = frame_in + 'to' + frame_out
+  dtime = np.array(hxform.timelib.ints2doy(t))
+
+  if v.shape[0] <= t.shape[0]:
+    outsize = t.shape[0]
+  else:
+    outsize = v.shape[0]
+
+  execution_start = time.time()
+  vt = geopack_08_dp.transform(v, trans, dtime, outsize)
+  execution_stop = time.time()
+
+  return vt, execution_stop - execution_start
+
+
+def _pyspedas(v, t, frame_in, frame_out):
+  import os
+  import time
+  import numpy as np
+  import hxform
+
+  os.environ["PYSPEDAS_LOGGING_LEVEL"] = "error"
+  from pyspedas import cotrans
+  from pyspedas import time_double
+
+  time_in = []
+  for i in range(t.shape[0]):
+    tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6))
+    time_in.append(time_double(tstr))
+
+  execution_start = time.time()
+  vt = cotrans(time_in=time_in, data_in=v, coord_in=frame_in, coord_out=frame_out)
+  if isinstance(vt, list):
+    # https://github.com/spedas/pyspedas/issues/1273
+    vt = np.array(vt)
+  execution_stop = time.time()
+
+  return vt, execution_stop - execution_start
+
+
+def _spiceypy(v, t, frame_in, frame_out, lib):
+
+  import os
+  import time
+
+  import numpy as np
+  import spiceypy
+  import hxform
+
+  vt = np.full(v.shape, np.nan)
+
+  info = hxform.lib_info(lib)
+  kernel_dir = info['kernel']['dir']
+  kernel_files = info['kernel']['files']
+  for kernel in kernel_files:
+    kernel_file = os.path.join(kernel_dir, kernel)
+    if not os.path.isfile(kernel_file):
+      raise FileNotFoundError(f"Required SPICE kernel file not found: {kernel_file}")
+    spiceypy.furnsh(kernel_file)
+
+  execution_start = time.time()
+  for i in range(t.shape[0]):
+    time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6))
+    et = spiceypy.str2et(time_str)
+    matrix = spiceypy.pxform(frame_in, frame_out, et)
+    vt[i,:] = spiceypy.mxv(matrix, v[i,:])
+  execution_stop = time.time()
+
+  spiceypy.kclear()
+
+  return vt, execution_stop - execution_start
+
+
+def _spacepy(v, t, frame_in, frame_out, lib):
+  import time
+  import numpy as np
+
+  import hxform
+  import spacepy.coordinates as sc
+
+  from spacepy.time import Ticktock
+
+  if len(t.shape) == 1:
+    # SpacePy requires time values to be strings with 1-second precision
+    t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t, length=6))
+  else:
+    t_str = []
+    for i in range(t.shape[0]):
+      t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6)))
+    t_str = np.array(t_str)
+
+  execution_start = time.time()
+  if lib.endswith('-irbem'):
+    cvals = sc.Coords(v, frame_in, 'car', use_irbem=True)
+  else:
+    cvals = sc.Coords(v, frame_in, 'car', use_irbem=False)
+
+  cvals.ticks = Ticktock(t_str, 'ISO')
+  vt = cvals.convert(frame_out, 'car').data
+  execution_stop = time.time()
+
+  return vt, execution_stop - execution_start
+
+
+def _sunpy(v, t, frame_in, frame_out):
+  import time
+  import hxform
+  import numpy as np
+  import astropy.coordinates
+  import sunpy.coordinates
+  # sunpy.coordinates is not used directly, but needed to register the frames.
+
+  vt = np.full(v.shape, np.nan)
+
+  representation_type = 'cartesian'
+
+  # Does not seem possible to transform a dimensionless vector.
+  one = astropy.constants.R_earth
+  #one = astropy.units.m
+  # TODO: Use
+  #   one = astropy.units.m
+  # when https://github.com/sunpy/sunpy/pull/7530 is merged.
+
+  info = hxform.lib_info('sunpy')
+  frame_in = info['system_aliases'][frame_in]
+  frame_out = info['system_aliases'][frame_out]
+
+  execution_start = time.time()
+  if t.shape[0] == 1:
+    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[0, :], length=6))
+    kwargs = {
+      "x": v[:, 0]*one,
+      "y": v[:, 1]*one,
+      "z": v[:, 2]*one,
+      "frame": frame_in,
+      "obstime": obstime,
+      "representation_type": representation_type
+    }
+    coord = astropy.coordinates.SkyCoord(**kwargs)
+    coord = coord.transform_to(frame_out).cartesian/one
+    vt = coord.xyz.decompose().value.transpose()
+  else:
+    for i in range(t.shape[0]):
+      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i, :], length=6))
       kwargs = {
-        "x": v[:,0]*units[0],
-        "y": v[:,1]*units[1],
-        "z": v[:,2]*units[2],
+        "x": v[i, 0]*one,
+        "y": v[i, 1]*one,
+        "z": v[i, 2]*one,
         "frame": frame_in,
         "obstime": obstime,
         "representation_type": representation_type
       }
-      coord = astropy.coordinates.SkyCoord(**kwargs)
-      coord = coord.transform_to(frame_out).cartesian/one
-      vp = coord.xyz.decompose().value.transpose()
 
-    else:
-      obstimes = []
-      for i in range(Nt):
-        obstimes.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6)))
+      coord_in = astropy.coordinates.SkyCoord(**kwargs)
+      coord_out = coord_in.transform_to(frame_out).cartesian/one
 
-      v = v*units[0]
-      execution_start = time_.time()
-      for i in range(Nt):
-        #obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
-        obstime = obstimes[i]
-        kwargs = {
-          #"x": v[i,0]*units[0],
-          #"y": v[i,1]*units[1],
-          #"z": v[i,2]*units[2],
-          "x": v[i,0],
-          "y": v[i,1],
-          "z": v[i,2],
-          "frame": frame_in,
-          "obstime": obstime,
-          "representation_type": representation_type
-        }
+      vt[i, :] = coord_out.xyz.decompose().value
 
-        coord_in = astropy.coordinates.SkyCoord(**kwargs)
+  execution_stop = time.time()
 
-        if ctype_out == 'car':
-          coord_out = coord_in.transform_to(frame_out).cartesian/one
-        if ctype_out == 'sph':
-          coord_out = coord_in.transform_to(frame_out).spherical/one
-
-        vp[i,:] = coord_out.xyz.decompose().value
-    execution_stop = time_.time()
-
-  if lib.startswith('spiceypy'):
-
-    import os
-    import spiceypy
-
-    kernel_dir = info['kernel']['dir']
-    kernel_files = info['kernel']['files']
-    for kernel in kernel_files:
-      kernel_file = os.path.join(kernel_dir, kernel)
-      if not os.path.isfile(kernel_file):
-        raise FileNotFoundError(f"Required SPICE kernel file not found: {kernel_file}")
-      spiceypy.furnsh(kernel_file)
-
-    execution_start = time_.time()
-    for i in range(time.shape[0]):
-      time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(time[i,:], length=6))
-      et = spiceypy.str2et(time_str)
-      matrix = spiceypy.pxform(csys_in, csys_out, et)
-      vp[i,:] = spiceypy.mxv(matrix, v[i,:])
-    execution_stop = time_.time()
-
-    spiceypy.kclear()
-
-  if lib == 'sscweb':
-    import re
-    import requests
-    import time as time_
-
-    frame_in = info['system_aliases'].get(csys_in, csys_in)
-    frame_out = info['system_aliases'].get(csys_out, csys_out)
-
-    if csys_in in ['GEO', 'MAG'] and ctype_in == 'car':
-      v[:,0], v[:,1], v[:,2] = car2sph(v[:,0], v[:,1], v[:,2])
-
-    execution_start = time_.time()
-    for i in range(time.shape[0]):
-
-      time_.sleep(0.1) # To avoid overwhelming the server with requests and getting blocked.
-      year = time[i][0]
-      doy_ = hxform.timelib.doy(time[i][0:3])
-      time_str = f'{year} {doy_:03d} {time[i][3]:02d}:{time[i][4]:02d}:{time[i][5]:02d}'
-      # TODO: Document why SSCWeb Python client was not used.
-      url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
-      if csys_in in ['GEO', 'MAG']:
-        url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={frame_in}"
-      else:
-        url += f"epoch={time_str}&x={v[i][0]:f}&y={v[i][1]:f}&z={v[i][2]:f}&lat=&lon=&r=&action={frame_in}"
-
-      # This is likely to fail if many requests are made.
-      try:
-        print(f"Fetching URL: {url}")
-        r = requests.get(url, timeout=2)
-      except Exception as e:
-        #print(e)
-        #raise Exception(f"Failed to fetch URL: {url}.")
-        vp[i] = np.full((1, 3), np.nan)
-        continue
-
-      if r.status_code != 200:
-        raise Exception(f"Failed to fetch URL: {url}. Status code: {r.status_code}.")
-
-      text = r.text
-
-      # Split the text into lines
-      lines = text.split("\n")
-
-      start = None
-      end = None
-      for idx, line in enumerate(lines):
-        if re.search('^ Radial distance', line):
-          start = idx
-        if re.search('^ REGION', line):
-          end = idx - 1
-          break
-
-      if start is None:
-        #raise Exception(f"Failed to find start of table in URL: {url}. Returned HTML:\n{text}")
-        vp[i] = np.full((1, 3), np.nan)
-        continue
-
-      # Extract the table lines
-      R = float(lines[start].split()[2].strip())
-      table_lines = lines[start+2:end]
-
-      # Parse the table into a list of dictionaries
-      result = {}
-      for line in table_lines:
-        parts = line.split()
-        result[parts[0]] = {
-            "R": R,
-            "Lat": float(parts[1]),
-            "Long": float(parts[2]),
-            "X": float(parts[3]),
-            "Y": float(parts[4]),
-            "Z": float(parts[5]),
-        }
-        if len(parts) > 6:
-          result[parts[0]]["hh.hhhhh"] = float(parts[6])
-
-      if ctype_out == 'car':
-        vp[i][0] = result[frame_out]['X']
-        vp[i][1] = result[frame_out]['Y']
-        vp[i][2] = result[frame_out]['Z']
-      else:
-        vp[i][0] = result[frame_out]['R']
-        vp[i][1] = result[frame_out]['Lat']
-        vp[i][2] = result[frame_out]['Long']
-    execution_stop = time_.time()
-
-  transform.execution_time = execution_stop - execution_start
-
-  if ctype_out == 'sph' and lib != 'sscweb':
-    vp[:,0], vp[:,1], vp[:,2] = car2sph(vp[:,0], vp[:,1], vp[:,2])
-
-  if issubclass(v_outertype, np.ndarray):
-    if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):
-      return vp[0]
-    return vp
-  elif issubclass(v_innertype, np.ndarray):
-    return v_outertype(vp)
-  else:
-    if Nv == 1 and Nt == 1 and v_innertype is not list:
-      return vp.tolist()[0]
-    return vp.tolist()
+  return vt, execution_stop - execution_start
 
 
-def transform_matrix(time, csys_in, csys_out, lib='geopack_08_dp'):
+def _sscweb(v, t, frame_in, frame_out):
+  import re
+  import requests
   import numpy as np
-  kwargs = {'ctype_in': 'car', ctype_out: 'car', 'lib': lib}
-  b1 = transform(np.array([1., 0., 0.]), time, csys_in, csys_out, **kwargs)
-  b2 = transform(np.array([0., 1., 0.]), time, csys_in, csys_out, **kwargs)
-  b3 = transform(np.array([0., 0., 1.]), time, csys_in, csys_out, **kwargs)
-  return np.column_stack([b1, b2, b3])
+  import hxform
+  import time as time
+  vt = np.full(v.shape, np.nan)
+
+  info = hxform.lib_info('sscweb')
+  frame_in = info['system_aliases'].get(frame_in, frame_in)
+  frame_out = info['system_aliases'].get(frame_out, frame_out)
+
+  if frame_in in ['GEO', 'GM']:
+    v[:,0], v[:,1], v[:,2] = car2sph(v[:,0], v[:,1], v[:,2])
+
+  execution_start = time.time()
+  for i in range(t.shape[0]):
+
+    time.sleep(0.1) # To avoid overwhelming the server with requests and getting blocked.
+    year = t[i][0]
+    doy_ = hxform.timelib.doy(t[i][0:3])
+    time_str = f'{year} {doy_:03d} {t[i][3]:02d}:{t[i][4]:02d}:{t[i][5]:02d}'
+    # TODO: Document why SSCWeb Python client was not used
+    #       (it handles too many request and retries)
+    url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
+    if frame_in in ['GEO', 'GM']:
+      url += f"epoch={time_str}&x=&y=&z=&lat={v[i][1]:f}&lon={v[i][2]:f}&r={v[i][0]:f}&action={frame_in}"
+    else:
+      url += f"epoch={time_str}&x={v[i][0]:f}&y={v[i][1]:f}&z={v[i][2]:f}&lat=&lon=&r=&action={frame_in}"
+
+    # This is likely to fail if many requests are made.
+    try:
+      print(f"Fetching URL: {url}")
+      r = requests.get(url, timeout=2)
+    except Exception as e:
+      #print(e)
+      raise Exception(f"Failed to fetch URL: {url}.")
+      vt[i] = np.full((1, 3), np.nan)
+      continue
+
+    if r.status_code != 200:
+      raise Exception(f"Failed to fetch URL: {url}. Status code: {r.status_code}.")
+
+    text = r.text
+
+    # Split the text into lines
+    lines = text.split("\n")
+
+    start = None
+    end = None
+    for idx, line in enumerate(lines):
+      if re.search('^ Radial distance', line):
+        start = idx
+      if re.search('^ REGION', line):
+        end = idx - 1
+        break
+
+    if start is None:
+      #logger.error(f"Failed to find start of table in URL: {url}. Returned HTML:\n{text}")
+      vt[i] = np.full((1, 3), np.nan)
+      continue
+
+    # Extract the table lines
+    R = float(lines[start].split()[2].strip())
+    table_lines = lines[start+2:end]
+
+    # Parse the table into a list of dictionaries
+    result = {}
+    for line in table_lines:
+      parts = line.split()
+      result[parts[0]] = {
+          "R": R,
+          "Lat": float(parts[1]),
+          "Long": float(parts[2]),
+          "X": float(parts[3]),
+          "Y": float(parts[4]),
+          "Z": float(parts[5]),
+      }
+      if len(parts) > 6:
+        result[parts[0]]["hh.hhhhh"] = float(parts[6])
+
+    vt[i][0] = result[frame_out]['X']
+    vt[i][1] = result[frame_out]['Y']
+    vt[i][2] = result[frame_out]['Z']
+
+  execution_stop = time.time()
+
+  return vt, execution_stop - execution_start
+
+
+def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
+  import numpy as np
+  kwargs = {'ctype_in': 'car', 'ctype_out': 'car', 'lib': lib}
+  c1 = transform(np.array([1., 0., 0.]), t, frame_in, frame_out, **kwargs)
+  c2 = transform(np.array([0., 1., 0.]), t, frame_in, frame_out, **kwargs)
+  c3 = transform(np.array([0., 0., 1.]), t, frame_in, frame_out, **kwargs)
+  if len(c1.shape) == 1:
+    m = np.column_stack([c1, c2, c3])
+    if isinstance(t, list):
+      return m.tolist()
+    return m
+
+  m = np.full((t.shape[0], 3, 3), np.nan)
+  for i in range(t.shape[0]):
+    m[i, :, 0] = c1[i, :]
+    m[i, :, 1] = c2[i, :]
+    m[i, :, 2] = c3[i, :]
+  if isinstance(t, list):
+    return m.tolist()
+  return m
 
 
 def car2sph(*args):
