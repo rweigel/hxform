@@ -1,7 +1,6 @@
 import pathlib
 import warnings
-from setuptools import setup, Extension, find_packages
-
+import setuptools
 
 # Read version info in hxform/version.py without importing the package
 main_ns = {}
@@ -21,21 +20,22 @@ install_requires = [
   'spacepy>=0.6.0',
   'spiceypy>=6.0.0',
   'pyspedas>=1.7.28',
-  'python-dateutil>=2.9.0',
+  'python-dateutil>=2.9.0'
 ]
 
 try:
-  # Will work if utilrsw was already installed, for example via pip install -e .
+  # Will work if utilrsw is already installed locally for development
+  # via pip install -e .
   import utilrsw
-except:
-  install_requires.append("utilrsw @ git+https://github.com/rweigel/utilrsw")
+except ImportError:
+  install_requires.append("utilrsw[xprint] @ git+https://github.com/rweigel/utilrsw")
 
 cxform_sources = [
     'src/cxform/cxform_wrapper.c',
     'src/cxform/cxform-manual.c',
     'src/cxform/cxform-auto.c',
 ]
-cxform_ext = Extension('hxform.cxform_wrapper',sources=cxform_sources)
+cxform_ext = setuptools.Extension('hxform.cxform_wrapper',sources=cxform_sources)
 
 def build_geopack():
   """Try to build Geopack using numpy.f2py and copy the produced shared library
@@ -132,18 +132,18 @@ emsg = build_geopack()
 if emsg:
   warnings.warn(emsg)
 
-setup(
+setuptools.setup(
   name='hxform',
   version=main_ns.get('__version__', '0.0.0'),
   author='Bob Weigel, Angel Gutarra-Leon, and Gary Quaresima',
   author_email='rweigel@gmu.edu',
-  packages=find_packages(),
+  packages=setuptools.find_packages(),
   description='Heliophysical coordinate transformations using various libraries',
   long_description=long_description,
   long_description_content_type='text/markdown',
   include_package_data=True,
   package_data={'': ['README.md']},
   install_requires=install_requires,
-  ext_modules=[cxform_ext],
+  ext_modules=[cxform_ext]
 )
 
