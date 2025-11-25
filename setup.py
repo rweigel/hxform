@@ -1,18 +1,7 @@
-import sys
 import pathlib
 import warnings
 from setuptools import setup, Extension, find_packages
 
-from setuptools.command.install import install as _install
-
-
-class CustomInstall(_install):
-  def run(self):
-    super().run()
-    # message printed at the end of the install step (will appear before pip's "Successfully installed" line)
-    sys.stdout.write('My custom post-install message!\n')
-    sys.stdout.flush()
-    #warnings.warn('This is a post-install warning.')
 
 # Read version info in hxform/version.py without importing the package
 main_ns = {}
@@ -25,9 +14,10 @@ readme_path = pathlib.Path(__file__).with_name('README.md')
 long_description = readme_path.read_text(encoding='utf-8') if readme_path.exists() else ''
 
 # See issues/issues.md for reason for minimum SunPy, SpacePy, and PySPEDAS versions.
+# Note that numpy>=1.26 also appears in pyproject.toml and both should be same.
 install_requires = [
   'numpy>=1.26',
-  'sunpy>=7.2.1', # Assumes https://github.com/sunpy/sunpy/issues/8406 fix in 7.2.1
+  'sunpy>=7.0.3',
   'spacepy>=0.6.0',
   'spiceypy>=6.0.0',
   'pyspedas>=1.7.28',
@@ -154,7 +144,6 @@ setup(
   include_package_data=True,
   package_data={'': ['README.md']},
   install_requires=install_requires,
-  cmdclass={'install': CustomInstall},
   ext_modules=[cxform_ext],
 )
 

@@ -1,44 +1,3451 @@
-cxform: Skipping tests because it is not in libs_only
-geopack_08_dp: Skipping tests because it is not in libs_only
-spacepy: Skipping tests because it is not in libs_only
-spacepy-irbem: Skipping tests because it is not in libs_only
-spiceypy1: Skipping tests because it is not in libs_only
-spiceypy2: Skipping tests because it is not in libs_only
+cxform J2000 to J2000
+cxform J2000 to GEI
+cxform J2000 to GEO
+cxform J2000 to GSE
+cxform J2000 to GSM
+cxform J2000 to SM
+cxform J2000 to MAG
+cxform J2000 to RTN
+cxform J2000 to GSEQ
+cxform J2000 to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.35543080e+08  4.44089210e-16  2.22044605e-16]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.35543080e+08  4.44089210e-16  2.22044605e-16]
+cxform J2000 to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  2.22044605e-16]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  2.22044605e-16]
+cxform J2000 to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.36727440e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.36727440e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.92740466e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.36727440e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.92740466e-06  3.51480726e+07]
+cxform GEI to J2000
+cxform GEI to GEI
+cxform GEI to GEO
+cxform GEI to GSE
+cxform GEI to GSM
+cxform GEI to SM
+cxform GEI to MAG
+cxform GEI to RTN
+cxform GEI to GSEQ
+cxform GEI to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform GEI to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform GEI to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.38577475e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.38577475e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.95329254e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.38577475e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.95329254e-06  3.51480726e+07]
+cxform GEO to J2000
+cxform GEO to GEI
+cxform GEO to GEO
+cxform GEO to GSE
+cxform GEO to GSM
+cxform GEO to SM
+cxform GEO to MAG
+cxform GEO to RTN
+cxform GEO to GSEQ
+cxform GEO to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08 -1.11022302e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08 -1.11022302e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.35543080e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08 -1.11022302e-16  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.35543080e+08 -2.22044605e-16  0.00000000e+00]
+cxform GEO to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform GEO to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.94211667e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.94211667e-06  3.51480726e+07]
+cxform GSE to J2000
+cxform GSE to GEI
+cxform GSE to GEO
+cxform GSE to GSE
+cxform GSE to GSM
+cxform GSE to SM
+cxform GSE to MAG
+cxform GSE to RTN
+cxform GSE to GSEQ
+cxform GSE to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform GSE to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform GSE to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93112995e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93112995e-06  3.51480726e+07]
+cxform GSM to J2000
+cxform GSM to GEI
+cxform GSM to GEO
+cxform GSM to GSE
+cxform GSM to GSM
+cxform GSM to SM
+cxform GSM to MAG
+cxform GSM to RTN
+cxform GSM to GSEQ
+cxform GSM to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08 -4.4408921e-16  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08 -4.4408921e-16  0.0000000e+00]
+cxform GSM to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform GSM to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93472914e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93472914e-06  3.51480726e+07]
+cxform SM to J2000
+cxform SM to GEI
+cxform SM to GEO
+cxform SM to GSE
+cxform SM to GSM
+cxform SM to SM
+cxform SM to MAG
+cxform SM to RTN
+cxform SM to GSEQ
+cxform SM to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform SM to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform SM to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37459888e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+cxform MAG to J2000
+cxform MAG to GEI
+cxform MAG to GEO
+cxform MAG to GSE
+cxform MAG to GSM
+cxform MAG to SM
+cxform MAG to MAG
+cxform MAG to RTN
+cxform MAG to GSEQ
+cxform MAG to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  1.11022302e-16 -2.77555756e-17]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  1.11022302e-16 -2.77555756e-17]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.35543080e+08  2.22044605e-16 -5.55111512e-17]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  1.11022302e-16 -2.77555756e-17]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.35543080e+08  2.22044605e-16 -5.55111512e-17]
+cxform MAG to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08 -5.55111512e-17]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08 -5.55111512e-17]
+cxform MAG to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+cxform RTN to J2000
+cxform RTN to GEI
+cxform RTN to GEO
+cxform RTN to GSE
+cxform RTN to GSM
+cxform RTN to SM
+cxform RTN to MAG
+cxform RTN to RTN
+cxform RTN to GSEQ
+cxform RTN to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform RTN to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform RTN to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93851748e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37466193e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93851748e-06  3.51480726e+07]
+cxform GSEQ to J2000
+cxform GSEQ to GEI
+cxform GSEQ to GEO
+cxform GSEQ to GSE
+cxform GSEQ to GSM
+cxform GSEQ to SM
+cxform GSEQ to MAG
+cxform GSEQ to RTN
+cxform GSEQ to GSEQ
+cxform GSEQ to HEE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform GSEQ to HAE
+  FAIL for single vector, single timestamp
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]
+cxform GSEQ to HEEQ
+  FAIL for single vector, single timestamp
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.93881129e+08 -2.37093664e-06  1.40592290e+07]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.34702821e+08 -5.93106690e-06  3.51480726e+07]
+cxform HEE to J2000
+  FAIL for single vector, single timestamp
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+cxform HEE to GEI
+  FAIL for single vector, single timestamp
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+cxform HEE to GEO
+  FAIL for single vector, single timestamp
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+cxform HEE to GSE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HEE to GSM
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08 -4.4408921e-16  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08 -2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08 -4.4408921e-16  0.0000000e+00]
+cxform HEE to SM
+  FAIL for single vector, single timestamp
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-6.62469413e+08 -4.44089210e-16  3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-6.62469413e+08 -4.44089210e-16  3.19621495e+08]
+cxform HEE to MAG
+  FAIL for single vector, single timestamp
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+cxform HEE to RTN
+  FAIL for single vector, single timestamp
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [7.3554308e+08 4.4408921e-16 0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [7.3554308e+08 4.4408921e-16 0.0000000e+00]
+cxform HEE to GSEQ
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HEE to HEE
+cxform HEE to HAE
+cxform HEE to HEEQ
+cxform HAE to J2000
+  FAIL for single vector, single timestamp
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+cxform HAE to GEI
+  FAIL for single vector, single timestamp
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+cxform HAE to GEO
+  FAIL for single vector, single timestamp
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+cxform HAE to GSE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HAE to GSM
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  4.4408921e-16  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  2.22044605e-16  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  4.4408921e-16  0.0000000e+00]
+cxform HAE to SM
+  FAIL for single vector, single timestamp
+  [-2.64987765e+08  2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.64987765e+08  2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-6.62469413e+08  4.44089210e-16  3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.64987765e+08  2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-6.62469413e+08  4.44089210e-16  3.19621495e+08]
+cxform HAE to MAG
+  FAIL for single vector, single timestamp
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+cxform HAE to RTN
+  FAIL for single vector, single timestamp
+  [ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 0
+  [ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 1
+  [ 7.35543080e+08  0.00000000e+00 -2.22044605e-16]
+  FAIL for two vectors, two timestamps vector 0
+  [ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]
+  FAIL for two vectors, two timestamps vector 1
+  [ 7.35543080e+08  0.00000000e+00 -2.22044605e-16]
+cxform HAE to GSEQ
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HAE to HEE
+cxform HAE to HAE
+cxform HAE to HEEQ
+cxform HEEQ to J2000
+  FAIL for single vector, single timestamp
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.12469637e+07  2.67308997e+08  1.15794506e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.03117409e+08  6.68272493e+08  2.89486266e+08]
+cxform HEEQ to GEI
+  FAIL for single vector, single timestamp
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.17802972e+07  2.67206935e+08  1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.04450743e+08  6.68017339e+08  2.89597135e+08]
+cxform HEEQ to GEO
+  FAIL for single vector, single timestamp
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [2.70440720e+08 2.63757255e+06 1.15838854e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [6.76101799e+08 6.59393137e+06 2.89597135e+08]
+cxform HEEQ to GSE
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HEEQ to GSM
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08 -2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08 -2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.35543080e+08 -4.44089210e-16  2.22044605e-16]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08 -2.22044605e-16  1.11022302e-16]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.35543080e+08 -4.44089210e-16  2.22044605e-16]
+cxform HEEQ to SM
+  FAIL for single vector, single timestamp
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [-6.62469413e+08 -4.44089210e-16  3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.64987765e+08 -2.22044605e-16  1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [-6.62469413e+08 -4.44089210e-16  3.19621495e+08]
+cxform HEEQ to MAG
+  FAIL for single vector, single timestamp
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, single timestamp vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+  FAIL for two vectors, two timestamps vector 0
+  [5.85795516e+07 2.58431716e+08 1.27848598e+08]
+  FAIL for two vectors, two timestamps vector 1
+  [1.46448879e+08 6.46079290e+08 3.19621495e+08]
+cxform HEEQ to RTN
+  FAIL for single vector, single timestamp
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [7.3554308e+08 4.4408921e-16 0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [2.94217232e+08 2.22044605e-16 0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [7.3554308e+08 4.4408921e-16 0.0000000e+00]
+cxform HEEQ to GSEQ
+  FAIL for single vector, single timestamp
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+  FAIL for two vectors, two timestamps vector 0
+  [-2.94217232e+08  0.00000000e+00  0.00000000e+00]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.3554308e+08  0.0000000e+00  0.0000000e+00]
+cxform HEEQ to HEE
+cxform HEEQ to HAE
+cxform HEEQ to HEEQ
+geopack_08_dp GEI to GEI
+geopack_08_dp GEI to GEO
+geopack_08_dp GEI to GSE
+geopack_08_dp GEI to GSM
+geopack_08_dp GEI to SM
+geopack_08_dp GEI to MAG
+geopack_08_dp GEO to GEI
+geopack_08_dp GEO to GEO
+geopack_08_dp GEO to GSE
+geopack_08_dp GEO to GSM
+geopack_08_dp GEO to SM
+geopack_08_dp GEO to MAG
+geopack_08_dp GSE to GEI
+geopack_08_dp GSE to GEO
+geopack_08_dp GSE to GSE
+geopack_08_dp GSE to GSM
+geopack_08_dp GSE to SM
+geopack_08_dp GSE to MAG
+geopack_08_dp GSM to GEI
+geopack_08_dp GSM to GEO
+geopack_08_dp GSM to GSE
+geopack_08_dp GSM to GSM
+geopack_08_dp GSM to SM
+geopack_08_dp GSM to MAG
+geopack_08_dp SM to GEI
+geopack_08_dp SM to GEO
+geopack_08_dp SM to GSE
+geopack_08_dp SM to GSM
+geopack_08_dp SM to SM
+geopack_08_dp SM to MAG
+geopack_08_dp MAG to GEI
+geopack_08_dp MAG to GEO
+geopack_08_dp MAG to GSE
+geopack_08_dp MAG to GSM
+geopack_08_dp MAG to SM
+geopack_08_dp MAG to MAG
+spacepy ECI2000 to ECI2000
+spacepy ECI2000 to ECIMOD
+spacepy ECI2000 to ECITOD
+spacepy ECI2000 to GEI
+spacepy ECI2000 to GSE
+spacepy ECI2000 to GSM
+spacepy ECI2000 to GEO
+spacepy ECI2000 to SM
+spacepy ECI2000 to MAG
+spacepy ECIMOD to ECI2000
+spacepy ECIMOD to ECIMOD
+spacepy ECIMOD to ECITOD
+spacepy ECIMOD to GEI
+spacepy ECIMOD to GSE
+spacepy ECIMOD to GSM
+spacepy ECIMOD to GEO
+spacepy ECIMOD to SM
+spacepy ECIMOD to MAG
+spacepy ECITOD to ECI2000
+spacepy ECITOD to ECIMOD
+spacepy ECITOD to ECITOD
+spacepy ECITOD to GEI
+spacepy ECITOD to GSE
+spacepy ECITOD to GSM
+spacepy ECITOD to GEO
+spacepy ECITOD to SM
+spacepy ECITOD to MAG
+spacepy GEI to ECI2000
+spacepy GEI to ECIMOD
+spacepy GEI to ECITOD
+spacepy GEI to GEI
+spacepy GEI to GSE
+spacepy GEI to GSM
+spacepy GEI to GEO
+spacepy GEI to SM
+spacepy GEI to MAG
+spacepy GSE to ECI2000
+spacepy GSE to ECIMOD
+spacepy GSE to ECITOD
+spacepy GSE to GEI
+spacepy GSE to GSE
+spacepy GSE to GSM
+spacepy GSE to GEO
+spacepy GSE to SM
+spacepy GSE to MAG
+spacepy GSM to ECI2000
+spacepy GSM to ECIMOD
+spacepy GSM to ECITOD
+spacepy GSM to GEI
+spacepy GSM to GSE
+spacepy GSM to GSM
+spacepy GSM to GEO
+spacepy GSM to SM
+spacepy GSM to MAG
+spacepy GEO to ECI2000
+spacepy GEO to ECIMOD
+spacepy GEO to ECITOD
+spacepy GEO to GEI
+spacepy GEO to GSE
+spacepy GEO to GSM
+spacepy GEO to GEO
+spacepy GEO to SM
+spacepy GEO to MAG
+spacepy SM to ECI2000
+spacepy SM to ECIMOD
+spacepy SM to ECITOD
+spacepy SM to GEI
+spacepy SM to GSE
+spacepy SM to GSM
+spacepy SM to GEO
+spacepy SM to SM
+spacepy SM to MAG
+spacepy MAG to ECI2000
+spacepy MAG to ECIMOD
+spacepy MAG to ECITOD
+spacepy MAG to GEI
+spacepy MAG to GSE
+spacepy MAG to GSM
+spacepy MAG to GEO
+spacepy MAG to SM
+spacepy MAG to MAG
+spacepy-irbem ECI2000 to ECI2000
+spacepy-irbem ECI2000 to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECI2000 to ECITOD
+spacepy-irbem ECI2000 to GEI
+spacepy-irbem ECI2000 to GSE
+spacepy-irbem ECI2000 to GSM
+spacepy-irbem ECI2000 to GEO
+spacepy-irbem ECI2000 to SM
+spacepy-irbem ECI2000 to MAG
+spacepy-irbem ECIMOD to ECI2000
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to ECIMOD
+spacepy-irbem ECIMOD to ECITOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to GEI
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to GSE
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to GSM
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to GEO
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to SM
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECIMOD to MAG
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECITOD to ECI2000
+spacepy-irbem ECITOD to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem ECITOD to ECITOD
+spacepy-irbem ECITOD to GEI
+spacepy-irbem ECITOD to GSE
+spacepy-irbem ECITOD to GSM
+spacepy-irbem ECITOD to GEO
+spacepy-irbem ECITOD to SM
+spacepy-irbem ECITOD to MAG
+spacepy-irbem GEI to ECI2000
+spacepy-irbem GEI to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem GEI to ECITOD
+spacepy-irbem GEI to GEI
+spacepy-irbem GEI to GSE
+spacepy-irbem GEI to GSM
+spacepy-irbem GEI to GEO
+spacepy-irbem GEI to SM
+spacepy-irbem GEI to MAG
+spacepy-irbem GSE to ECI2000
+spacepy-irbem GSE to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem GSE to ECITOD
+spacepy-irbem GSE to GEI
+spacepy-irbem GSE to GSE
+spacepy-irbem GSE to GSM
+spacepy-irbem GSE to GEO
+spacepy-irbem GSE to SM
+spacepy-irbem GSE to MAG
+spacepy-irbem GSM to ECI2000
+spacepy-irbem GSM to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem GSM to ECITOD
+spacepy-irbem GSM to GEI
+spacepy-irbem GSM to GSE
+spacepy-irbem GSM to GSM
+spacepy-irbem GSM to GEO
+spacepy-irbem GSM to SM
+spacepy-irbem GSM to MAG
+spacepy-irbem GEO to ECI2000
+spacepy-irbem GEO to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem GEO to ECITOD
+spacepy-irbem GEO to GEI
+spacepy-irbem GEO to GSE
+spacepy-irbem GEO to GSM
+spacepy-irbem GEO to GEO
+spacepy-irbem GEO to SM
+spacepy-irbem GEO to MAG
+spacepy-irbem SM to ECI2000
+spacepy-irbem SM to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem SM to ECITOD
+spacepy-irbem SM to GEI
+spacepy-irbem SM to GSE
+spacepy-irbem SM to GSM
+spacepy-irbem SM to GEO
+spacepy-irbem SM to SM
+spacepy-irbem SM to MAG
+spacepy-irbem MAG to ECI2000
+spacepy-irbem MAG to ECIMOD
+  FAIL for single vector, single timestamp
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, single timestamp vector 1
+  [5.e+31 5.e+31 5.e+31]
+  FAIL for two vectors, two timestamps vector 0
+  [2.e+31 2.e+31 2.e+31]
+  FAIL for two vectors, two timestamps vector 1
+  [5.e+31 5.e+31 5.e+31]
+spacepy-irbem MAG to ECITOD
+spacepy-irbem MAG to GEI
+spacepy-irbem MAG to GSE
+spacepy-irbem MAG to GSM
+spacepy-irbem MAG to GEO
+spacepy-irbem MAG to SM
+spacepy-irbem MAG to MAG
+spiceypy1 GEI to GEI
+spiceypy1 GEI to GEI_TOD
+spiceypy1 GEI to GEI_MOD
+spiceypy1 GEI to MEAN_ECLIP
+spiceypy1 GEI to GEO
+spiceypy1 GEI to GSE
+spiceypy1 GEI to GSM
+spiceypy1 GEI to MAG
+spiceypy1 GEI to SM
+spiceypy1 GEI_TOD to GEI
+spiceypy1 GEI_TOD to GEI_TOD
+spiceypy1 GEI_TOD to GEI_MOD
+spiceypy1 GEI_TOD to MEAN_ECLIP
+spiceypy1 GEI_TOD to GEO
+spiceypy1 GEI_TOD to GSE
+spiceypy1 GEI_TOD to GSM
+spiceypy1 GEI_TOD to MAG
+spiceypy1 GEI_TOD to SM
+spiceypy1 GEI_MOD to GEI
+spiceypy1 GEI_MOD to GEI_TOD
+spiceypy1 GEI_MOD to GEI_MOD
+spiceypy1 GEI_MOD to MEAN_ECLIP
+spiceypy1 GEI_MOD to GEO
+spiceypy1 GEI_MOD to GSE
+spiceypy1 GEI_MOD to GSM
+spiceypy1 GEI_MOD to MAG
+spiceypy1 GEI_MOD to SM
+spiceypy1 MEAN_ECLIP to GEI
+spiceypy1 MEAN_ECLIP to GEI_TOD
+spiceypy1 MEAN_ECLIP to GEI_MOD
+spiceypy1 MEAN_ECLIP to MEAN_ECLIP
+spiceypy1 MEAN_ECLIP to GEO
+spiceypy1 MEAN_ECLIP to GSE
+spiceypy1 MEAN_ECLIP to GSM
+spiceypy1 MEAN_ECLIP to MAG
+spiceypy1 MEAN_ECLIP to SM
+spiceypy1 GEO to GEI
+spiceypy1 GEO to GEI_TOD
+spiceypy1 GEO to GEI_MOD
+spiceypy1 GEO to MEAN_ECLIP
+spiceypy1 GEO to GEO
+spiceypy1 GEO to GSE
+spiceypy1 GEO to GSM
+spiceypy1 GEO to MAG
+spiceypy1 GEO to SM
+spiceypy1 GSE to GEI
+spiceypy1 GSE to GEI_TOD
+spiceypy1 GSE to GEI_MOD
+spiceypy1 GSE to MEAN_ECLIP
+spiceypy1 GSE to GEO
+spiceypy1 GSE to GSE
+spiceypy1 GSE to GSM
+spiceypy1 GSE to MAG
+spiceypy1 GSE to SM
+spiceypy1 GSM to GEI
+spiceypy1 GSM to GEI_TOD
+spiceypy1 GSM to GEI_MOD
+spiceypy1 GSM to MEAN_ECLIP
+spiceypy1 GSM to GEO
+spiceypy1 GSM to GSE
+spiceypy1 GSM to GSM
+spiceypy1 GSM to MAG
+spiceypy1 GSM to SM
+spiceypy1 MAG to GEI
+spiceypy1 MAG to GEI_TOD
+spiceypy1 MAG to GEI_MOD
+spiceypy1 MAG to MEAN_ECLIP
+spiceypy1 MAG to GEO
+spiceypy1 MAG to GSE
+spiceypy1 MAG to GSM
+spiceypy1 MAG to MAG
+spiceypy1 MAG to SM
+spiceypy1 SM to GEI
+spiceypy1 SM to GEI_TOD
+spiceypy1 SM to GEI_MOD
+spiceypy1 SM to MEAN_ECLIP
+spiceypy1 SM to GEO
+spiceypy1 SM to GSE
+spiceypy1 SM to GSM
+spiceypy1 SM to MAG
+spiceypy1 SM to SM
+spiceypy2 GEI to GEI
+spiceypy2 GEI to GEI_TOD
+spiceypy2 GEI to GEI_MOD
+spiceypy2 GEI to MEAN_ECLIP
+spiceypy2 GEI to GEO
+spiceypy2 GEI to GSE
+spiceypy2 GEI to GSE_Z_PRIMARY
+spiceypy2 GEI to GSM
+spiceypy2 GEI to MAG
+spiceypy2 GEI to SM
+spiceypy2 GEI_TOD to GEI
+spiceypy2 GEI_TOD to GEI_TOD
+spiceypy2 GEI_TOD to GEI_MOD
+spiceypy2 GEI_TOD to MEAN_ECLIP
+spiceypy2 GEI_TOD to GEO
+spiceypy2 GEI_TOD to GSE
+spiceypy2 GEI_TOD to GSE_Z_PRIMARY
+spiceypy2 GEI_TOD to GSM
+spiceypy2 GEI_TOD to MAG
+spiceypy2 GEI_TOD to SM
+spiceypy2 GEI_MOD to GEI
+spiceypy2 GEI_MOD to GEI_TOD
+spiceypy2 GEI_MOD to GEI_MOD
+spiceypy2 GEI_MOD to MEAN_ECLIP
+spiceypy2 GEI_MOD to GEO
+spiceypy2 GEI_MOD to GSE
+spiceypy2 GEI_MOD to GSE_Z_PRIMARY
+spiceypy2 GEI_MOD to GSM
+spiceypy2 GEI_MOD to MAG
+spiceypy2 GEI_MOD to SM
+spiceypy2 MEAN_ECLIP to GEI
+spiceypy2 MEAN_ECLIP to GEI_TOD
+spiceypy2 MEAN_ECLIP to GEI_MOD
+spiceypy2 MEAN_ECLIP to MEAN_ECLIP
+spiceypy2 MEAN_ECLIP to GEO
+spiceypy2 MEAN_ECLIP to GSE
+spiceypy2 MEAN_ECLIP to GSE_Z_PRIMARY
+spiceypy2 MEAN_ECLIP to GSM
+spiceypy2 MEAN_ECLIP to MAG
+spiceypy2 MEAN_ECLIP to SM
+spiceypy2 GEO to GEI
+spiceypy2 GEO to GEI_TOD
+spiceypy2 GEO to GEI_MOD
+spiceypy2 GEO to MEAN_ECLIP
+spiceypy2 GEO to GEO
+spiceypy2 GEO to GSE
+spiceypy2 GEO to GSE_Z_PRIMARY
+spiceypy2 GEO to GSM
+spiceypy2 GEO to MAG
+spiceypy2 GEO to SM
+spiceypy2 GSE to GEI
+spiceypy2 GSE to GEI_TOD
+spiceypy2 GSE to GEI_MOD
+spiceypy2 GSE to MEAN_ECLIP
+spiceypy2 GSE to GEO
+spiceypy2 GSE to GSE
+spiceypy2 GSE to GSE_Z_PRIMARY
+spiceypy2 GSE to GSM
+spiceypy2 GSE to MAG
+spiceypy2 GSE to SM
+spiceypy2 GSE_Z_PRIMARY to GEI
+spiceypy2 GSE_Z_PRIMARY to GEI_TOD
+spiceypy2 GSE_Z_PRIMARY to GEI_MOD
+spiceypy2 GSE_Z_PRIMARY to MEAN_ECLIP
+spiceypy2 GSE_Z_PRIMARY to GEO
+spiceypy2 GSE_Z_PRIMARY to GSE
+spiceypy2 GSE_Z_PRIMARY to GSE_Z_PRIMARY
+spiceypy2 GSE_Z_PRIMARY to GSM
+spiceypy2 GSE_Z_PRIMARY to MAG
+spiceypy2 GSE_Z_PRIMARY to SM
+spiceypy2 GSM to GEI
+spiceypy2 GSM to GEI_TOD
+spiceypy2 GSM to GEI_MOD
+spiceypy2 GSM to MEAN_ECLIP
+spiceypy2 GSM to GEO
+spiceypy2 GSM to GSE
+spiceypy2 GSM to GSE_Z_PRIMARY
+spiceypy2 GSM to GSM
+spiceypy2 GSM to MAG
+spiceypy2 GSM to SM
+spiceypy2 MAG to GEI
+spiceypy2 MAG to GEI_TOD
+spiceypy2 MAG to GEI_MOD
+spiceypy2 MAG to MEAN_ECLIP
+spiceypy2 MAG to GEO
+spiceypy2 MAG to GSE
+spiceypy2 MAG to GSE_Z_PRIMARY
+spiceypy2 MAG to GSM
+spiceypy2 MAG to MAG
+spiceypy2 MAG to SM
+spiceypy2 SM to GEI
+spiceypy2 SM to GEI_TOD
+spiceypy2 SM to GEI_MOD
+spiceypy2 SM to MEAN_ECLIP
+spiceypy2 SM to GEO
+spiceypy2 SM to GSE
+spiceypy2 SM to GSE_Z_PRIMARY
+spiceypy2 SM to GSM
+spiceypy2 SM to MAG
+spiceypy2 SM to SM
 sunpy GEI to GEI
 sunpy GEI to GEO
+  FAIL for single vector, single timestamp
+  [ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [ 0.00011551 -0.00020913  0.00014036]
+  FAIL for two vectors, two timestamps vector 0
+  [ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [ 0.00011551 -0.00020913  0.00014036]
 sunpy GEI to GSE
+  FAIL for single vector, single timestamp
+  [-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]
+  FAIL for two vectors, single timestamp vector 0
+  [-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]
+  FAIL for two vectors, single timestamp vector 1
+  [-3.34932082e-11 -4.11182199e-12 -3.66728869e-12]
+  FAIL for two vectors, two timestamps vector 0
+  [-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]
+  FAIL for two vectors, two timestamps vector 1
+  [-3.34932082e-11 -4.11182199e-12 -3.66728869e-12]
 sunpy GEI to GSM
+  FAIL for single vector, single timestamp
+  [-7.97871763e-05  9.56339010e-05  6.06826127e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-7.97871763e-05  9.56339010e-05  6.06826127e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-0.00015957  0.00019127  0.00012137]
+  FAIL for two vectors, two timestamps vector 0
+  [-7.97871763e-05  9.56339010e-05  6.06826127e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-0.00015957  0.00019127  0.00012137]
 sunpy GEI to SM
+  FAIL for single vector, single timestamp
+  [-4.54890775e-05  9.56339010e-05  8.93259022e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-4.54890775e-05  9.56339010e-05  8.93259022e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-9.09781639e-05  1.91267800e-04  1.78651808e-04]
+  FAIL for two vectors, two timestamps vector 0
+  [-4.54890775e-05  9.56339010e-05  8.93259022e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-9.09781639e-05  1.91267800e-04  1.78651808e-04]
 sunpy GEI to MAG
+  FAIL for single vector, single timestamp
+  [1.03327178e-04 2.32076164e-05 8.93259022e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [1.03327178e-04 2.32076164e-05 8.93259022e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [2.06654356e-04 4.64152419e-05 1.78651808e-04]
+  FAIL for two vectors, two timestamps vector 0
+  [1.03327178e-04 2.32076164e-05 8.93259022e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [2.06654356e-04 4.64152419e-05 1.78651808e-04]
 sunpy GEO to GEI
+  FAIL for single vector, single timestamp
+  [-8.97568392e-05  4.36774017e-05  5.42197849e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-8.97568392e-05  4.36774017e-05  5.42197849e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.79513679e-04  8.73548095e-05  1.08439568e-04]
+  FAIL for two vectors, two timestamps vector 0
+  [-8.97568392e-05  4.36774017e-05  5.42197849e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.79513679e-04  8.73548095e-05  1.08439568e-04]
 sunpy GEO to GEO
 sunpy GEO to GSE
+  FAIL for single vector, single timestamp
+  [-7.35480044e-05 -8.02898552e-05  3.23731048e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-7.35480044e-05 -8.02898552e-05  3.23731048e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.47096014e-04 -1.60579709e-04  6.47462044e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [-7.35480044e-05 -8.02898552e-05  3.23731048e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.47096014e-04 -1.60579709e-04  6.47462044e-05]
 sunpy GEO to GSM
 sunpy GEO to SM
 sunpy GEO to MAG
 sunpy GSE to GEI
+  FAIL for single vector, single timestamp
+  [1.19615429e-12 4.12603285e-12 2.51176857e-12]
+  FAIL for two vectors, single timestamp vector 0
+  [1.19615429e-12 4.12603285e-12 2.51176857e-12]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.19637633e-12 -1.78790316e-12  4.12359036e-12]
+  FAIL for two vectors, two timestamps vector 0
+  [1.19615429e-12 4.12603285e-12 2.51176857e-12]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.19637633e-12 -1.78790316e-12  4.12359036e-12]
 sunpy GSE to GEO
+  FAIL for single vector, single timestamp
+  [-7.76635111e-05 -8.23353464e-05  3.53488187e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-7.76635111e-05 -8.23353464e-05  3.53488187e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.55327035e-04 -1.64670689e-04  7.06976354e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [-7.76635111e-05 -8.23353464e-05  3.53488187e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.55327035e-04 -1.64670689e-04  7.06976354e-05]
 sunpy GSE to GSE
 sunpy GSE to GSM
+  FAIL for single vector, single timestamp
+  [5.82036507e-05 6.86123399e-05 7.72330957e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [5.82036507e-05 6.86123399e-05 7.72330957e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [0.00011641 0.00013722 0.00015447]
+  FAIL for two vectors, two timestamps vector 0
+  [5.82036507e-05 6.86123399e-05 7.72330957e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [0.00011641 0.00013722 0.00015447]
 sunpy GSE to SM
+  FAIL for single vector, single timestamp
+  [8.59833355e-05 6.86123399e-05 4.42660372e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [8.59833355e-05 6.86123399e-05 4.42660372e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [1.71966683e-04 1.37224676e-04 8.85320711e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [8.59833355e-05 6.86123399e-05 4.42660372e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [1.71966683e-04 1.37224676e-04 8.85320711e-05]
 sunpy GSE to MAG
+  FAIL for single vector, single timestamp
+  [ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [ 9.57855976e-05 -1.98061281e-04  8.85320711e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [ 9.57855976e-05 -1.98061281e-04  8.85320711e-05]
 sunpy GSM to GEI
+  FAIL for single vector, single timestamp
+  [-1.21525486e-04  7.01825401e-05 -2.55709683e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-1.21525486e-04  7.01825401e-05 -2.55709683e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-2.43050972e-04  1.40365094e-04 -5.11419336e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [-1.21525486e-04  7.01825401e-05 -2.55709683e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-2.43050972e-04  1.40365094e-04 -5.11419336e-05]
 sunpy GSM to GEO
 sunpy GSM to GSE
+  FAIL for single vector, single timestamp
+  [-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-0.00014126 -0.00022556 -0.00010275]
+  FAIL for two vectors, two timestamps vector 0
+  [-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-0.00014126 -0.00022556 -0.00010275]
 sunpy GSM to GSM
 sunpy GSM to SM
 sunpy GSM to MAG
 sunpy SM to GEI
+  FAIL for single vector, single timestamp
+  [-1.28430004e-04  4.75553997e-05 -6.59251034e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-1.28430004e-04  4.75553997e-05 -6.59251034e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-2.56860005e-04  9.51108005e-05 -1.31850210e-04]
+  FAIL for two vectors, two timestamps vector 0
+  [-1.28430004e-04  4.75553997e-05 -6.59251034e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-2.56860005e-04  9.51108005e-05 -1.31850210e-04]
 sunpy SM to GEO
 sunpy SM to GSE
+  FAIL for single vector, single timestamp
+  [-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-7.02791054e-05 -2.49499698e-04 -1.58802859e-04]
+  FAIL for two vectors, two timestamps vector 0
+  [-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-7.02791054e-05 -2.49499698e-04 -1.58802859e-04]
 sunpy SM to GSM
 sunpy SM to SM
 sunpy SM to MAG
 sunpy MAG to GEI
+  FAIL for single vector, single timestamp
+  [-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]
+  FAIL for two vectors, single timestamp vector 0
+  [-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]
+  FAIL for two vectors, single timestamp vector 1
+  [-1.11963117e-04 -1.42439949e-04 -8.13012323e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]
+  FAIL for two vectors, two timestamps vector 1
+  [-1.11963117e-04 -1.42439949e-04 -8.13012323e-05]
 sunpy MAG to GEO
 sunpy MAG to GSE
+  FAIL for single vector, single timestamp
+  [ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]
+  FAIL for two vectors, single timestamp vector 0
+  [ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]
+  FAIL for two vectors, single timestamp vector 1
+  [ 1.45829516e-04 -1.33591852e-04 -1.79373200e-05]
+  FAIL for two vectors, two timestamps vector 0
+  [ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]
+  FAIL for two vectors, two timestamps vector 1
+  [ 1.45829516e-04 -1.33591852e-04 -1.79373200e-05]
 sunpy MAG to GSM
 sunpy MAG to SM
 sunpy MAG to MAG
-sscweb: Skipping tests because it is not in libs_only
-pyspedas: Skipping tests because it is not in libs_only
+sscweb: Skipping tests because it is in libs_exclude
+pyspedas GSE to GSE
+pyspedas GSE to GSM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSE to GEI
+pyspedas GSE to SM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSE to GEO
+pyspedas GSE to J2000
+pyspedas GSM to GSE
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSM to GSM
+pyspedas GSM to GEI
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSM to SM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSM to GEO
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GSM to J2000
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEI to GSE
+pyspedas GEI to GSM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEI to GEI
+pyspedas GEI to SM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEI to GEO
+pyspedas GEI to J2000
+pyspedas SM to GSE
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas SM to GSM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas SM to GEI
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas SM to SM
+pyspedas SM to GEO
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas SM to J2000
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEO to GSE
+pyspedas GEO to GSM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEO to GEI
+pyspedas GEO to SM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas GEO to GEO
+pyspedas GEO to J2000
+pyspedas J2000 to GSE
+pyspedas J2000 to GSM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas J2000 to GEI
+pyspedas J2000 to SM
+  FAIL on single vector, single timestamp: object of type 'numpy.int64' has no len()
+  FAIL on two vectors, single timestamp: object of type 'numpy.int64' has no len()
+pyspedas J2000 to GEO
+pyspedas J2000 to J2000
+Some tests failed: 
+{
+  "cxform J2000 to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.35543080e+08  4.44089210e-16  2.22044605e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.35543080e+08  4.44089210e-16  2.22044605e-16]"
+    }
+  ],
+  "cxform J2000 to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  2.22044605e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  2.22044605e-16]"
+    }
+  ],
+  "cxform J2000 to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.36727440e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.36727440e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.92740466e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.36727440e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.92740466e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform GEI to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform GEI to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform GEI to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.38577475e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.38577475e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.95329254e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.38577475e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.95329254e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform GEO to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08 -1.11022302e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08 -1.11022302e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.35543080e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08 -1.11022302e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.35543080e+08 -2.22044605e-16  0.00000000e+00]"
+    }
+  ],
+  "cxform GEO to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform GEO to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.94211667e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.94211667e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform GSE to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform GSE to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform GSE to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93112995e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93112995e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform GSM to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08 -4.4408921e-16  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08 -4.4408921e-16  0.0000000e+00]"
+    }
+  ],
+  "cxform GSM to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform GSM to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93472914e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93472914e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform SM to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform SM to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform SM to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37459888e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform MAG to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  1.11022302e-16 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  1.11022302e-16 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.35543080e+08  2.22044605e-16 -5.55111512e-17]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  1.11022302e-16 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.35543080e+08  2.22044605e-16 -5.55111512e-17]"
+    }
+  ],
+  "cxform MAG to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08 -5.55111512e-17]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08 -2.77555756e-17]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08 -5.55111512e-17]"
+    }
+  ],
+  "cxform MAG to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform RTN to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform RTN to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform RTN to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93851748e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37466193e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93851748e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform GSEQ to HEE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform GSEQ to HAE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.17802972e+07 -2.91235620e+08  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.04450743e+08 -7.28089050e+08  0.00000000e+00]"
+    }
+  ],
+  "cxform GSEQ to HEEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.93881129e+08 -2.37093664e-06  1.40592290e+07]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.34702821e+08 -5.93106690e-06  3.51480726e+07]"
+    }
+  ],
+  "cxform HEE to J2000": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    }
+  ],
+  "cxform HEE to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    }
+  ],
+  "cxform HEE to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    }
+  ],
+  "cxform HEE to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform HEE to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08 -4.4408921e-16  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08 -4.4408921e-16  0.0000000e+00]"
+    }
+  ],
+  "cxform HEE to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-6.62469413e+08 -4.44089210e-16  3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-6.62469413e+08 -4.44089210e-16  3.19621495e+08]"
+    }
+  ],
+  "cxform HEE to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    }
+  ],
+  "cxform HEE to RTN": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[7.3554308e+08 4.4408921e-16 0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[7.3554308e+08 4.4408921e-16 0.0000000e+00]"
+    }
+  ],
+  "cxform HEE to GSEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform HAE to J2000": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    }
+  ],
+  "cxform HAE to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    }
+  ],
+  "cxform HAE to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    }
+  ],
+  "cxform HAE to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform HAE to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  4.4408921e-16  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  2.22044605e-16  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  4.4408921e-16  0.0000000e+00]"
+    }
+  ],
+  "cxform HAE to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.64987765e+08  2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.64987765e+08  2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-6.62469413e+08  4.44089210e-16  3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.64987765e+08  2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-6.62469413e+08  4.44089210e-16  3.19621495e+08]"
+    }
+  ],
+  "cxform HAE to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    }
+  ],
+  "cxform HAE to RTN": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 7.35543080e+08  0.00000000e+00 -2.22044605e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 2.94217232e+08  0.00000000e+00 -1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 7.35543080e+08  0.00000000e+00 -2.22044605e-16]"
+    }
+  ],
+  "cxform HAE to GSEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform HEEQ to J2000": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.12469637e+07  2.67308997e+08  1.15794506e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.03117409e+08  6.68272493e+08  2.89486266e+08]"
+    }
+  ],
+  "cxform HEEQ to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.17802972e+07  2.67206935e+08  1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.04450743e+08  6.68017339e+08  2.89597135e+08]"
+    }
+  ],
+  "cxform HEEQ to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.70440720e+08 2.63757255e+06 1.15838854e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[6.76101799e+08 6.59393137e+06 2.89597135e+08]"
+    }
+  ],
+  "cxform HEEQ to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "cxform HEEQ to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.35543080e+08 -4.44089210e-16  2.22044605e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08 -2.22044605e-16  1.11022302e-16]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.35543080e+08 -4.44089210e-16  2.22044605e-16]"
+    }
+  ],
+  "cxform HEEQ to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-6.62469413e+08 -4.44089210e-16  3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.64987765e+08 -2.22044605e-16  1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-6.62469413e+08 -4.44089210e-16  3.19621495e+08]"
+    }
+  ],
+  "cxform HEEQ to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[5.85795516e+07 2.58431716e+08 1.27848598e+08]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[1.46448879e+08 6.46079290e+08 3.19621495e+08]"
+    }
+  ],
+  "cxform HEEQ to RTN": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[7.3554308e+08 4.4408921e-16 0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.94217232e+08 2.22044605e-16 0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[7.3554308e+08 4.4408921e-16 0.0000000e+00]"
+    }
+  ],
+  "cxform HEEQ to GSEQ": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-2.94217232e+08  0.00000000e+00  0.00000000e+00]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.3554308e+08  0.0000000e+00  0.0000000e+00]"
+    }
+  ],
+  "spacepy-irbem ECI2000 to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to ECI2000": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to ECITOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECIMOD to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem ECITOD to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem GEI to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem GSE to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem GSM to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem GEO to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem SM to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "spacepy-irbem MAG to ECIMOD": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[2.e+31 2.e+31 2.e+31]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[5.e+31 5.e+31 5.e+31]"
+    }
+  ],
+  "sunpy GEI to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 0.00011551 -0.00020913  0.00014036]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 5.77555112e-05 -1.04562530e-04  7.01797288e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 0.00011551 -0.00020913  0.00014036]"
+    }
+  ],
+  "sunpy GEI to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-3.34932082e-11 -4.11182199e-12 -3.66728869e-12]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-1.91389127e-11 -9.49018641e-13 -1.98485672e-12]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-3.34932082e-11 -4.11182199e-12 -3.66728869e-12]"
+    }
+  ],
+  "sunpy GEI to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-7.97871763e-05  9.56339010e-05  6.06826127e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-7.97871763e-05  9.56339010e-05  6.06826127e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-0.00015957  0.00019127  0.00012137]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-7.97871763e-05  9.56339010e-05  6.06826127e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-0.00015957  0.00019127  0.00012137]"
+    }
+  ],
+  "sunpy GEI to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-4.54890775e-05  9.56339010e-05  8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-4.54890775e-05  9.56339010e-05  8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-9.09781639e-05  1.91267800e-04  1.78651808e-04]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-4.54890775e-05  9.56339010e-05  8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-9.09781639e-05  1.91267800e-04  1.78651808e-04]"
+    }
+  ],
+  "sunpy GEI to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[1.03327178e-04 2.32076164e-05 8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[1.03327178e-04 2.32076164e-05 8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[2.06654356e-04 4.64152419e-05 1.78651808e-04]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[1.03327178e-04 2.32076164e-05 8.93259022e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[2.06654356e-04 4.64152419e-05 1.78651808e-04]"
+    }
+  ],
+  "sunpy GEO to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-8.97568392e-05  4.36774017e-05  5.42197849e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-8.97568392e-05  4.36774017e-05  5.42197849e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.79513679e-04  8.73548095e-05  1.08439568e-04]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-8.97568392e-05  4.36774017e-05  5.42197849e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.79513679e-04  8.73548095e-05  1.08439568e-04]"
+    }
+  ],
+  "sunpy GEO to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-7.35480044e-05 -8.02898552e-05  3.23731048e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-7.35480044e-05 -8.02898552e-05  3.23731048e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.47096014e-04 -1.60579709e-04  6.47462044e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-7.35480044e-05 -8.02898552e-05  3.23731048e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.47096014e-04 -1.60579709e-04  6.47462044e-05]"
+    }
+  ],
+  "sunpy GSE to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[1.19615429e-12 4.12603285e-12 2.51176857e-12]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[1.19615429e-12 4.12603285e-12 2.51176857e-12]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.19637633e-12 -1.78790316e-12  4.12359036e-12]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[1.19615429e-12 4.12603285e-12 2.51176857e-12]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.19637633e-12 -1.78790316e-12  4.12359036e-12]"
+    }
+  ],
+  "sunpy GSE to GEO": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-7.76635111e-05 -8.23353464e-05  3.53488187e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-7.76635111e-05 -8.23353464e-05  3.53488187e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.55327035e-04 -1.64670689e-04  7.06976354e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-7.76635111e-05 -8.23353464e-05  3.53488187e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.55327035e-04 -1.64670689e-04  7.06976354e-05]"
+    }
+  ],
+  "sunpy GSE to GSM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[5.82036507e-05 6.86123399e-05 7.72330957e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[5.82036507e-05 6.86123399e-05 7.72330957e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[0.00011641 0.00013722 0.00015447]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[5.82036507e-05 6.86123399e-05 7.72330957e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[0.00011641 0.00013722 0.00015447]"
+    }
+  ],
+  "sunpy GSE to SM": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[8.59833355e-05 6.86123399e-05 4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[8.59833355e-05 6.86123399e-05 4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[1.71966683e-04 1.37224676e-04 8.85320711e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[8.59833355e-05 6.86123399e-05 4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[1.71966683e-04 1.37224676e-04 8.85320711e-05]"
+    }
+  ],
+  "sunpy GSE to MAG": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 9.57855976e-05 -1.98061281e-04  8.85320711e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 4.78928022e-05 -9.90306350e-05  4.42660372e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 9.57855976e-05 -1.98061281e-04  8.85320711e-05]"
+    }
+  ],
+  "sunpy GSM to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-1.21525486e-04  7.01825401e-05 -2.55709683e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-1.21525486e-04  7.01825401e-05 -2.55709683e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-2.43050972e-04  1.40365094e-04 -5.11419336e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-1.21525486e-04  7.01825401e-05 -2.55709683e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-2.43050972e-04  1.40365094e-04 -5.11419336e-05]"
+    }
+  ],
+  "sunpy GSM to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-0.00014126 -0.00022556 -0.00010275]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-7.06292290e-05 -1.12782241e-04 -5.13768738e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-0.00014126 -0.00022556 -0.00010275]"
+    }
+  ],
+  "sunpy SM to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-1.28430004e-04  4.75553997e-05 -6.59251034e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-1.28430004e-04  4.75553997e-05 -6.59251034e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-2.56860005e-04  9.51108005e-05 -1.31850210e-04]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-1.28430004e-04  4.75553997e-05 -6.59251034e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-2.56860005e-04  9.51108005e-05 -1.31850210e-04]"
+    }
+  ],
+  "sunpy SM to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-7.02791054e-05 -2.49499698e-04 -1.58802859e-04]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-3.51395551e-05 -1.24749851e-04 -7.94014273e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-7.02791054e-05 -2.49499698e-04 -1.58802859e-04]"
+    }
+  ],
+  "sunpy MAG to GEI": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[-1.11963117e-04 -1.42439949e-04 -8.13012323e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[-5.59815565e-05 -7.12199788e-05 -4.06506188e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[-1.11963117e-04 -1.42439949e-04 -8.13012323e-05]"
+    }
+  ],
+  "sunpy MAG to GSE": [
+    {
+      "msg": "single vector, single timestamp",
+      "diff": "[ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 0",
+      "diff": "[ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]"
+    },
+    {
+      "msg": "two vectors, single timestamp vector 1",
+      "diff": "[ 1.45829516e-04 -1.33591852e-04 -1.79373200e-05]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 0",
+      "diff": "[ 7.29147579e-05 -6.67959260e-05 -8.96866021e-06]"
+    },
+    {
+      "msg": "two vectors, two timestamps vector 1",
+      "diff": "[ 1.45829516e-04 -1.33591852e-04 -1.79373200e-05]"
+    }
+  ]
+}

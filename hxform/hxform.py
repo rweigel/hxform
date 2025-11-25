@@ -131,7 +131,8 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
     if Nt == 1 and Nv > 1 and lib != 'sunpy':
       # In this case, we could compute matrix once for the single time and
       # apply it to all times. This would speed up execution time for some libs.
-      # However, many failures in computing the matrix; see hxform/test/matrix_test.py
+      # However, many failures in computing the matrix for certain libraries;
+      # see hxform/test/matrix_test.py
       t = np.tile(t, (Nv, 1))
 
     if Nv == 1 and Nt > 1:
