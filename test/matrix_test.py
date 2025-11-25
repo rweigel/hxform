@@ -16,7 +16,7 @@ t2 = numpy.array([t1, t1])
 libs_exclude = ['sscweb']
 
 libs_only = []
-libs_only = ['sunpy']
+#libs_only = ['sunpy'] # Uncomment to test only one or more specific libraries
 
 raise_on_fail = False
 
@@ -47,12 +47,6 @@ for lib in libs:
   for f1 in hxform.frames(lib):
     for f2 in hxform.frames(lib):
 
-      kwargs = {
-          'frame_in': f1,
-          'frame_out': f2,
-          'lib': lib
-      }
-
       key = f'{lib} {f1} to {f2}'
       hxform.xprint(key)
 
@@ -60,8 +54,8 @@ for lib in libs:
       # Transform single vector at single timestamp
       msg = "single vector, single timestamp"
       try:
-        vt = hxform.transform(v1, t1, **kwargs)
-        matrix = hxform.matrix(t1, **kwargs)
+        vt = hxform.transform(v1, t1, f1, f2, lib=lib)
+        matrix = hxform.matrix(t1, f1, f2, lib=lib)
         diff = vt - numpy.dot(matrix, v1)
         test_passed = numpy.all(numpy.abs(diff) < 1e-15)
         report(test_passed, diff, raise_on_fail, key, msg)
@@ -73,8 +67,8 @@ for lib in libs:
       # Transform two vectors at with same timestamp
       msg = "two vectors, single timestamp"
       try:
-        vt = hxform.transform(v2, t1, **kwargs)
-        matrix = hxform.matrix(t1, **kwargs)
+        vt = hxform.transform(v2, t1, f1, f2, lib=lib)
+        matrix = hxform.matrix(t1, f1, f2, lib=lib)
         for i in range(v2.shape[0]):
           diff = vt[i, :] - numpy.dot(matrix, v2[i, :])
           report(test_passed, diff, raise_on_fail, key, f"{msg} vector {i}")
@@ -86,8 +80,8 @@ for lib in libs:
       # Transform two vectors at two timestamps
       msg = "two vectors, two timestamps"
       try:
-        vt = hxform.transform(v2, t2, **kwargs)
-        matrices = hxform.matrix(t2, **kwargs)
+        vt = hxform.transform(v2, t2, f1, f2, lib=lib)
+        matrices = hxform.matrix(t2, f1, f2, lib=lib)
         for i in range(matrices.shape[0]):
           diff = vt[i, :] - numpy.dot(matrices[i, :, :], v2[i, :])
           report(test_passed, diff, raise_on_fail, key,  f"{msg} vector {i}")
