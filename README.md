@@ -54,6 +54,8 @@ python demo/basic.py
 
 # Tests
 
+## Single version of Python
+
 See the files in the [test](https://github.com/rweigel/hxform/tree/master/test) directory. The result from executing the files is stored in a `.log` file.
 
 To run, execute
@@ -61,6 +63,13 @@ To run, execute
 ```bash
 pip install pytest
 pytest # Executes files in ./test
+```
+
+## Multiple versions of Python
+
+```
+python -m pip install --upgrade 'nox[pbs]'
+nox -s tests
 ```
 
 # Development
