@@ -9,7 +9,7 @@ Test using current Python version:
 
 import nox
 
-# Can't use earlier version b/c of bugs in some libs
+# Can't use earlier versions b/c of bugs in some libs
 python = [
   "3.11",
   "3.12",
