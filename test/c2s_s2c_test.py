@@ -11,7 +11,74 @@ def test_basic():
     car = hxform.sph2car(sph[0], sph[1], sph[2])
 
     for i in range(3):
-        np.testing.assert_allclose(car0[:,i], car[i], atol=0.0, rtol=1e-10)
+      np.testing.assert_allclose(car0[:,i], car[i], atol=1e-15, rtol=0.0)
+
+def test_components2matrix():
+  out1 = np.array([[1.0, 0.0, 0.0]])
+  out2 = np.array([[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
+
+  # Three inputs
+  # Case 1. in docstring
+  sph = hxform.components2matrix(1.0, 0.0, 0.0)
+  assert(np.all(sph == out1))
+
+  # Case 2. in docstring
+  sph = hxform.components2matrix([1.0], [0.0], [0.0])
+  assert(np.all(sph == out1))
+
+  sph = hxform.components2matrix([1.0, 2.0], [0.0, 0.0], [0.0, 0.0])
+  assert(np.all(sph[0, :] == out2[0, :]))
+  assert(np.all(sph[1, :] == out2[1, :]))
+
+  sph = hxform.components2matrix((1.0, 0.0, 0.0))
+  assert(np.all(sph == out1))
+
+  # Case 3. in docstring
+  sph = hxform.components2matrix((1.0), (0.0), (0.0))
+  assert(np.all(sph == out1))
+
+  sph = hxform.components2matrix((1.0, 2.0), (0.0, 0.0), (0.0, 0.0))
+  assert(np.all(sph[0, :] == out2[0, :]))
+  assert(np.all(sph[1, :] == out2[1, :]))
+
+  # One input
+  # Case 4. in docstring
+  sph = hxform.components2matrix([1.0, 0.0, 0.0])
+  assert(np.all(sph == out1))
+
+  # Case 5. in docstring
+  sph = hxform.components2matrix((1.0, 0.0, 0.0))
+  assert(np.all(sph == out1))
+
+  # Case 6. in docstring
+  sph = hxform.components2matrix([1.0], [0.0], [0.0])
+  assert(np.all(sph == out1))
+
+  sph = hxform.components2matrix((1.0), (0.0), (0.0))
+  assert(np.all(sph == out1))
+
+  # Case 7. in docstring
+  sph = hxform.components2matrix([1.0, 2.0], [0.0, 0.0], [0.0, 0.0])
+  assert(np.all(sph[0, :] == out2[0, :]))
+  assert(np.all(sph[1, :] == out2[1, :]))
+
+  sph = hxform.components2matrix((1.0, 2.0), (0.0, 0.0), (0.0, 0.0))
+  assert(np.all(sph[0, :] == out2[0, :]))
+  assert(np.all(sph[1, :] == out2[1, :]))
+
+  # Case 8. in docstring
+  sph = hxform.components2matrix(np.array([1.0, 0.0, 0.0]))
+  assert(np.all(sph == out1))
+
+  # Case 9. in docstring
+  out1c = out1.copy()
+  out1c.shape = (1, 3)
+  sph = hxform.components2matrix(out1c)
+  assert(np.all(sph == out1))
+
+  # Case 10. in docstring
+  sph = hxform.components2matrix(out2)
+  assert(np.all(sph == out2))
 
 
 def test_simple_values():
@@ -72,6 +139,8 @@ def test_random_values():
 
 if __name__ == '__main__':
   # Could use: https://stackoverflow.com/a/28643737 to call all functions.
+  test_components2matrix()
+  exit()
   test_basic()
   test_simple_values()
   test_r_equal_zero()

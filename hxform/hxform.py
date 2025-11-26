@@ -522,59 +522,155 @@ def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
   return m
 
 
+def components2matrix(*args):
+  """Convert input to a 2D numpy array with three columns.
+
+  For three inputs, components2matrix(x, y, z), each input contains a value(s)
+  for one component (x, y, z).  The output matrix has columns of x, y, and z.
+  List and tuple inputs must have same length.
+    1. components2matrix(number, number, number)
+    2. components2matrix(list, list, list)
+    3. components2matrix(tuple, tuple, tuple)
+
+  For one input, components2matrix(v), the input contains all three components.    :
+    Output matrix has columns of x, y, and z and 1 row.
+      4. components2matrix([number, number, number])
+      5. components2matrix((number, number, number))
+    Output matrix has columns of x, y, and z and N rows
+      6. components2matrix([[number, number, number], ...]) (N lists of 3 numbers)
+      7. components2matrix(((number, number, number), ...)) (N tuples of 3 numbers)
+    Output matrix has columns of x, y, and z and 1 row
+      8. components2matrix(size = (3,) ndarray)
+      9. components2matrix(size = (1, 3) ndarray)
+    Output is same as input
+      10. components2matrix((N, 3) ndarray)
+
+  """
+  import numpy
+
+  if len(args) != 1 and len(args) != 3:
+    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
+
+  number_types = (int, float, numpy.integer, numpy.floating)
+
+  if len(args) == 3:
+    # _components(x, y, z)
+
+    for arg in args:
+      # x, y, and z must have same type
+      if not isinstance(arg, type(args[0])):
+        ve = 'All inputs must be of the same type when passing three arguments.'
+        raise ValueError(ve)
+      if not (isinstance(arg, number_types) or
+              isinstance(arg, (list, tuple)) or
+              isinstance(arg, numpy.ndarray)):
+        ve = 'All inputs must be number, list, tuple, or numpy.ndarray when passing three arguments.'
+        raise ValueError(ve)
+
+    if isinstance(args[0], number_types):
+      # _components(number, number, number)
+      # Return 2D array with one row
+      return numpy.column_stack([args[0], args[1], args[2]])
+
+    if isinstance(args[0], (list, tuple)):
+      # _components(list, list, list) or _components(tuple, tuple, tuple)
+      for arg in args:
+        if not isinstance(arg, number_types):
+          if len(arg) != len(args[0]):
+            ve = 'All arguments must have same length when passing three arguments.'
+            raise ValueError(ve)
+      # Return 2D array with columns of component
+      return numpy.column_stack([args[0], args[1], args[2]])
+
+    if isinstance(args[0], numpy.ndarray):
+      # _components(ndarray, ndarray, ndarray)
+      for arg in args:
+        if len(arg.shape) != 1:
+          ve = 'All numpy.ndarrays must be 1D when passing three arguments.'
+          raise ValueError(ve)
+        if arg.shape[0] != args[0].shape[0]:
+          ve = 'All numpy.ndarrays must have same length when passing three arguments.'
+          raise ValueError(ve)
+      # Return 2D array with columns of component
+      return numpy.column_stack([args[0], args[1], args[2]])
+
+  if len(args) == 1:
+
+    if isinstance(args, (list, tuple)):
+      # _components(list) or _components(tuple)
+      if isinstance(args[0], (list, tuple)):
+        # _components([list of 3 values, ...]) or _components((tuple of 3 values, ...))
+        for arg in args[0]:
+          if not isinstance(arg, type(args[0])):
+            ve = 'All elements of input list/tuple must be of same type when passing one argument.'
+          if isinstance(arg, (list, tuple)):
+            if len(arg) != 3:
+              ve = 'All elements of input list/tuple must have three elements when passing one argument.'
+              raise ValueError(ve)
+
+        if isinstance(args[0][0], number_types):
+          # _components([number, number, number]) or _components((number, number, number))
+          return numpy.array([[args[0][0], args[0][1], args[0][2]]])
+        else:
+          # _components([[number, number, number], ...]) or _components(((number, number, number), ...))
+          return numpy.array(args[0])
+
+      if isinstance(args[0], numpy.ndarray):
+        # _components(ndarray)
+
+        if len(args[0].shape) != 1 and len(args[0].shape) != 2:
+          ve = 'Input numpy.ndarray must be 1D or 2D when passing one argument.'
+          raise ValueError(ve)
+
+        if len(args[0].shape) == 1:
+          # _components(1D ndarray)
+          if args[0].shape[0] != 3:
+            ve = 'Input 1-D numpy.ndarray must have three elements when passing one argument.'
+            raise ValueError(ve)
+          return numpy.array([args[0]])
+
+        if len(args[0].shape) == 2:
+          # _components((n, 3) ndarray)
+          if args[0].shape[1] != 3:
+            ve = 'Input numpy.ndarray must have three columns when passing one argument.'
+            raise ValueError(ve)
+          return args[0]
+
+
 def car2sph(*args):
   """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
   import numpy as np
 
-  if len(args) == 3:
-    x = args[0]
-    y = args[1]
-    z = args[2]
-  elif len(args) == 1:
-    xyz = args[0]
-    if len(xyz.shape) != 2:
-      # 1-D array of xyz values. Convert to 2-D array with one row so columns
-      # are x, y, z.
-      xyz.shape = (1, xyz.shape[0])
-    x = xyz[:, 0]
-    y = xyz[:, 1]
-    z = xyz[:, 2]
-  else:
-    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
+  try:
+    matrix = components2matrix(*args)
+    x = matrix[:, 0]
+    y = matrix[:, 1]
+    z = matrix[:, 2]
+  except ValueError as e:
+    raise e
 
   r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
   assert np.all(r > 0), 'radius must be greater than zero.'
   lat = 90.0 - (180.0/np.pi)*np.arccos(z/r)
   lon = (180.0/np.pi)*np.arctan2(y, x)
 
-  if len(args) == 1:
-    return np.column_stack([r, lat, lon])
-
-  return r, lat, lon
+  return np.column_stack([r, lat, lon])
 
 
 def sph2car(*args):
   """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
   import numpy as np
 
-  if len(args) == 3:
-    r = args[0]
-    lat = args[1]
-    lon = args[2]
-  elif len(args) == 1:
-    rtp = args[0] # r, theta, phi
-    if len(rtp.shape) != 2:
-      # 1-D array of rtp values. Convert to 2-D array with one row so columns
-      # are r, theta, phi.
-      rtp.shape = (1, rtp.shape[0])
-    r = rtp[:, 0]
-    lat = rtp[:, 1]
-    lon = rtp[:, 2]
-  else:
-    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
+  try:
+    matrix = components2matrix(*args)
+    r = matrix[:, 0]
+    lat = matrix[:, 1]
+    lon = matrix[:, 2]
+  except ValueError as e:
+    raise e
 
   if not np.all(r > 0):
-    raise ValueError('radius must be greater than zero.')
+    raise ValueError('All radius values must be greater than zero.')
 
   x = r*np.cos((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
   y = r*np.sin((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)

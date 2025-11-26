@@ -65,8 +65,16 @@ pip install pytest
 pytest # Executes files in ./test
 ```
 
+`pytest` stops execution on error, to run full test so full log files are
+generated, use
+
+```
+python test/all.py
+```
+
 ## Multiple versions of Python
 
+To have a version installed and tested, use
 ```
 python -m pip install --upgrade 'nox[pbs]'
 nox -s tests
