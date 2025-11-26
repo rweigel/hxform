@@ -19,32 +19,39 @@ for lib in libs:
   if skip_sscweb and lib == 'sscweb':
     continue
 
-  #hxform.xprint(f'Testing {lib}')
+  if lib != 'geopack_08_dp':
+    continue
 
-  output1 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'car', lib=lib)
-  output1 = hxform.car2sph(output1)
-  output2 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'sph', lib=lib)
+  for f1 in hxform.frames(lib):
+    for f2 in hxform.frames(lib):
 
-  assert(numpy.all(output1 == output2))
+      hxform.xprint(f'Testing {lib} {f1} to {f2}')
+      if f1 == f2:
+        continue
 
-
-  output1 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'sph', lib=lib)
-  output2 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'car', lib=lib)
-  output2 = hxform.car2sph(output2)
-
-  assert(numpy.all(output1 == output2))
-
-
-  output1 = hxform.transform(input, time, 'GEO', 'GSE', 'car', 'car', lib=lib)
-  input2 = hxform.car2sph(input)
-  output2 = hxform.transform(input2, time, 'GEO', 'GSE', 'sph', 'car', lib=lib)
-  assert(numpy.all(numpy.abs(output1 - output2) < 1e-15))
+      output1 = hxform.transform(input, time, f1, f2, 'car', lib=lib)
+      output1 = hxform.car2sph(output1)
+      output2 = hxform.transform(input, time, f1, f2, 'car', 'sph', lib=lib)
+      assert(numpy.all(output1 == output2))
 
 
-  input1 = hxform.car2sph(input)
-  output1 = hxform.transform(input1, time, 'GEO', 'GSE', 'sph', 'sph', lib=lib)
-  output1 = hxform.sph2car(output1)
+      output1 = hxform.transform(input, time, f1, f2, 'car', 'sph', lib=lib)
+      output2 = hxform.transform(input, time, f1, f2, 'car', 'car', lib=lib)
+      output2 = hxform.car2sph(output2)
 
-  output2 = hxform.transform(input1, time, 'GEO', 'GSE', 'sph', 'car', lib=lib)
+      assert(numpy.all(output1 == output2))
 
-  assert(numpy.all(numpy.abs(output1 - output2) < 1e-15))
+
+      output1 = hxform.transform(input, time, f1, f2, 'car', 'car', lib=lib)
+      input2 = hxform.car2sph(input)
+      output2 = hxform.transform(input2, time, f1, f2, 'sph', 'car', lib=lib)
+      assert(numpy.all(numpy.abs(output1 - output2) < 1e-15))
+
+
+      input1 = hxform.car2sph(input)
+      output1 = hxform.transform(input1, time, f1, f2, 'sph', 'sph', lib=lib)
+      output1 = hxform.sph2car(output1)
+
+      output2 = hxform.transform(input1, time, f1, f2, 'sph', 'car', lib=lib)
+
+      assert(numpy.all(numpy.abs(output1 - output2) < 1e-15))

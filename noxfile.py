@@ -49,4 +49,8 @@ def copy_logs(pyver):
   dest_dir.mkdir(parents=True, exist_ok=True)
   for src in pathlib.Path("test").glob("*.log"):
     dest = dest_dir / f"{src.stem}.{pyver}.log"
+    print(dest)
     shutil.copy2(src, dest)
+
+if __name__ == "__main__":
+  copy_logs("10")
