@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 import hxform
+import utilrsw.time
 
 def scene3d(xlims=(-1, 1), ylims=(-1, 1), zlims=(-1, 1), xlabel='X', ylabel='Y', zlabel='Z', figsize=(8, 8)):
 
@@ -104,8 +105,8 @@ labels = {
   'zlabel': '$Z_{GSE}$'
 }
 
-t = hxform.time_array(to, tf, delta)
-t_dts = hxform.ints2datetime(t)
+t = utilrsw.time.ints_list(to, tf, delta)
+t_dts = utilrsw.time.ints2datetime(t)
 
 gsm_z = numpy.array([0., 0., 1.])
 kwargs['frame_in'] = 'GSM'

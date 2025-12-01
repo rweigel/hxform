@@ -14,15 +14,9 @@ install_requires = [
   'spacepy>=0.6.0',
   'spiceypy>=6.0.0',
   'pyspedas>=1.7.28',
-  'python-dateutil>=2.9.0'
+  'python-dateutil>=2.9.0',
+  'utilrsw @ git+https://github.com/rweigel/utilrsw'
 ]
-
-try:
-  # Will work if utilrsw is already installed locally for development
-  # via pip install -e .
-  import utilrsw
-except ImportError:
-  install_requires.append("utilrsw[xprint] @ git+https://github.com/rweigel/utilrsw")
 
 cxform_sources = [
     'src/cxform/cxform_wrapper.c',
