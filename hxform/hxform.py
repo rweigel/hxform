@@ -104,7 +104,7 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
     # This will occur for input of the form [[2000, 1, 1], [2000, 1, 1, 1]]
     # where not all time values have the same number of elements.
     for i in range(len(t)):
-      t[i] = hxform.timelib.tpad(t[i], length=6)
+      t[i] = hxform.timelib.ints_pad(t[i], length=6)
     t = np.array(t, dtype=np.int32)
 
   if len(t.shape) == 1:
@@ -274,7 +274,7 @@ def _pyspedas(v, t, frame_in, frame_out):
 
   time_in = []
   for i in range(t.shape[0]):
-    tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6))
+    tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6))
     time_in.append(time_double(tstr))
 
   execution_start = time.time()
@@ -309,7 +309,7 @@ def _spiceypy(v, t, frame_in, frame_out, lib):
 
   execution_start = time.time()
   for i in range(t.shape[0]):
-    time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6))
+    time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6))
     et = spiceypy.str2et(time_str)
     matrix = spiceypy.pxform(frame_in, frame_out, et)
     vt[i,:] = spiceypy.mxv(matrix, v[i,:])
@@ -324,18 +324,21 @@ def _spacepy(v, t, frame_in, frame_out, lib):
   import time
   import numpy as np
 
-  import hxform
   import spacepy.coordinates as sc
-
   from spacepy.time import Ticktock
+
+  import hxform
+
+  import warnings
+  warnings.filterwarnings("ignore", message="Leapseconds.*")
 
   if len(t.shape) == 1:
     # SpacePy requires time values to be strings with 1-second precision
-    t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t, length=6))
+    t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t, length=6))
   else:
     t_str = []
     for i in range(t.shape[0]):
-      t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i,:], length=6)))
+      t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6)))
     t_str = np.array(t_str)
 
   execution_start = time.time()
@@ -376,7 +379,7 @@ def _sunpy(v, t, frame_in, frame_out):
 
   execution_start = time.time()
   if t.shape[0] == 1:
-    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[0, :], length=6))
+    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[0, :], length=6))
     kwargs = {
       "x": v[:, 0]*one,
       "y": v[:, 1]*one,
@@ -390,7 +393,7 @@ def _sunpy(v, t, frame_in, frame_out):
     vt = coord.xyz.decompose().value.transpose()
   else:
     for i in range(t.shape[0]):
-      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.tpad(t[i, :], length=6))
+      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i, :], length=6))
       kwargs = {
         "x": v[i, 0]*one,
         "y": v[i, 1]*one,
@@ -522,188 +525,10 @@ def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
   return m
 
 
-def components2matrix(*args):
-  """Convert input to a 2D numpy array with three columns.
-
-  For three arguments, components2matrix(x, y, z), each argument contains a value
-  (or values) for one component (x, y, z). The output matrix has columns
-  of x, y, and z. List and tuple inputs must have same length. Returned matrix
-  is numpy.column_stack([x, y, z]).
-    1. components2matrix(number, number, number)
-    2. components2matrix(list, list, list)
-    3. components2matrix(tuple, tuple, tuple)
-    4. components2matrix(ndarray, ndarray, ndarray)
-
-  For one argument, components2matrix(v), the argument contains all three components.
-    Output matrix has columns of x, y, and z and 1 row. Numbers must be of same type.
-      5. components2matrix([number, number, number])
-      6. components2matrix((number, number, number))
-    Output matrix has columns of x, y, and z and N rows. Numbers are coerced to same type.
-      7. components2matrix([[number, number, number], ...]) (N lists of 3 numbers)
-      8. components2matrix(((number, number, number), ...)) (N tuples of 3 numbers)
-    Output matrix has columns of x, y, and z and 1 row
-      9. components2matrix(size = (3,) ndarray)
-      10. components2matrix(size = (1, 3) ndarray)
-    Output is same as input
-      11. components2matrix((N, 3) ndarray)
-
-  """
-  import numpy
-  if len(args) != 1 and len(args) != 3:
-    raise ValueError(f'Number of arguments must be 1 or 3, got {len(args)}.')
-
-
-  number_types = (int, float, numpy.integer, numpy.floating)
-
-  if len(args) == 3:
-    # _components(x, y, z)
-    coda = 'when passing three arguments.'
-    for arg in args:
-      if not (isinstance(arg, number_types) or
-              isinstance(arg, (list, tuple)) or
-              isinstance(arg, numpy.ndarray)):
-        ve = f'All inputs must be number, list, tuple, or numpy.ndarray {coda}'
-        raise ValueError(ve)
-
-      if isinstance(args[0], number_types):
-        if not isinstance(arg, number_types):
-          ve = f'If the first input is a number, all inputs must numbers {coda}'
-          raise ValueError(ve)
-      else:
-        if not isinstance(arg, type(args[0])):
-          ve = f'If the first input is not numeric, all inputs have same type {coda}'
-          raise ValueError(ve)
-
-    if isinstance(args[0], number_types):
-      # _components(number, number, number)
-      # Return 2D array with one row
-      return numpy.column_stack([args[0], args[1], args[2]])
-
-    if isinstance(args[0], (list, tuple)):
-      # _components(list, list, list)
-      # or
-      # _components(tuple, tuple, tuple)
-      for arg in args:
-        if not isinstance(arg, number_types):
-          if len(arg) != len(args[0]):
-            ve = f'All arguments must have same length {coda}'
-            raise ValueError(ve)
-      # Return 2D array with columns of component
-      return numpy.column_stack([args[0], args[1], args[2]])
-
-    if isinstance(args[0], numpy.ndarray):
-      # _components(ndarray, ndarray, ndarray)
-      if args[0].ndim == 0:
-        return numpy.array([[args[0], args[1], args[2]]])
-
-      for arg in args:
-        if len(arg.shape) != 1:
-          ve = f'All numpy.ndarrays must be 1D {coda}'
-          raise ValueError(ve)
-        if arg.shape[0] != args[0].shape[0]:
-          ve = f'All numpy.ndarrays must have same shape[0] {coda}'
-          raise ValueError(ve)
-
-      # Return 2D array with columns of component
-      return numpy.column_stack([args[0], args[1], args[2]])
-
-
-  if len(args) == 1:
-    coda = 'when passing one argument.'
-    if isinstance(args, (list, tuple)):
-      # _components(list) or _components(tuple)
-      if isinstance(args[0], (list, tuple)):
-        # _components([list of 3 values, ...])
-        # or
-        # _components((tuple of 3 values, ...))
-        for arg in args[0]:
-          if isinstance(args[0][0], number_types):
-            if not isinstance(arg, number_types):
-              ve = f'If the first input is a number, all inputs must numbers {coda}'
-              raise ValueError(ve)
-          else:
-            if not isinstance(arg, type(args[0][0])):
-              ve = f'If the first input is not numeric, all inputs must have same type {coda}'
-              raise ValueError(ve)
-
-          if isinstance(arg, (list, tuple)):
-            if len(arg) != 3:
-              ve = f'All list/tuples must have three elements {coda}'
-              raise ValueError(ve)
-
-        if isinstance(args[0][0], number_types):
-          if len(args[0]) != 3:
-            ve = f'Input list/tuple must have three elements {coda}'
-            raise ValueError(ve)
-          # _components([number, number, number])
-          # or
-          # _components((number, number, number))
-          return numpy.array(args[0]).reshape((1, 3))
-        else:
-          # _components([[number, number, number], ...])
-          # or
-          # _components(((number, number, number), ...))
-          # Does not test that each number is of same type
-          return numpy.array(args[0])
-
-      if isinstance(args[0], numpy.ndarray):
-        # _components(ndarray)
-
-        if len(args[0].shape) != 1 and len(args[0].shape) != 2:
-          ve = f'Input numpy.ndarray must be 1D or 2D {coda}'
-          raise ValueError(ve)
-
-        if len(args[0].shape) == 1:
-          # _components(1D ndarray)
-          if args[0].shape[0] != 3:
-            ve = f'Input 1-D numpy.ndarray must have three elements {coda}'
-            raise ValueError(ve)
-          return numpy.array([args[0]])
-
-        if len(args[0].shape) == 2:
-          # _components((n, 3) ndarray)
-          if args[0].shape[1] != 3:
-            ve = f'Input numpy.ndarray must have three columns {coda}'
-            raise ValueError(ve)
-          return args[0]
-
-
-def matrix2components(*args):
-  """Given args passed to components2matrix, return values matching input type.
-  """
-  import numpy as np
-  out = []
-  if len(args) != 4 and len(args) != 1:
-    raise ValueError(f'Number of arguments must be 1 or 4, got {len(args)}.')
-
-  if len(args) == 4:
-    # Input was components2matrix(x, y, z, mat)
-    mat = args[3]
-    for i in range(3):
-      comp = mat[:, i]
-      if isinstance(args[i], np.ndarray):
-        out.append(np.array(comp).reshape(args[i].shape))
-      elif isinstance(args[i], (list, tuple)):
-        out.append(type(args[i])(comp.tolist()))
-      else:
-        out.append(comp[0])
-    return tuple(out)
-
-  if len(args) == 1:
-    # Input was components2matrix(v, mat)
-    mat = args[0]
-    if isinstance(args[0], np.ndarray):
-      return np.array(mat).reshape(args[0].shape)
-    elif isinstance(args[0], list):
-      return [list(row) for row in mat.tolist()]
-    elif isinstance(args[0], tuple):
-      return tuple(tuple(row) for row in mat.tolist())
-
-
 def car2sph(*args):
   """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
   import numpy as np
-
+  from utilrsw.np import components2matrix, matrix2components
   try:
     matrix = components2matrix(*args)
     x = matrix[:, 0]
@@ -723,6 +548,7 @@ def car2sph(*args):
 def sph2car(*args):
   """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
   import numpy as np
+  from utilrsw.np import components2matrix, matrix2components
 
   try:
     matrix = components2matrix(*args)

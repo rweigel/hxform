@@ -1,7 +1,7 @@
 '''
 API Test 1
-Test that output type matches input type.
-Test that output shape is correct.
+Test that output outer and inner type matches that in input.
+Test that output lengths/shapes match input lengths/shapes.
 '''
 
 import numpy as np
@@ -10,7 +10,7 @@ import hxform
 skip_sscweb = True
 
 def trans(v, t, lib):
-  # lib should not matter.
+  # lib, frame_in, and frame_out should not matter.
   return hxform.transform(v, t, 'GEO', 'GSE', lib=lib)
 
 def all_float(x):
@@ -36,82 +36,125 @@ for lib in libs:
   if skip_sscweb and lib == 'sscweb':
     continue
 
+
+  # Single vector, single timestamp
   vt = trans(v, t, lib)
-  assert(isinstance(vt, list))  # Outer type of v is preserved
+  assert(isinstance(vt, list))  # Outer type of input is preserved
   assert(len(vt) == 3)
-  assert(all_float(vt)) # Input is ints, but output is float
+  assert(all_float(vt))         # Input is ints, but output is float
 
   vt = trans(np.array(v), np.array(t), lib)
-  assert(isinstance(vt, np.ndarray))    # Outer type of v is preserved
+  assert(isinstance(vt, np.ndarray))    # Outer type of input is preserved
   assert(vt.dtype == np.double)         # Input is ints, but output is np.double
   assert(vt.shape == (3, ))
 
   vt = trans(np.array(v), t, lib)
-  assert(isinstance(vt, np.ndarray)) # Outer type of v is preserved
-  assert(vt.dtype == np.double)
+  assert(isinstance(vt, np.ndarray)) # Outer type of input is preserved
+  assert(vt.dtype == np.double)      # Input is ints, but output is np.double
   assert(vt.shape == (3, ))
 
   vt = trans(v, np.array(t), lib)
-  assert(isinstance(vt, list)) # Outer type of v is preserved
+  assert(isinstance(vt, list))       # Outer type of input is preserved
   assert(len(vt) == 3)
 
   vt = trans([v],[t], lib)
-  assert(isinstance(vt, list))
-  assert(isinstance(vt[0], list))
+  assert(isinstance(vt, list))      # Outer type of input is preserved
+  assert(isinstance(vt[0], list))   # Inner type of input is preserved
   assert(len(vt) == 1)
   assert(len(vt[0]) == 3)
   assert(all_float(vt))
 
-  vp = trans([np.array(v)], t, lib)
-  assert(isinstance(vp, list)) # Outer type of v is preserved
-  assert(len(vp) == 1)
-  assert(isinstance(vp[0], np.ndarray))
-  assert(vp[0].shape == (3, ))
+  vt = trans([np.array(v)], t, lib)
+  assert(isinstance(vt, list))           # Outer type of input is preserved
+  assert(len(vt) == 1)
+  assert(isinstance(vt[0], np.ndarray))  # Inner type of input is preserved
+  assert(vt[0].shape == (3, ))
 
-  vp = trans([v], np.array(t), lib)
-  assert(isinstance(vp, list)) # Outer type of v is preserved
-  assert(len(vp) == 1)
-  assert(isinstance(vp[0], list))
-  assert(len(vp[0]) == 3)
+  vt = trans([v], np.array(t), lib)
+  assert(isinstance(vt, list))           # Outer type of input is preserved
+  assert(len(vt) == 1)
+  assert(isinstance(vt[0], list))        # Inner type of input is preserved
+  assert(len(vt[0]) == 3)
 
   vt = trans(np.array([v]), np.array([t]), lib)
-  assert(isinstance(vt, np.ndarray))
+  assert(isinstance(vt, np.ndarray))      # Outer type of input is preserved
   assert(vt.shape == (1, 3))
-  assert(isinstance(vt[0, 0], np.double))
+  assert(isinstance(vt[0, 0], np.double)) # Input is ints, but output is np.double
 
-  vt = trans([v, v],[t, t], lib)
-  assert(isinstance(vt, list))
-  assert(isinstance(vt[0], list))
-  assert(isinstance(vt[1], list))
-  assert(len(vt) == 2)
-  assert(len(vt[0]) == 3)
-  assert(len(vt[1]) == 3)
-  assert(all_float(vt))
 
-  vt = trans(np.array([v, v]), np.array([t,t]), lib)
-  assert(isinstance(vt, np.ndarray))
-  assert(isinstance(vt[0], np.ndarray))
-  assert(isinstance(vt[1], np.ndarray))
-  assert(vt.shape == (2, 3))
-  assert(vt[0].dtype == np.double)
-  assert(vt[1].dtype == np.double)
+  # Single vector, multiple timestamps
+  vt = trans(v, [t, t], lib)
+  assert(isinstance(vt, list))    # Outer type of input is preserved
+  assert(len(vt) == 2)            # Number of output items matches number of timestamps
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
+
+  vt = trans(np.array(v), [t, t], lib)
+  assert(isinstance(vt, np.ndarray)) # Outer type of input is preserved
+  assert(vt.shape == (2, 3))         # Number of rows matches number of timestamps
+
+  vt = trans(v, np.array([t, t]), lib)
+  assert(isinstance(vt, list))    # Outer type of input is preserved
+  assert(len(vt) == 2)            # Number of output items matches number of timestamps
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
 
   vt = trans(np.array(v), np.array([t,t]), lib)
-  assert(vt.shape == (2, 3))
+  assert(isinstance(vt, np.ndarray))
+  assert(vt.shape == (2, 3))      # Number of rows matches number of timestamps
 
-  vt = trans(np.array([v, v]), t, lib)
-  assert(vt.shape == (2, 3))
 
-  vt = trans(v, [t, t], lib)
-  assert(isinstance(vt, list))
-  assert(len(vt) == 2)
-  assert(isinstance(vt[0], list))
-  assert(isinstance(vt[1], list))
-
+  # Multiple vectors, single timestamp
   vt = trans([v, v], t, lib)
-  assert(isinstance(vt, list))
+  assert(isinstance(vt, list))    # Outer type of input is preserved
   assert(len(vt) == 2)
-  assert(isinstance(vt[0], list))
-  assert(isinstance(vt[1], list))
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
   assert(len(vt[0]) == 3)
   assert(len(vt[1]) == 3)
+
+  vt = trans([v, v], np.array(t), lib)
+  assert(isinstance(vt, list))    # Outer type of input is preserved
+  assert(len(vt) == 2)
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
+  assert(len(vt[0]) == 3)
+  assert(len(vt[1]) == 3)
+
+  vt = trans(np.array([v, v]), t, lib)
+  assert(isinstance(vt, np.ndarray))
+  assert(vt.shape == (2, 3))  # Number of rows matches number of input rows
+
+  vt = trans(np.array([v, v]), np.array(t), lib)
+  assert(isinstance(vt, np.ndarray))
+  assert(vt.shape == (2, 3))  # Number of rows matches number of input rows
+
+
+  # Multiple vectors, multiple timestamps
+  vt = trans([v, v], [t, t], lib)
+  assert(isinstance(vt, list))    # Outer type of input is preserved
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
+  assert(len(vt) == 2)
+  assert(len(vt[0]) == 3)
+  assert(len(vt[1]) == 3)
+  assert(all_float(vt))           # Input is ints, but output is float
+
+  vt = trans([v, v], np.array([t, t]), lib)
+  assert(isinstance(vt, list))    # Outer type of input is preserved
+  assert(isinstance(vt[0], list)) # Inner type of input is preserved
+  assert(isinstance(vt[1], list)) # Inner type of input is preserved
+  assert(len(vt) == 2)
+  assert(len(vt[0]) == 3)
+  assert(len(vt[1]) == 3)
+  assert(all_float(vt))           # Input is ints, but output is float
+
+  vt = trans(np.array([v, v]), [t, t], lib)
+  assert(isinstance(vt, np.ndarray))
+  assert(vt.shape == (2, 3))  # Number of rows matches number of input rows
+
+  vt = trans(np.array([v, v]), np.array([t, t]), lib)
+  assert(isinstance(vt, np.ndarray))    # Outer type of input is preserved
+  assert(vt.shape == (2, 3))            # Number of rows matches number of timestamps
+  assert(vt[0].dtype == np.double)
+  assert(vt[1].dtype == np.double)
