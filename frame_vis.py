@@ -46,6 +46,7 @@ def scene3d(xlims=(-1, 1), ylims=(-1, 1), zlims=(-1, 1), xlabel='X', ylabel='Y',
 
   return fig, ax
 
+
 def _plane(ax, vertices, color='k', alpha=0.1):
   """
   Create a plane in 3D space defined by the x, y, and z coordinates.
@@ -56,6 +57,7 @@ def _plane(ax, vertices, color='k', alpha=0.1):
   poly = Poly3DCollection([vertices], alpha=0.6, facecolor='cyan', edgecolor=None)
   ax.add_collection3d(poly)
 
+
 def _savefig(file_name):
   import matplotlib.pyplot as plt
   import os
@@ -63,6 +65,7 @@ def _savefig(file_name):
     os.makedirs(os.path.dirname(file_name))
   print(f'Writing {file_name}...')
   plt.savefig(file_name, dpi=300, bbox_inches='tight', pad_inches=0.1)
+
 
 def _angle_wedge(ax, gsm_z_gse, mag_z_gse):
   from mpl_toolkits.mplot3d import Axes3D
@@ -78,6 +81,7 @@ def _angle_wedge(ax, gsm_z_gse, mag_z_gse):
   # TODO: Make wedge have arc
   poly = Poly3DCollection([vertices], facecolor='black', edgecolor=None)
   ax.add_collection3d(poly)
+
 
 def _title(gsm_z_gse, t, t_dt, dipole_tilt):
   time_string = t_dt.strftime("%Y-%m-%dT%H:%M:%S")
@@ -150,8 +154,6 @@ for t, t_dt in enumerate(t_dts):
 
   ax.set_title(_title(gsm_z_gse, t, t_dt, dipole_tilt))
 
-  file_name = f'figures/frame_vis/frame_vis_{t_dt.strftime("%Y%m%dT%H%M%S")}.png'
+  file_name = f'frame_vis/frame_vis_{t_dt.strftime("%Y%m%dT%H%M%S")}.png'
   _savefig(file_name)
   plt.close()
-
-  #if t > 3: break
