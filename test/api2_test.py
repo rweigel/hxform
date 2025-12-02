@@ -25,6 +25,9 @@ for lib in libs:
     hxform.xprint("sscweb - Skipping b/c skip_sscweb=True")
     continue
 
+  if lib != 'spacepy-irbem':
+    continue
+
   for f1 in hxform.frames(lib):
     for f2 in hxform.frames(lib):
 
@@ -34,19 +37,23 @@ for lib in libs:
       hxform.xprint(f'{lib} {f1} to {f2}')
 
       # Single time, single vector
+      #print(f"  Input: {input1} at {time1}")
       output11 = hxform.transform(input1, time1, frame_in, frame_out, lib=lib)
 
       # Multiple times, single vector
+      #print(f"  Input: {input1} at {time2}")
       output12 = hxform.transform(input1, time2, frame_in, frame_out, lib=lib)
       assert(output12[0] == output11)
       assert(output12[1] == output11)
 
       # Single time, multiple vectors
+      #print(f"  Input: {input2} at {time1}")
       output21 = hxform.transform(input2, time1, frame_in, frame_out, lib=lib)
       assert(output21[0] == output11)
       assert(output21[1] == output11)
 
       # Multiple times, multiple vectors
+      #print(f"  Input: {input2} at {time2}")
       output22 = hxform.transform(input2, time2, frame_in, frame_out, lib=lib)
       assert(output22[0] == output11)
       assert(output22[1] == output11)

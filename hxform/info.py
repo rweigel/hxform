@@ -28,9 +28,8 @@ def lib_info(lib=None):
   import spiceypy
 
   # https://spacepy.github.io/coordinates.html
-  frames_spacepy = [
+  frames_spacepy_irbem = [
     "ECI2000",
-    "ECIMOD",
     "ECITOD",
     "GEI",
     "GSE",
@@ -39,6 +38,7 @@ def lib_info(lib=None):
     "SM",
     "MAG"
   ]
+  frames_spacepy = frames_spacepy_irbem + ["ECIMOD"]
 
   kernel_dir = os.path.join(os.path.dirname(__file__), '..', 'kernels')
   kernel_dir = os.path.abspath(kernel_dir)
@@ -87,7 +87,7 @@ def lib_info(lib=None):
       'name': 'spacepy-irbem',
       'version': spacepy.__version__,
       'version_info': None,
-      'frames': frames_spacepy
+      'frames': frames_spacepy_irbem
     },
     'spiceypy1': {
       'name': 'spiceypy1',
