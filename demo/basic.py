@@ -8,7 +8,6 @@ time2 = '2010-12-31T01:00:00Z'
 input1 = [1., 1., 1.]
 input2 = [1., 0., 1.]
 
-
 time1 = hxform.timelib.iso2ints(time1)
 time2 = hxform.timelib.iso2ints(time2)
 
@@ -17,7 +16,7 @@ hxform.xprint("")
 hxform.xprint(f"Transform: {initial} => {final}")
 hxform.xprint(f"Time:      {time1}")
 hxform.xprint(f"Input:     {input1}")
-hxform.xprint(f"Library:   {input1}")
+hxform.xprint(f"Library:   {lib}")
 
 output = hxform.transform(input1, time1, initial, final, lib=lib)
 hxform.xprint(f"Output: {output}\n")

@@ -24,7 +24,7 @@ Over time, we have needed to use various coordinate transform libraries in Pytho
 3. some libraries had errors for certain transforms, and
 4. some libraries did not interface with ParaView's Python.
 
-To facilitate comparison, we have developed a single interface. To transform a vector `v` at time `t` from frame  `frame_in` to `frame_out`, using library `LIB`, use
+To facilitate comparison, we have developed a single interface to the libraries that we have used. To transform a vector `v` at time `t` from frame  `frame_in` to `frame_out`, using library `LIB`, use
 
 ```python
 vt = hxform.transform(v, t, frame_in, frame_out, lib=LIB)
@@ -63,13 +63,6 @@ To run, execute
 ```bash
 pip install pytest
 pytest # Executes files in ./test
-```
-
-`pytest` stops execution on error, to run full test so full log files are
-generated, use
-
-```
-python test/all.py
 ```
 
 ## Multiple versions of Python
