@@ -23,7 +23,7 @@ cxform_sources = [
     'src/cxform/cxform-manual.c',
     'src/cxform/cxform-auto.c',
 ]
-cxform_ext = setuptools.Extension('hxform.cxform_wrapper',sources=cxform_sources)
+cxform_ext = setuptools.Extension('hxform.cxform_wrapper', sources=cxform_sources)
 
 def version(pkg):
   # Read version info in hxform/version.py without importing the package

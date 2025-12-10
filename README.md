@@ -30,7 +30,7 @@ To facilitate comparison, we have developed a single interface to the libraries 
 vt = hxform.transform(v, t, frame_in, frame_out, lib=LIB)
 ```
 
-See the [`demo/`](https://github.com/rweigel/hxform/tree/main/demo) directory for example usage.
+See the [`demo/`](https://github.com/rweigel/hxform/tree/main/demo) directory for example usage and log files with output from the examples.
 
 # Overview
 
