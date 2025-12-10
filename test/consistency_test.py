@@ -10,17 +10,38 @@ v1 = numpy.array([1., 1., 1.])
 v2 = numpy.array([v1, 2*v1])
 t2 = numpy.array([t1, t1])
 
-# SSCWeb returns results to only two decimal places, leading to large
-# discrepancies when comparing matrix multiplication to transform results.
-# TODO: Compute appropriate threshold for pass.
-libs_exclude = ['sscweb']
-
-libs_only = ['geopack_08_dp']
-# If failure for SunPy, see https://github.com/sunpy/sunpy/issues/8406 and
-# update setup.py to require version with fix.
-#libs_only = ['sunpy'] # Uncomment to test only one or more specific libraries
+# Uncomment to test only one or more specific libraries
+libs_only = []
+#libs_only = ['sunpy']
 
 raise_on_fail = False
+
+def excludes():
+  # SSCWeb returns results to only two decimal places, leading to large
+  # discrepancies when comparing matrix multiplication to transform results.
+  # TODO: Compute appropriate threshold for pass.
+  # cxform has errors that need to be investigated.
+  libs_exclude = ['sscweb', 'cxform']
+
+  pyspedas_version = hxform.lib_info()['pyspedas']['version']
+  if pyspedas_version is not None:
+    ver_parts = pyspedas_version.split('.')
+    # https://github.com/spedas/pyspedas/issues/1274
+    # The following assumes fix will be in 2.0.6
+    a = int(ver_parts[0]) < 2
+    b = int(ver_parts[0]) == 2 and int(ver_parts[1]) == 0 and int(ver_parts[2]) < 6
+    if a or b:
+      libs_exclude.append('pyspedas')
+
+  sunpy_version = hxform.lib_info()['sunpy']['version']
+  if sunpy_version is not None:
+    ver_parts = sunpy_version.split('.')
+    # https://github.com/sunpy/sunpy/issues/8406
+    if int(ver_parts[0]) < 7 or (int(ver_parts[0]) == 7 and int(ver_parts[1]) < 1):
+      libs_exclude.append('sunpy')
+
+  return libs_exclude
+
 
 def report(test_passed, diff, raise_on_fail, key, msg, error=None):
   if not test_passed:
@@ -128,6 +149,8 @@ def coord_sys():
     report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
+libs_exclude = excludes()
+
 fails = {}
 libs = hxform.libs()
 for lib in libs:
@@ -147,6 +170,7 @@ for lib in libs:
       hxform.xprint(key)
 
       if f1 == f2:
+        # Some libraries don't do this or fail. Need to investigate.
         continue
 
       matrix()

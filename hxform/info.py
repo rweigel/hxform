@@ -23,10 +23,6 @@ def lib_info(lib=None):
   """
   import os
 
-  import sunpy
-  import spacepy
-  import spiceypy
-
   # https://spacepy.github.io/coordinates.html
   frames_spacepy_irbem = [
     "ECI2000",
@@ -42,6 +38,10 @@ def lib_info(lib=None):
 
   kernel_dir = os.path.join(os.path.dirname(__file__), '..', 'kernels')
   kernel_dir = os.path.abspath(kernel_dir)
+
+  # In the following, a package with its configuration is a 'lib'. The top-level
+  # keys in infos should be packages and the children should be configuration
+  # variants.
 
   infos = {
     'cxform': {
@@ -79,19 +79,21 @@ def lib_info(lib=None):
     },
     'spacepy': {
       'name': 'spacepy',
-      'version': spacepy.__version__,
+      'version': None,
       'version_info': None,
       'frames': frames_spacepy
     },
     'spacepy-irbem': {
       'name': 'spacepy-irbem',
-      'version': spacepy.__version__,
+      'parent': 'spacepy',
+      'version': None,
       'version_info': None,
       'frames': frames_spacepy_irbem
     },
     'spiceypy1': {
       'name': 'spiceypy1',
-      'version': spiceypy.__version__,
+      'parent': 'spiceypy',
+      'version': None,
       'version_info': None,
       'frames': [
         "GEI",
@@ -116,7 +118,8 @@ def lib_info(lib=None):
     },
     'spiceypy2': {
       'name': 'spiceypy2',
-      'version': spiceypy.__version__,
+      'parent': 'spiceypy',
+      'version': None,
       'version_info': None,
       'frames': [
         "GEI",
@@ -142,7 +145,7 @@ def lib_info(lib=None):
     },
     'sunpy': {
       'name': 'sunpy',
-      'version': sunpy.__version__,
+      'version': None,
       'version_info': None,
       'frames': [
         "GEI",
@@ -194,7 +197,27 @@ def lib_info(lib=None):
     }
   }
 
+  if hasattr(lib_info, 'infos'):
+    infos = lib_info.infos
+  else:
+    # Memoize infos
+    _set_versions(infos)
+    lib_info.infos = infos
+
   if lib is not None:
     return infos[lib]
 
   return infos
+
+
+def _set_versions(infos):
+  from importlib.metadata import version as imp_version
+  for info in infos.values():
+    try:
+      if 'parent' in info:
+        name = info['parent']
+      else:
+        name = info['name']
+      infos[info['name']]['version'] = imp_version(name)
+    except:
+      pass
