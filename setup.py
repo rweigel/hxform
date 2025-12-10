@@ -140,6 +140,7 @@ setuptools.setup(
   long_description_content_type='text/markdown',
   include_package_data=True,
   package_data={'': ['README.md']},
+  license='LICENSE.txt',
   install_requires=install_requires,
   ext_modules=[cxform_ext]
 )
