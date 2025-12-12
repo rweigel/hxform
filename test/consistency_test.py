@@ -10,9 +10,8 @@ v1 = numpy.array([1., 1., 1.])
 v2 = numpy.array([v1, 2*v1])
 t2 = numpy.array([t1, t1])
 
-# Uncomment to test only one or more specific libraries
 libs_only = []
-#libs_only = ['sunpy']
+#libs_only = ['sunpy'] # test only one or more specific libraries
 
 raise_on_fail = False
 
@@ -81,7 +80,7 @@ def matrix():
     for i in range(v2.shape[0]):
       diff = vt[i, :] - numpy.dot(matrix, v2[i, :])
       test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-      report(test_passed, diff, raise_on_fail, key, f"{msg} vector {i}")
+      report(test_passed, diff, raise_on_fail, key, f"{msg} vector #{i}")
   except Exception as e:
     report(False, None, raise_on_fail, key, msg, error=str(e))
 

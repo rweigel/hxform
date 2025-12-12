@@ -7,6 +7,8 @@ Test that output lengths/shapes match input lengths/shapes.
 import numpy as np
 import hxform
 
+from utilrsw.test.assert_raises import assert_raises
+
 skip_sscweb = True
 
 def trans(v, t, lib):
@@ -36,6 +38,14 @@ for lib in libs:
   if skip_sscweb and lib == 'sscweb':
     continue
 
+  match = "utilrsw.np.components2matrix(v) raised"
+  assert_raises(ValueError, hxform.transform, [None, t, 'GEO', 'GSE'], match=match)
+
+  match = "utilrsw.np.components2matrix(v) raised"
+  assert_raises(ValueError, hxform.transform, [v[0:2], t, 'GEO', 'GSE'], match=match)
+
+  match = "utilrsw.np.components2matrix(v) raised"
+  assert_raises(ValueError, hxform.transform, [{}, t, 'GEO', 'GSE'], match=match)
 
   # Single vector, single timestamp
   vt = trans(v, t, lib)
@@ -57,7 +67,7 @@ for lib in libs:
   assert(isinstance(vt, list))       # Outer type of input is preserved
   assert(len(vt) == 3)
 
-  vt = trans([v],[t], lib)
+  vt = trans([v], [t], lib)
   assert(isinstance(vt, list))      # Outer type of input is preserved
   assert(isinstance(vt[0], list))   # Inner type of input is preserved
   assert(len(vt) == 1)
@@ -99,7 +109,7 @@ for lib in libs:
   assert(isinstance(vt[0], list)) # Inner type of input is preserved
   assert(isinstance(vt[1], list)) # Inner type of input is preserved
 
-  vt = trans(np.array(v), np.array([t,t]), lib)
+  vt = trans(np.array(v), np.array([t, t]), lib)
   assert(isinstance(vt, np.ndarray))
   assert(vt.shape == (2, 3))      # Number of rows matches number of timestamps
 
