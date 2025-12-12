@@ -1,6 +1,6 @@
 import sys
 
-def compare(v, time, frame_in, frame_out, libs='all', libs_exclude=None, io=sys.stdout):
+def compare(v, time, frame_in, frame_out, libs=None, libs_exclude=None, io=sys.stdout):
 
   import numpy as np
   import hxform
@@ -11,8 +11,9 @@ def compare(v, time, frame_in, frame_out, libs='all', libs_exclude=None, io=sys.
       io.write(msg + "\n")
 
   libs_all = hxform.info.libs()
-  if libs == 'all':
+  if libs is None:
     libs = libs_all
+
   if libs_exclude is not None:
     libs = list(set(libs) - set(libs_exclude))
 
