@@ -6,26 +6,31 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   ----------
   v : array-like
 
-      (Nv, 3) float np.array
+      (Nv, 3) float ndarrays, where `Nv` is the number of vectors to transform.
+      This option will result in the smallest execution time.
 
-      np.array of three floats
+      list/tuple of three floats
 
-      list of three floats
+      list/tuple containing `Nv` lists/tuples of three floats
 
-      list containing lists of three floats
+      list/tuple of `Nv` (3, ) or (3, 1) ndarrays
 
-      list of 3-element np.arrays
+  t : str or array-like
 
-  t : array-like
+      In the following, `Nt` is the number of times to transform at. All times
+      are assumed to be in UTC.
 
-      list of 3+ ints ([year, month, day, [hours, [minutes, [seconds]]]])
+      str in the exact ISO format 'YYYY-MM-DDTHH:MM:SSZ' or 'YYYY-MM-DDTHH:MM:SS'.
+
+      list/tuple of `Nt` strs in ISO format above and `Nt` = 1 or `Nt` = `Nv`.
+
+      list/tuple of 3+ ints ([year, month, day, [hours, [minutes, [seconds]]]])
       Zeros are used for any missing optional value.
 
-      (Nt, 3+) float np.array, where Nt = 1 or Nt = Nv
+      list/tuple containing `Nt` lists/tuples of 3+ ints, where `Nt` = 1 or `Nt` = `Nv`.
 
-      list containing lists of 3+ ints
+      (Nt, 3+) int ndarray, where `Nt` = 1 or `Nt` = `Nv`.
 
-      np.array of 3+ ints
 
   lib : str
         Library to use for the transformation. See hxform.libs() for list.
@@ -47,12 +52,14 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
 
   Returns
   -------
-  array-like with dimensions matching either `t` (if `Nt` != 1 and `Nv` = 1) or
-  `v` (if `Nv` =! 1 and `Nt` = 1). If `Nv` and `Nt` != 1, dimensions are same as `v`.
+  array-like with dimensions matching either `t` (if `Nt` ≠ 1 and `Nv` = 1) or
+  `v` (if `Nv`≠ 1 and `Nt` = 1). If `Nv` and `Nt`≠ 1, dimensions are same as `v`.
 
-  Return type will match that of `v`. Note that if a list of 3-element np.arrays are
-  passed, execution time will be long. Use `np.ndarrays` for `v` and `t` for fastest
-  execution time.
+  Use `np.ndarrays` for `v` and `t` and `t` with ints for fastest execution time when
+  cxform and Geopack-08 libraries are used.
+
+  Return type will match that of `v`. Note that if a list/tuple of 3-element np.arrays are
+  passed, execution time will be long. 
 
   Examples
   --------
@@ -83,47 +90,21 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
       >>> hx.transform([v1, v1], [t1, t1], 'GSM', 'GSE')
   """
   import numpy as np
-  import hxform
 
-  assert lib in hxform.libs(), f'lib must be one of {hxform.info.libs()}'
-  assert ctype_in in ['car', 'sph'], 'ctype_in must be one of ["car", "sph"]'
-  assert ctype_out in ['car', 'sph'], 'ctype_out must be one of ["car", "sph"]'
+  _arg_check(frame_in, frame_out, ctype_in, ctype_out, lib)
 
-  info = hxform.lib_info(lib)
-  for csys in [frame_in, frame_out]:
-    emsg = f'For lib={lib}, {csys} must be one of {info["frames"]}'
-    assert frame_in in info['frames'], emsg
+  # Check t and convert to standard form of (Nt, 6) int ndarray
+  t, Nt = _t_prep(t)
 
-  v_outertype = type(v)
-  v_innertype = type(v[0])
-
-  v = np.array(v, dtype=np.double)
-  try:
-    t = np.array(t, dtype=np.int32)
-  except:
-    # This will occur for input of the form [[2000, 1, 1], [2000, 1, 1, 1]]
-    # where not all time values have the same number of elements.
-    for i in range(len(t)):
-      t[i] = hxform.timelib.ints_pad(t[i], length=6)
-    t = np.array(t, dtype=np.int32)
-
-  if len(t.shape) == 1:
-    t = np.array([t])
-  if len(v.shape) == 1:
-    v = np.array([v])
-
-  if t.shape[1] > 6:
-    # Keep only year, month, day, hour, minute, second (drop microseconds)
-    t = t[:,0:6]
+  # Check v and convert to standard form of (Nv, 3) float ndarray
+  v, v_outertype, v_innertype = _v_prep(v)
 
   Nv = v.shape[0]  # Number of vectors
-  Nt = t.shape[0]  # Number of times
 
-  assert(len(v[0]) == 3)
-  assert(len(t.shape) == 2 and len(v.shape) == 2)
-  assert(Nv == Nt or Nt == 1 or Nv == 1)
+  if Nt != 1 and Nv != 1 and Nt != Nv:
+    msg = "If number of vectors and number of times are both > 1, they must be equal."
+    raise ValueError(msg)
 
-  tile = False
   tile = frame_in == frame_out
   tile = tile or lib.startswith('spacepy') or lib.startswith('spiceypy')
   tile = tile or lib in ['sscweb', 'sunpy', 'pyspedas']
@@ -137,6 +118,7 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
 
     if Nv == 1 and Nt > 1:
       v = np.tile(v, (Nt, 1))
+
 
   if ctype_in == 'sph':
     v[:,0], v[:,1], v[:,2] = sph2car(v[:,0], v[:,1], v[:,2])
@@ -169,12 +151,6 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   if lib == 'sscweb':
     vt, execution_time = _sscweb(v, t, frame_in, frame_out)
 
-  if False and Nt == 1 and Nv > 1:
-    matrix = hxform.matrix(t[0,:], frame_in=frame_in, frame_out=frame_out, lib=lib)
-    vt_alt = np.dot(v, matrix)
-    import pdb; pdb.set_trace()
-    print(np.max(np.abs(vt - vt_alt)))
-
   transform.execution_time = execution_time
 
   if ctype_out == 'sph':
@@ -190,6 +166,100 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
     if Nv == 1 and Nt == 1 and v_innertype is not list:
       return vt.tolist()[0]
     return vt.tolist()
+
+
+def _v_prep(v):
+  import numpy as np
+
+  v_outertype = type(v)
+  if isinstance(v, (list, tuple, np.ndarray)) and len(v) > 0:
+    v_innertype = type(v[0])
+
+  from utilrsw.np import components2matrix
+  try:
+    # Check v and convert to standard form of (Nv, 3) float ndarray
+    v = components2matrix(v)
+  except Exception as e:
+    raise ValueError("utilrsw.np.components2matrix(v) raised") from e
+
+  return v, v_outertype, v_innertype
+
+
+def _arg_check(frame_in, frame_out, ctype_in, ctype_out, lib):
+  import hxform
+  assert lib in hxform.libs(), f'lib must be one of {hxform.info.libs()}'
+  assert ctype_in in ['car', 'sph'], 'ctype_in must be one of ["car", "sph"]'
+  assert ctype_out in ['car', 'sph'], 'ctype_out must be one of ["car", "sph"]'
+
+  info = hxform.lib_info(lib)
+  for csys in [frame_in, frame_out]:
+    emsg = f'For lib={lib}, {csys} must be one of {info["frames"]}'
+    assert frame_in in info['frames'], emsg
+
+
+def _t_prep(t):
+  import numpy as np
+  if isinstance(t, str):
+    t = [t]
+
+  if not isinstance(t, (list, tuple, np.ndarray)):
+    raise ValueError("time must be a str, list, tuple, or np.ndarray")
+
+  if len(t) == 0:
+    raise ValueError("time input is empty")
+
+  if isinstance(t[0], str):
+    t = _t2ints(t)
+
+  try:
+    t = np.array(t, dtype=np.int32)
+  except:
+    raise ValueError("Invalid time input.")
+
+  if len(t.shape) > 2:
+    raise ValueError("Invalid time input.")
+
+  if len(t.shape) == 1:
+    t = np.array([t])
+
+  prefix = "When represented as a list or tuple of ints, each time"
+  if t.shape[1] > 6:
+    raise ValueError(f"{prefix} must be given by 3 to 6 ints.")
+
+  if t.shape[1] < 3:
+    raise ValueError(f"{prefix} must have at least 3 elements.")
+
+  if t.shape[1] < 6:
+    n_pad = 6 - t.shape
+    t = np.pad(t, ((0, 0), (0, n_pad)), 'constant', constant_values=0)
+
+  Nt = t.shape[0]  # Number of times
+
+  return t, Nt
+
+
+def _t2ints(t):
+  import datetime
+  fmt = "%Y-%m-%dT%H:%M:%S"
+  t_parsed = []
+  for ti in t:
+    if not isinstance(ti, str):
+      raise ValueError("If time is a list, tuple, or ndarray of strings, all elements must be strings.")
+    if ti.endswith('Z'):
+      ti = ti[:-1]
+    try:
+      dt = datetime.datetime.strptime(ti, fmt)
+    except ValueError as e:
+      emsg = f"datetime.datetime.strptime('{ti}', '{fmt}') failed"
+      raise ValueError(emsg) from e
+
+    t_parsed.append([dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second])
+
+  t = t_parsed
+  if len(t) == 1:
+    t = t[0]
+
+  return t
 
 
 def _cxform(v, t, frame_in, frame_out):
@@ -210,23 +280,15 @@ def _cxform(v, t, frame_in, frame_out):
   lib_path = os.path.join(lib_file)
   lib_obj = ctypes.cdll.LoadLibrary(lib_path)
 
-  Nt = t.shape[0]
-
-  if t.shape[1] < 3:
-    raise ValueError("At least year, month, and day must be given for time.")
-
   execution_start = time.time()
-  nz = t.shape[1]
-  if nz != 6:
-    # Pad time. TODO: Do this in wrapper so extra memory is not needed.
-    tmp = np.zeros((t.shape[0], 6-nz), dtype=np.int32)
-    t = np.concatenate((t, tmp), 1)
 
+  Nt = t.shape[0]
   if Nt == 1:
     vt = np.full(v.shape, np.nan)
   else:
     vt = np.full((Nt, 3), np.nan)
 
+  # TODO: Handle ret
   ret = lib_obj.cxform_wrapper(
           ctypes.c_void_p(v.ctypes.data),
           ctypes.c_void_p(t.ctypes.data),
@@ -274,7 +336,7 @@ def _pyspedas(v, t, frame_in, frame_out):
 
   time_in = []
   for i in range(t.shape[0]):
-    tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6))
+    tstr = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[i, :])
     time_in.append(time_double(tstr))
 
   execution_start = time.time()
@@ -309,7 +371,7 @@ def _spiceypy(v, t, frame_in, frame_out, lib):
 
   execution_start = time.time()
   for i in range(t.shape[0]):
-    time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6))
+    time_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[i,:])
     et = spiceypy.str2et(time_str)
     matrix = spiceypy.pxform(frame_in, frame_out, et)
     vt[i,:] = spiceypy.mxv(matrix, v[i,:])
@@ -334,11 +396,11 @@ def _spacepy(v, t, frame_in, frame_out, lib):
 
   if len(t.shape) == 1:
     # SpacePy requires time values to be strings with 1-second precision
-    t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t, length=6))
+    t_str = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t)
   else:
     t_str = []
     for i in range(t.shape[0]):
-      t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i,:], length=6)))
+      t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[i,:]))
     t_str = np.array(t_str)
 
   execution_start = time.time()
@@ -379,7 +441,7 @@ def _sunpy(v, t, frame_in, frame_out):
 
   execution_start = time.time()
   if t.shape[0] == 1:
-    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[0, :], length=6))
+    obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[0, :])
     kwargs = {
       "x": v[:, 0]*one,
       "y": v[:, 1]*one,
@@ -393,7 +455,7 @@ def _sunpy(v, t, frame_in, frame_out):
     vt = coord.xyz.decompose().value.transpose()
   else:
     for i in range(t.shape[0]):
-      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(hxform.timelib.ints_pad(t[i, :], length=6))
+      obstime = '%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[i, :])
       kwargs = {
         "x": v[i, 0]*one,
         "y": v[i, 1]*one,
