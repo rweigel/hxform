@@ -6,19 +6,19 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   ----------
   v : array-like
 
-      (Nv, 3) float ndarrays, where `Nv` is the number of vectors to transform.
-      This option will result in the smallest execution time.
+      (Nv, 3) ndarrays, where `Nv` is the number of vectors to transform and
+      v has dytpe of np.number. This option will result in the smallest execution time.
 
-      list/tuple of three floats
+      list/tuple of three numbers (ints, floats, or numpy.numbers)
 
-      list/tuple containing `Nv` lists/tuples of three floats
+      list/tuple containing `Nv` lists/tuples of three numbers
 
       list/tuple of `Nv` (3, ) or (3, 1) ndarrays
 
   t : str or array-like
 
       In the following, `Nt` is the number of times to transform at. All times
-      are assumed to be in UTC.
+      are interpreted as in UTC.
 
       str in the exact ISO format 'YYYY-MM-DDTHH:MM:SSZ' or 'YYYY-MM-DDTHH:MM:SS'.
 
@@ -168,23 +168,6 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
     return vt.tolist()
 
 
-def _v_prep(v):
-  import numpy as np
-
-  v_outertype = type(v)
-  if isinstance(v, (list, tuple, np.ndarray)) and len(v) > 0:
-    v_innertype = type(v[0])
-
-  from utilrsw.np import components2matrix
-  try:
-    # Check v and convert to standard form of (Nv, 3) float ndarray
-    v = components2matrix(v)
-  except Exception as e:
-    raise ValueError("utilrsw.np.components2matrix(v) raised") from e
-
-  return v, v_outertype, v_innertype
-
-
 def _arg_check(frame_in, frame_out, ctype_in, ctype_out, lib):
   import hxform
   assert lib in hxform.libs(), f'lib must be one of {hxform.info.libs()}'
@@ -197,16 +180,75 @@ def _arg_check(frame_in, frame_out, ctype_in, ctype_out, lib):
     assert frame_in in info['frames'], emsg
 
 
-def _t_prep(t):
+def _v_prep(v):
   import numpy as np
+
+  if not isinstance(v, (list, tuple, np.ndarray)):
+    raise ValueError(f"v must be a list, tuple, or np.ndarray, not {type(v).__name__}")
+
+  if isinstance(v, (list, tuple)) and len(v) == 0:
+    raise ValueError(f"v is an empty {type(v).__name__}")
+
+  if isinstance(v, np.ndarray):
+    if v.ndim == 0:
+      raise ValueError("v may not be a scalar (0-dim ndarray)")
+    if v.size == 0:
+      raise ValueError("v.size = 0")
+
+  v_outertype = type(v)
+  v_innertype = type(v[0])
+
+  from utilrsw.np import components2matrix
+  try:
+    # Check v and convert to standard form of (Nv, 3) float ndarray
+    v = components2matrix(v)
+  except Exception as e:
+    raise ValueError(f"utilrsw.np.components2matrix(v) raised '{e}'") from e
+
+  return v, v_outertype, v_innertype
+
+
+def _t_prep(t):
+
+  import numpy as np
+
+  def _t2ints(t):
+    import datetime
+    fmt = "%Y-%m-%dT%H:%M:%S"
+    t_parsed = []
+    for ti in t:
+      if not isinstance(ti, str):
+        raise ValueError("If time is a list, tuple, or ndarray of strings, all elements must be strings.")
+      if ti.endswith('Z'):
+        ti = ti[:-1]
+      try:
+        dt = datetime.datetime.strptime(ti, fmt)
+      except ValueError as e:
+        emsg = f"datetime.datetime.strptime('{ti}', '{fmt}') failed"
+        raise ValueError(emsg) from e
+
+      t_parsed.append([dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second])
+
+    t = t_parsed
+    if len(t) == 1:
+      t = t[0]
+
+    return t
+
   if isinstance(t, str):
     t = [t]
 
   if not isinstance(t, (list, tuple, np.ndarray)):
     raise ValueError("time must be a str, list, tuple, or np.ndarray")
 
-  if len(t) == 0:
+  if isinstance(t, (list, tuple)) and len(t) == 0:
     raise ValueError("time input is empty")
+
+  if isinstance(t, np.ndarray) and t.size == 0:
+    raise ValueError("time input is empty")
+
+  if isinstance(t, np.ndarray) and t.ndim == 0:
+    t = np.array([t.item()])
 
   if isinstance(t[0], str):
     t = _t2ints(t)
@@ -238,50 +280,29 @@ def _t_prep(t):
   return t, Nt
 
 
-def _t2ints(t):
-  import datetime
-  fmt = "%Y-%m-%dT%H:%M:%S"
-  t_parsed = []
-  for ti in t:
-    if not isinstance(ti, str):
-      raise ValueError("If time is a list, tuple, or ndarray of strings, all elements must be strings.")
-    if ti.endswith('Z'):
-      ti = ti[:-1]
-    try:
-      dt = datetime.datetime.strptime(ti, fmt)
-    except ValueError as e:
-      emsg = f"datetime.datetime.strptime('{ti}', '{fmt}') failed"
-      raise ValueError(emsg) from e
-
-    t_parsed.append([dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second])
-
-  t = t_parsed
-  if len(t) == 1:
-    t = t[0]
-
-  return t
-
-
 def _cxform(v, t, frame_in, frame_out):
   import os
+  import time
   import glob
   import ctypes
-  import time
+
   import numpy as np
 
-  this_script = os.path.join(os.path.dirname(__file__), "..", "hxform", "cxform_wrapper*")
+  lib_dir = os.path.join(os.path.dirname(__file__), "..", "hxform", "cxform_wrapper*")
 
-  for lib_file in glob.glob(this_script):
+  for lib_file in glob.glob(lib_dir):
     # The name of the .so or .dll file will not be the same on all
     # frames, so we need to find it. (For example, on one system
     # it is cxform_wrapper.cpython-37m-darwin.so.)
     # TODO: Find a better way to do this.
     break
+
   lib_path = os.path.join(lib_file)
   lib_obj = ctypes.cdll.LoadLibrary(lib_path)
 
   execution_start = time.time()
 
+  # Allocate output array
   Nt = t.shape[0]
   if Nt == 1:
     vt = np.full(v.shape, np.nan)
@@ -305,13 +326,16 @@ def _cxform(v, t, frame_in, frame_out):
 
 def _geopack_08_dp(v, t, frame_in, frame_out):
   import time
-  import numpy as np
+
+  import numpy
+
   import hxform
-  import hxform.geopack_08_dp as geopack_08_dp
+  from hxform import geopack_08_dp
 
   trans = frame_in + 'to' + frame_out
-  dtime = np.array(hxform.timelib.ints2doy(t))
+  dtime = numpy.array(hxform.timelib.ints2doy(t))
 
+  # Allocate output array
   if v.shape[0] <= t.shape[0]:
     outsize = t.shape[0]
   else:
@@ -327,8 +351,8 @@ def _geopack_08_dp(v, t, frame_in, frame_out):
 def _pyspedas(v, t, frame_in, frame_out):
   import os
   import time
-  import numpy as np
-  import hxform
+
+  import numpy
 
   os.environ["PYSPEDAS_LOGGING_LEVEL"] = "error"
   from pyspedas import cotrans
@@ -343,7 +367,7 @@ def _pyspedas(v, t, frame_in, frame_out):
   vt = cotrans(time_in=time_in, data_in=v, coord_in=frame_in, coord_out=frame_out)
   if isinstance(vt, list):
     # https://github.com/spedas/pyspedas/issues/1273
-    vt = np.array(vt)
+    vt = numpy.array(vt)
   execution_stop = time.time()
 
   return vt, execution_stop - execution_start
@@ -354,11 +378,12 @@ def _spiceypy(v, t, frame_in, frame_out, lib):
   import os
   import time
 
-  import numpy as np
+  import numpy
   import spiceypy
+
   import hxform
 
-  vt = np.full(v.shape, np.nan)
+  vt = numpy.full(v.shape, numpy.nan)
 
   info = hxform.lib_info(lib)
   kernel_dir = info['kernel']['dir']
@@ -384,12 +409,11 @@ def _spiceypy(v, t, frame_in, frame_out, lib):
 
 def _spacepy(v, t, frame_in, frame_out, lib):
   import time
-  import numpy as np
+
+  import numpy
 
   import spacepy.coordinates as sc
   from spacepy.time import Ticktock
-
-  import hxform
 
   import warnings
   warnings.filterwarnings("ignore", message="Leapseconds.*")
@@ -401,7 +425,7 @@ def _spacepy(v, t, frame_in, frame_out, lib):
     t_str = []
     for i in range(t.shape[0]):
       t_str.append('%04d-%02d-%02dT%02d:%02d:%02d' % tuple(t[i,:]))
-    t_str = np.array(t_str)
+    t_str = numpy.array(t_str)
 
   execution_start = time.time()
   if lib.endswith('-irbem'):
@@ -419,12 +443,13 @@ def _spacepy(v, t, frame_in, frame_out, lib):
 def _sunpy(v, t, frame_in, frame_out):
   import time
   import hxform
-  import numpy as np
-  import astropy.coordinates
-  import sunpy.coordinates
-  # sunpy.coordinates is not used directly, but needed to register the frames.
 
-  vt = np.full(v.shape, np.nan)
+  import numpy
+
+  import astropy.coordinates
+  import sunpy.coordinates # Not used directly, but needed to register the frames.
+
+  vt = numpy.full(v.shape, numpy.nan)
 
   representation_type = 'cartesian'
 
@@ -476,12 +501,15 @@ def _sunpy(v, t, frame_in, frame_out):
 
 
 def _sscweb(v, t, frame_in, frame_out):
+
   import re
   import requests
-  import numpy as np
-  import hxform
   import time as time
-  vt = np.full(v.shape, np.nan)
+
+  import numpy
+
+  import hxform
+  vt = numpy.full(v.shape, numpy.nan)
 
   info = hxform.lib_info('sscweb')
   frame_in = info['system_aliases'].get(frame_in, frame_in)
@@ -512,7 +540,7 @@ def _sscweb(v, t, frame_in, frame_out):
     except Exception as e:
       #print(e)
       raise Exception(f"Failed to fetch URL: {url}.")
-      vt[i] = np.full((1, 3), np.nan)
+      vt[i] = numpy.full((1, 3), numpy.nan)
       continue
 
     if r.status_code != 200:
@@ -534,7 +562,7 @@ def _sscweb(v, t, frame_in, frame_out):
 
     if start is None:
       #logger.error(f"Failed to find start of table in URL: {url}. Returned HTML:\n{text}")
-      vt[i] = np.full((1, 3), np.nan)
+      vt[i] = numpy.full((1, 3), numpy.nan)
       continue
 
     # Extract the table lines
@@ -563,174 +591,3 @@ def _sscweb(v, t, frame_in, frame_out):
   execution_stop = time.time()
 
   return vt, execution_stop - execution_start
-
-
-def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
-  import numpy as np
-  kwargs = {'ctype_in': 'car', 'ctype_out': 'car', 'lib': lib}
-  c1 = transform(np.array([1., 0., 0.]), t, frame_in, frame_out, **kwargs)
-  c2 = transform(np.array([0., 1., 0.]), t, frame_in, frame_out, **kwargs)
-  c3 = transform(np.array([0., 0., 1.]), t, frame_in, frame_out, **kwargs)
-  if len(c1.shape) == 1:
-    m = np.column_stack([c1, c2, c3])
-    if isinstance(t, list):
-      return m.tolist()
-    return m
-
-  m = np.full((t.shape[0], 3, 3), np.nan)
-  for i in range(t.shape[0]):
-    m[i, :, 0] = c1[i, :]
-    m[i, :, 1] = c2[i, :]
-    m[i, :, 2] = c3[i, :]
-  if isinstance(t, list):
-    return m.tolist()
-  return m
-
-
-def car2sph(*args):
-  """Convert from cartesian to r, latitude [degrees], longitude [degrees]."""
-  import numpy as np
-  from utilrsw.np import components2matrix, matrix2components
-  try:
-    matrix = components2matrix(*args)
-    x = matrix[:, 0]
-    y = matrix[:, 1]
-    z = matrix[:, 2]
-  except ValueError as e:
-    raise e
-
-  r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
-  assert np.all(r > 0), 'radius must be greater than zero.'
-  lat = 90.0 - (180.0/np.pi)*np.arccos(z/r)
-  lon = (180.0/np.pi)*np.arctan2(y, x)
-
-  return matrix2components(*args, np.column_stack([r, lat, lon]))
-
-
-def sph2car(*args):
-  """Convert r, latitude [degrees], longitude [degrees] to cartesian."""
-  import numpy as np
-  from utilrsw.np import components2matrix, matrix2components
-
-  try:
-    matrix = components2matrix(*args)
-    r = matrix[:, 0]
-    lat = matrix[:, 1]
-    lon = matrix[:, 2]
-  except ValueError as e:
-    raise e
-
-  if not np.all(r > 0):
-    raise ValueError('All radius values must be greater than zero.')
-
-  x = r*np.cos((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
-  y = r*np.sin((np.pi/180.0)*lon)*np.cos((np.pi/180.0)*lat)
-  z = r*np.sin((np.pi/180.0)*lat)
-
-  return matrix2components(*args, np.column_stack([x, y, z]))
-
-
-def get_spherical_vector_components(v_cart, x_cart):
-
-  import numpy as np
-  x = x_cart[:,0]
-  y = x_cart[:,1]
-  z = x_cart[:,2]
-  vx = v_cart[:,0]
-  vy = v_cart[:,1]
-  vz = v_cart[:,2]
-
-  r = np.sqrt(x**2 + y**2 + z**2)
-  L = np.sqrt(x**2 + y**2)
-
-  v_r = (x*vx + y*vy + z*vz)/r
-  v_theta = ((x*vx + y*vy)*z - (L**2)*vz)/(r*L)
-  v_phi = (-y*vx + x*vy)/L
-
-  return np.column_stack([v_r, v_theta, v_phi])
-
-
-def get_NED_vector_components(v_cart, x_cart):
-  import numpy as np
-  v_sph = get_spherical_vector_components(v_cart, x_cart)
-  v_north = -v_sph[:,1]
-  v_east  = +v_sph[:,2]
-  v_down  = -v_sph[:,0]
-  return np.column_stack([v_north, v_east, v_down])
-
-
-def MAGtoMLT(pos, time, csys='sph', lib='geopack_08_dp'):
-  """Compute magnetic local time given a UT and MAG position or longitude.
-
-  Uses equation 93 in Laundal and Richmond, 2016 (10.1007/s11214-016-0275-y)
-
-  Usage:
-  ------
-  >>> from hxform import hxform as hx
-  >>> mlt = hx.MAGtoMLT(MAGlong, time)
-  >>> mlt = hx.MAGtoMLT([MAGlong1, Mlong2, ...], time)
-
-  >>> mlt = hx.MAGtoMLT([MAGx, MAGy, MAGz], time, csys='car')
-  >>> mlt = hx.MAGtoMLT([[MAGx1, MAGy1, MAGz1],...], time, csys='car')
-
-  Returns:
-  --------
-  mlt: float or array-like
-
-  Examples:
-  --------
-  >>> from hxform import hxform as hx
-  >>> mlt = hx.MAGtoMLT(0., [2000, 1, 1, 0, 0, 0])
-  >>> print(mlt) # 18.869936573301775
-
-  >>> from hxform import hxform as hx
-  >>> mlt = hx.MAGtoMLT([0., 0.], [2000, 1, 1, 0, 0, 0])
-  >>> print(mlt) # [18.86993657 18.86993657]
-
-  >>> from hxform import hxform as hx
-  >>> mlt = hx.MAGtoMLT([-1., 0., 0.], [2000, 1, 1, 0, 0, 0], csys='car')
-  >>> print(mlt) # 6.869936573301775
-
-  >>> from hxform import hxform as hx
-  >>> mlt = hx.MAGtoMLT([[-1., 0., 0.],[-1., 0., 0.]], [2000, 1, 1, 0, 0, 0], csys='car')
-  >>> print(mlt) # [6.86993657 6.86993657]
-  """
-  import numpy as np
-  assert csys == 'car' or csys == 'sph', 'csys must be one of ["car", "sph"]'
-
-  pos = np.array(pos)
-  time = np.array(time)
-
-  if not isinstance(pos, float):
-      pos = np.array(pos)
-
-  if csys == 'sph':
-      phi = pos*np.pi/180.
-  else:
-      if pos.shape == (3, ):
-          phi = np.arctan2(pos[1], pos[0])
-      else:
-          phi = np.arctan2(pos[:, 1], pos[:, 0])
-
-  subsol_pt = transform(np.array([1., 0., 0.]), time, 'GSM', 'MAG', lib=lib)
-
-  if len(subsol_pt.shape) == 1:
-      phi_cds = np.arctan2(subsol_pt[1], subsol_pt[0])
-  else:
-      phi_cds = np.arctan2(subsol_pt[:, 1], subsol_pt[:, 0])
-
-  delta = phi - phi_cds # note np.array([a1, a2, ...])+b == np.array([a1+b, a2+b, ...])
-
-  if isinstance(delta, float):
-      delta = np.array([delta])
-
-  idx = np.where(delta > np.pi)
-  delta[idx] = delta[idx] - 2.*np.pi
-  idx = np.where(delta <= -np.pi)
-  delta[idx] = delta[idx] + 2.*np.pi
-
-  if delta.size == 1:
-      delta = delta[0]
-
-  MLT = 12. + delta*24./(2.*np.pi)
-  return MLT

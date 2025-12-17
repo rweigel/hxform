@@ -7,11 +7,6 @@ def libs():
   return list(lib_info().keys())
 
 
-def frames(lib):
-  """Return list of frames supported by a given library."""
-  return lib_info(lib)["frames"]
-
-
 def lib_info(lib=None):
   """Return list of known libraries.
 
@@ -208,6 +203,11 @@ def lib_info(lib=None):
     return infos[lib]
 
   return infos
+
+
+def frames(lib):
+  """Return list of frames supported by a given library."""
+  return lib_info(lib)["frames"]
 
 
 def _set_versions(infos):
