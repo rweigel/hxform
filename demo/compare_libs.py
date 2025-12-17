@@ -1,4 +1,7 @@
+# Calls hxform.compare to compare different libraries for a given transformation
+# Writes results to compare_libs directory
 import numpy as np
+
 import hxform
 
 v = np.array([1., 1., 1.])/np.sqrt(3)
@@ -11,5 +14,6 @@ kwargs = {
 }
 
 results = hxform.compare(v, t, **kwargs)
-with open(f'./compare_libs/{kwargs["frame_in"]}2{kwargs["frame_out"]}.txt', 'w') as f:
-  f.write(results["log"])
+fname = f'./compare_libs/{kwargs["frame_in"]}2{kwargs["frame_out"]}.txt'
+with open(fname, 'w') as file:
+  file.write(results["log"])
