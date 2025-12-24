@@ -91,6 +91,8 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   """
   import numpy as np
 
+  import hxform
+
   _arg_check(frame_in, frame_out, ctype_in, ctype_out, lib)
 
   # Check t and convert to standard form of (Nt, 6) int ndarray
@@ -121,7 +123,7 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
 
 
   if ctype_in == 'sph':
-    v[:,0], v[:,1], v[:,2] = sph2car(v[:,0], v[:,1], v[:,2])
+    v[:,0], v[:,1], v[:,2] = hxform.sph2car(v[:,0], v[:,1], v[:,2])
 
 
   if lib == 'cxform':
@@ -154,7 +156,7 @@ def transform(v, t, frame_in, frame_out, ctype_in='car', ctype_out='car', lib='c
   transform.execution_time = execution_time
 
   if ctype_out == 'sph':
-    vt[:,0], vt[:,1], vt[:,2] = car2sph(vt[:,0], vt[:,1], vt[:,2])
+    vt[:,0], vt[:,1], vt[:,2] = hxform.car2sph(vt[:,0], vt[:,1], vt[:,2])
 
   if issubclass(v_outertype, np.ndarray):
     if Nv == 1 and Nt == 1 and not issubclass(v_innertype, np.ndarray):

@@ -5,5 +5,3 @@ Testing spacepy-irbem
 Testing spiceypy1 
 Testing spiceypy2 
 Testing sunpy 
-Testing sscweb (skipping b/c skip_sscweb=True)
-Testing pyspedas 
