@@ -1,7 +1,7 @@
 def mlt(pos, time, csys='sph', lib='geopack_08_dp'):
   """Compute magnetic local time given a UT and MAG position or longitude.
 
-  Uses equation 93 in Laundal and Richmond, 2016 (10.1007/s11214-016-0275-y)
+  Uses equation 93 in Laundal and Richmond, 2016 (doi:10.1007/s11214-016-0275-y)
 
   Usage:
   ------
@@ -62,7 +62,7 @@ def mlt(pos, time, csys='sph', lib='geopack_08_dp'):
   else:
       phi_cds = np.arctan2(subsol_pt[:, 1], subsol_pt[:, 0])
 
-  delta = phi - phi_cds # note np.array([a1, a2, ...])+b == np.array([a1+b, a2+b, ...])
+  delta = phi - phi_cds
 
   if isinstance(delta, float):
       delta = np.array([delta])

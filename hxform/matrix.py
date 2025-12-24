@@ -1,7 +1,7 @@
 def matrix(t, frame_in, frame_out, lib='geopack_08_dp'):
   import numpy
 
-  from hxform.hxform import transform
+  from hxform import transform
 
   kwargs = {'ctype_in': 'car', 'ctype_out': 'car', 'lib': lib}
   c1 = transform(numpy.array([1., 0., 0.]), t, frame_in, frame_out, **kwargs)
