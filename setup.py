@@ -2,7 +2,6 @@ import pathlib
 import warnings
 import setuptools
 
-# Read README.md for long description
 readme = pathlib.Path(__file__).with_name('README.md')
 long_description = readme.read_text(encoding='utf-8') if readme.exists() else ''
 
@@ -143,4 +142,3 @@ setuptools.setup(
   install_requires=install_requires,
   ext_modules=[cxform_ext]
 )
-
