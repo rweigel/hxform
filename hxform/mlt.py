@@ -81,31 +81,3 @@ def mlt(pos, time, csys='sph', lib='geopack_08_dp'):
 
   return MLT
 
-
-if __name__ == '__main__':
-
-  import hxform
-  lib = 'geopack_08_dp'
-  t = '2000-01-01T00:00:00'
-
-  mlong = 0.0
-  mlt = hxform.mlt(mlong, t, lib=lib)
-  print(mlt) # 18.8708344
-
-  mlt = hxform.mlt([mlong, mlong], t, lib=lib)
-  print(mlt) # [18.8708344 18.8708344]
-
-  mlt = hxform.mlt([-1., 0., 0.], t, lib=lib, csys='car')
-  print(mlt) # 6.8708344027652934
-
-  mlt = hxform.mlt([[-1., 0., 0.], [-1., 0., 0.]], [2000, 1, 1, 0, 0, 0], lib=lib, csys='car')
-  print(mlt) # [6.8708344 6.8708344]
-
-  libs = hxform.libs()
-  print(f'MLT at 0 deg MAG long at {t}Z')
-  for lib in libs:
-    try:
-      mlt = hxform.mlt(0., [2000, 1, 1, 0, 0, 0], lib=lib)
-      print(f'{lib:13s}: {mlt}')
-    except Exception as e:
-      print(f'{lib:13s}: Error: {e}')
