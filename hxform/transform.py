@@ -334,6 +334,9 @@ def _geopack_08_dp(v, t, frame_in, frame_out):
   import hxform
   from hxform import geopack_08_dp
 
+  if frame_in == frame_out:
+    return v, None
+
   trans = frame_in + 'to' + frame_out
   dtime = numpy.array(hxform.timelib.ints2doy(t))
 
