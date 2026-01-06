@@ -168,10 +168,6 @@ for lib in libs:
       key = f'{lib} {f1} to {f2}'
       hxform.xprint(key)
 
-      if f1 == f2:
-        # Some libraries don't do this or fail. Need to investigate.
-        continue
-
       matrix()
       coord_sys()
 
