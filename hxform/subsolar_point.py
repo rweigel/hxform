@@ -6,6 +6,98 @@ def _nint(a):
   else:
     return int(a - 0.5)
 
+def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
+
+  # TODO: Implement.
+  # Russel 1971 Appendix 2.
+  """
+  G.D. Mead (private communication) has written a simple subroutine to calculate the position of the Sun in GEI coordinates. It
+  is accurate for years 1901 through 2099, to within 0.006 deg. The input is the year, day of year and seconds of the day in UT.
+  The output is Greenwich Mean Sideral Time in degrees, the ecliptic longitude, apparent right ascension and declination of the
+  Sun in degrees. The listing of this program follows. We note that the cartesian coordinates of the vector from the Earth to the
+  Sun are:
+  X = cos(SRASN) cos(SDEC)
+  Y = sin(SRASN) cos(SDEC)
+  Z = sin(SDEC)
+  SUBROUTINE SUN(IYR, IDAY, SECS, GST, SLONG, SRASN, SDEC)
+  C PROGRAM TO CALCULATE SIDEREAL TIME AND POSITION OF THE SUN.
+  C GOOD FOR YEARS 1901 THROUGH 2099. ACCURACY 0.006 DEGREE.
+  C INPUT IS IYR, IDAY (INTEGERS), AND SECS, DEFINING UN. TIME.
+  C OUTPUT IS GREENWICH MEAN SIDEREAL TIME (GST) IN DEGREES,
+  C LONGITUDE ALONG ECLIPTIC (SLONG), AND APPARENT RIGHT ASCENSION
+  C AND DECLINATION (SRASN, SDEC) OF THE SUN, ALL IN DEGREES
+  """
+
+  from math import sin, cos, atan, tan, atan2, sqrt
+  def cotan(x):
+    return 1.0 / tan(x)
+  def DMOD(x, y):
+    return x - y * int(x / y)
+
+  #DATA RAD /57.29578/
+  RAD = 57.29578
+  #DOUBLE PRECISION DJ, FDAY
+  #IF(IYR. LT. 1901. OR. IYR. GT. 2099) RETURN
+  if IYR < 1901 or IYR > 2099:
+    return None, None
+  #FDAY = SECS/86400
+  FDAY = SECS/86400
+  #DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5D0
+  DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5
+
+  #T = DJ / 36525
+  T = DJ / 36525
+
+  #VL = DMOD (279.696678 + 0.9856473354*DJ, 360.D0)
+  VL = DMOD (279.696678 + 0.9856473354*DJ, 360.)
+
+  #GST = DMOD (279.690983 + 0.9856473354*DJ + 360.*FDAY + 180., 360.D0)
+  GST = DMOD (279.690983 + 0.9856473354*DJ + 360.*FDAY + 180., 360.)
+
+  #G = DMOD (358.475845 + 0.985600267*DJ, 360.D0) / RAD
+  G = DMOD (358.475845 + 0.985600267*DJ, 360.) / RAD
+
+  #SLONG = VL + (1.91946 -0.004789*T)*SIN(G) + 0.020094*SIN (2.*G)
+  SLONG = VL + (1.91946 -0.004789*T)*sin(G) + 0.020094*sin (2.*G)
+
+  #OBLIQ = (23.45229 -0.0130125*T) / RAD
+  OBLIQ = (23.45229 -0.0130125*T) / RAD
+
+  #SLP = (SLONG -0.005686) / RAD
+  SLP = (SLONG -0.005686) / RAD
+
+  #SIND = SIN (OBLIQ)*SIN (SLP)
+  SIND = sin (OBLIQ)*sin (SLP)
+
+  #COSD = SQRT(1.-SIND**2)
+  COSD = sqrt(1.-SIND**2)
+
+  #SDEC = RAD * ATAN (SIND/COSD)
+  SDEC = RAD * atan (SIND/COSD)
+
+  #SRASN = 180. -RAD*ATAN2
+  #(COTAN (OBLIQ)*SIND/COSD, -COS (SLP)/COSD)
+
+  SRASN = 180. -RAD*atan2(cotan (OBLIQ)*SIND/COSD, -cos (SLP)/COSD)
+
+  # GEI coordinates
+  X = cos(SRASN) * cos(SDEC)
+  Y = sin(SRASN) * cos(SDEC)
+  Z = sin(SDEC)
+
+
+  import hxform
+  # Compute month day given day of year
+  month, day = hxform.timelib.doy2md(IYR, IDAY)
+
+  # Compute hour, minute, second given seconds of day
+  hour, minute, second = hxform.time.sod2hms(int(SECS))
+
+  minute = int((FDAY * 24 - hour) * 60)
+  t = [IYR, month, day, hour, minute, second]
+  XYZ_GEO = hxform.transform([X, Y, Z], t, 'GEI', 'GEO', lib=lib_transform)
+
+  return XYZ_GEO
 
 def _laundal(year, doy, ut):
 
@@ -195,7 +287,7 @@ def subsolar_point(t, frame='MAG', lib='geopack_08_dp', lib_transform='geopack_0
       # year
       yr = t[0]
       # day of year
-      doy = hxform.timelib.doy(t[0:3]) 
+      doy = hxform.timelib.ymd2doy(t[0:3])
       # hours, minutes, seconds
       hms = t[3:6]
       # seconds after midnight
@@ -232,13 +324,18 @@ if __name__ == '__main__':
   yr = t[0]
 
   # day of year
-  doy = hxform.timelib.doy(t[0:3]) 
+  doy = hxform.timelib.ymd2doy(t[0:3])
 
   # hours, minutes, seconds
   hms = t[3:6]
 
-  # seconds after midnight
-  sf = t[3]*3600 + t[4]*60 + t[5]
+  # seconds after midnight (second of day)
+  sod = t[3]*3600 + t[4]*60 + t[5]
+
+  if False:
+    # Needs testing
+    subsolar_point = _mead(yr, doy, sod, lib_transform='geopack_08_dp')
+    print(subsolar_point)
 
   # https://github.com/NCAR/apex_fortran/blob/master/test.out
   # subsol inputs: iyr,iday,ihr,imn,sec= 2018  182   12    0   0. UT
