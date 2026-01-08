@@ -528,8 +528,8 @@ def _sscweb(v, t, frame_in, frame_out):
 
     time.sleep(0.1) # To avoid overwhelming the server with requests and getting blocked.
     year = t[i][0]
-    doy_ = hxform.timelib.doy(t[i][0:3])
-    time_str = f'{year} {doy_:03d} {t[i][3]:02d}:{t[i][4]:02d}:{t[i][5]:02d}'
+    doy = hxform.timelib.ymd2doy(t[i][0:3])
+    time_str = f'{year} {doy:03d} {t[i][3]:02d}:{t[i][4]:02d}:{t[i][5]:02d}'
     # TODO: Document why SSCWeb Python client was not used
     #       (it handles too many request and retries)
     url = "https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi?"
