@@ -38,7 +38,12 @@ The list of supported libraries and frames is in [`info.py`](https://github.com/
 
 # Install
 
-Tested with Python 3.{11,12,13,14}.
+Install a Fortran compiler
+* OS-X: `brew install gcc`
+* Linux: the package name is either `gfortran` or `gcc-fortran`, depending on the distribution
+* Windows: Not tested. If you have success with the following commands, please post an issue with the steps you followed
+
+Tested with Python 3.{11,12,13,14}
 
 ```bash
 git clone https://github.com/rweigel/hxform
