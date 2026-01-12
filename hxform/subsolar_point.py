@@ -6,6 +6,7 @@ def _nint(a):
   else:
     return int(a - 0.5)
 
+
 def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
 
   # TODO: Implement.
@@ -28,20 +29,24 @@ def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
   C AND DECLINATION (SRASN, SDEC) OF THE SUN, ALL IN DEGREES
   """
 
-  from math import sin, cos, atan, tan, atan2, sqrt
+  from math import pi, sin, cos, atan, tan, atan2, sqrt
   def cotan(x):
     return 1.0 / tan(x)
   def DMOD(x, y):
     return x - y * int(x / y)
 
+
   #DATA RAD /57.29578/
-  RAD = 57.29578
+  RAD = 180.0 / pi
+
   #DOUBLE PRECISION DJ, FDAY
   #IF(IYR. LT. 1901. OR. IYR. GT. 2099) RETURN
   if IYR < 1901 or IYR > 2099:
-    return None, None
+    raise ValueError('1901 <= year <= 2099 required')
+
   #FDAY = SECS/86400
   FDAY = SECS/86400
+
   #DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5D0
   DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5
 
@@ -80,30 +85,19 @@ def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
 
   SRASN = 180. -RAD*atan2(cotan (OBLIQ)*SIND/COSD, -cos (SLP)/COSD)
 
-  # GEI coordinates
-  X = cos(SRASN) * cos(SDEC)
-  Y = sin(SRASN) * cos(SDEC)
-  Z = sin(SDEC)
+  # Added
+  sbsllon = SRASN - GST
 
+  return SDEC, sbsllon
 
-  import hxform
-  # Compute month day given day of year
-  month, day = hxform.timelib.doy2md(IYR, IDAY)
-
-  # Compute hour, minute, second given seconds of day
-  hour, minute, second = hxform.time.sod2hms(int(SECS))
-
-  minute = int((FDAY * 24 - hour) * 60)
-  t = [IYR, month, day, hour, minute, second]
-  XYZ_GEO = hxform.transform([X, Y, Z], t, 'GEI', 'GEO', lib=lib_transform)
-
-  return XYZ_GEO
 
 def _laundal(year, doy, ut):
 
   from math import floor, sin, cos, pi, atan2, asin
 
   # Appendix C of https://link.springer.com/article/10.1007/s11214-016-0275-y#appendices
+  # Reference frame of output not stated in Appendix, but from paragraph that
+  # references appendix, it appears to be GEO.
   yr = year - 2000
   nleap = floor((year - 1601)/4.)
   nleap = nleap - 99
@@ -142,6 +136,7 @@ def _laundal(year, doy, ut):
 def _apex(iyr, iday, ihr, imn, sec):
   # Subroutine subsol in
   # https://github.com/NCAR/apex_fortran/blob/master/apex.f90
+  # subsolar geographic latitude and longitude given the date and time (Universal Time)
   from math import sin, cos, atan2, asin
 
   dtr = 0.0174532925199432957692369076847
@@ -197,7 +192,7 @@ def _apex(iyr, iday, ihr, imn, sec):
 def _tiegcm(IYR, IDAY, IHR, IMN, SEC):
   from math import sin, cos, atan2, asin
   # https://fpi.hao.ucar.edu/hao/aim3/marsal/tiegcm/maggrd/src_code/subsol.F
-
+  # Find subsolar geographic latitude and longitude given the date and time (Universal Time)
   D2R = 0.0174532925199432957692369076847
   R2D = 57.2957795130823208767981548147
   YR = IYR - 2000
@@ -243,76 +238,85 @@ def _tiegcm(IYR, IDAY, IHR, IMN, SEC):
   return SBSLLAT, SBSLLON
 
 
-def _hxform(time, frame='MAG', lib='geopack_08_dp'):
+def _hxform(time, frame='GEO', lib='geopack_08_dp'):
   """Compute the subsolar point at a given time in a specified frame.
-  Usage:
-  ------
-  subsol_pt = hxform.subsolar_point(time, frame='MAG', lib='geopack_08_dp')
+  This is done by transforming [1, 0, 0] from GSM to the desired frame.
   """
 
   import numpy
   import hxform
+  outer_type = type(time)
 
   if lib not in hxform.libs():
     raise ValueError(f"Library '{lib}' not in available libraries: {hxform.libs()}")
 
   subsol_pt = hxform.transform([1., 0., 0.], time, 'GSM', frame, lib=lib)
 
-  if isinstance(time, (list, tuple, str)):
-    return subsol_pt
+  if isinstance(time, outer_type):
+    return outer_type(subsol_pt)
   else:
     return numpy.array(subsol_pt)
 
 
-def subsolar_point(t, frame='MAG', lib='geopack_08_dp', lib_transform='geopack_08_dp'):
+def subsolar_point(t, frame='GEO', lib='geopack_08_dp', lib_transform='geopack_08_dp'):
 
   import numpy as np
 
   import hxform
 
-  libs_alt = ['tiegcm', 'apex', 'laundal']
+  libs_alt = ['tiegcm', 'apex', 'laundal', 'mead']
   libs = [*libs_alt, *hxform.libs()]
   if lib not in libs:
     raise ValueError(f"Library '{lib}' not in available libraries: {libs}")
 
+  if lib not in libs_alt:
+    return _hxform(t, frame=frame, lib=lib)
+
+  # rtp: radius, theta (colat), phi (lon)
+  from hxform.transform import _t_prep
   if lib in libs_alt:
     outer_type = type(t)
 
-    from hxform.transform import _t_prep
     ts, _ = _t_prep(t)
+
     rtp = np.full((len(ts), 3), np.nan)
     rtp[:, 0] = 1.0  # radius
 
     for i, t in enumerate(ts):
-      # year
-      yr = t[0]
-      # day of year
-      doy = hxform.timelib.ymd2doy(t[0:3])
-      # hours, minutes, seconds
-      hms = t[3:6]
-      # seconds after midnight
-      sf = t[3]*3600 + t[4]*60 + t[5]
+      yr = t[0] # year
+      doy = hxform.timelib.ymd2doy(t[0:3]) # day of year
+      hms = t[3:6] # hours, minutes, seconds
+      sod = t[3]*3600 + t[4]*60 + t[5] # second of day
 
       if lib == 'tiegcm':
         lat, lon = _tiegcm(yr, doy, *hms)
+
       if lib == 'apex':
         lat, lon = _apex(yr, doy, *hms)
+
       if lib == 'laundal':
-        lat, lon = _laundal(yr, doy, sf)
+        lat, lon = _laundal(yr, doy, sod)
+
+      if lib == 'mead':
+        lat, lon = _mead(yr, doy, sod)
 
       rtp[i, 1] = lat
       rtp[i, 2] = lon
 
     xyz = hxform.sph2car(rtp)
-    if frame != 'GEO':
-      xyz = hxform.transform(xyz, t, 'GEO', frame, lib=lib_transform)
+    print(t)
+    print(xyz)
+    if lib == 'mead':
+      if frame != 'GEI':
+        xyz = hxform.transform(xyz, t, 'GEI', frame, lib=lib_transform)
+    else:
+      if frame != 'GEO':
+        xyz = hxform.transform(xyz, t, 'GEO', frame, lib=lib_transform)
 
     if outer_type in (list, tuple, str):
       return outer_type(xyz[0])
 
     return xyz
-
-  return _hxform(t, frame=frame, lib=lib)
 
 
 if __name__ == '__main__':
@@ -332,10 +336,9 @@ if __name__ == '__main__':
   # seconds after midnight (second of day)
   sod = t[3]*3600 + t[4]*60 + t[5]
 
-  if False:
-    # Needs testing
-    subsolar_point = _mead(yr, doy, sod, lib_transform='geopack_08_dp')
-    print(subsolar_point)
+  subsolar_pt = _mead(yr, doy, sod, lib_transform='geopack_08_dp')
+  print(subsolar_pt)
+  # (23.07090356829239, 0.9811996644603767)
 
   # https://github.com/NCAR/apex_fortran/blob/master/test.out
   # subsol inputs: iyr,iday,ihr,imn,sec= 2018  182   12    0   0. UT
@@ -349,11 +352,11 @@ if __name__ == '__main__':
   print(subsolar_pt)
   # (23.07096778320955, 0.9804334139973321)
 
-  subsolar_pt = _laundal(2018, doy, sf)
+  subsolar_pt = _laundal(2018, doy, sod)
   print(subsolar_pt)
   # (23.08837872675872, 0.9684353956029668)
 
   subsolar_pt = _hxform(t, frame='GEO')
   rtp = hxform.car2sph(subsolar_pt)
-  print(rtp[1:3])
-  # [23.088330367250137, 0.969196427178192]
+  print(tuple(rtp[1:3]))
+  # (23.088330367250137, 0.969196427178192)
