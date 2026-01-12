@@ -38,7 +38,8 @@ The list of supported libraries and frames is in [`info.py`](https://github.com/
 
 # Install
 
-Install a Fortran compiler
+First, install a Fortran compiler. Then
+
 * OS-X: `brew install gcc`
 * Linux: the package name is either `gfortran` or `gcc-fortran`, depending on the distribution
 * Windows: Not tested. If you have success with the following commands, please post an issue with the steps you followed
@@ -72,11 +73,14 @@ pytest # Executes files in ./test
 
 ## Multiple versions of Python
 
-To have a version installed and tested, use
+To have a version automatically installed and tested, use
 ```
 python -m pip install --upgrade 'nox[pbs]'
 nox -s tests
-# To test using only a single version of Python
+```
+
+To test using only a single version of Python
+```
 nox -s tests --python 3.12
 ```
 
@@ -84,20 +88,22 @@ nox -s tests --python 3.12
 
 ## Native interfaces
 
-Examples of using the native interface for other Python packages are in the [`demo-native`](https://github.com/rweigel/hxform/tree/main/demo-native) directory.
+Examples of using the native interface are [`demo-native`](https://github.com/rweigel/hxform/tree/main/demo-native) directory.
 
 ## Geopack-08 and cxform
 
-[cxform (C)](https://github.com/edsantiago/cxform) is a library based on the algorithms in Hapgood, 1992. Python wrappers include:
+`hxform` includes wrappers to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/Tsyganenko%20Magnetic%20Field~T96/) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions. Copies of the source code are in [src](https://github.com/rweigel/hxform/tree/master/src)).
+
+[cxform (C)](https://github.com/edsantiago/cxform) is a library based on the algorithms in Hapgood, 1992. Other Python wrappers include:
 [aics](https://aics.readthedocs.io/api.html), [python-magnetosphere](https://github.com/dpq/python-magnetosphere), and [bsd-conquerer](https://github.com/bsd-conqueror/cxform).
 
 [Geopack-08 (Fortran)](https://ccmc.gsfc.nasa.gov/models/Tsyganenko%20Magnetic%20Field~T96/) is a library of utility functions related to magnetospheric magnetic field models. Python translations and wrappers include [Geopack (Python)](https://pypi.org/project/geopack/) is based on a hand translation of Tysganenko's Geopack (Fortran) to native Python and [PyGeopack](https://pypi.org/project/PyGeopack/), which wraps Geopack using Python `ctypes` and requires the user to provide a compiled Geopack shared object library or DLL.
 
-`hxform` includes wrappers to [Tsyganenko's Geopack-08 library](https://ccmc.gsfc.nasa.gov/models/Tsyganenko%20Magnetic%20Field~T96/) and [cxform](https://github.com/edsantiago/cxform), both of which contain magnetospheric coordinate transformation functions. Copies of the source code are in [src](https://github.com/rweigel/hxform/tree/master/src)).
-
 To wrap `Geopack-08`, Numpy's `f2py` is used; see [`Geopack-2008_dp_wrapper.for`](https://github.com/rweigel/hxform/tree/master/src/geopack-08).
 
-To wrap `cxform` Python's `ctype` library is used; see [`cxform_wrapper.c`](https://github.com/rweigel/hxform/tree/master/src/cxform). Arrays are passed to the wrapper function, which loops over the array and calls the required functions on each iteration. This is much faster than looping over an array in Python and calling an external library function on each iteration.
+To wrap `cxform` Python's `ctype` library is used; see [`cxform_wrapper.c`](https://github.com/rweigel/hxform/tree/master/src/cxform). 
+
+For both `cxform` and `Geopack-08`, arrays are passed to the wrapper function, which loops over the array in the native language. This is much faster than looping over an array in Python and calling an external library function on each iteration.
 
 To build the libraries manually, install `NumPy` and `meson-python` and
 
@@ -114,7 +120,7 @@ gcc -fPIC -shared -o cxform_wrapper.so cxform_wrapper.c cxform-manual.c cxform-a
 cp *.so ../../hxform
 ```
 
-The following demos show how `hxform` calls the Geopack-08 and cxform wrappers. In general, you should not need to use these methods except for debugging.
+The following demos show how `hxform` calls the `Geopack-08` and `cxform` wrappers. In general, you should not need to use these methods except for debugging.
 
 ```bash
 python demo-native/geopack_08_dp_demo.py

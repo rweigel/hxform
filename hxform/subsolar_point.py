@@ -260,6 +260,7 @@ def _hxform(time, frame='GEO', lib='geopack_08_dp'):
 
 def subsolar_point(t, frame='GEO', lib='geopack_08_dp', lib_transform='geopack_08_dp'):
 
+  # TODO: Also use https://docs.astropy.org/en/latest/api/astropy.coordinates.get_sun.html
   import numpy as np
 
   import hxform
