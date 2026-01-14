@@ -4,7 +4,7 @@ import hxform
 
 from geopack import geopack
 
-# TODO: What was issue?
+# TODO: What was issue this was written for?
 time = (2003, 11, 19, 21, 36, 0)
 input = np.array([0., 0., 1.])
 hxform.xprint(f"Time:  {time}")
