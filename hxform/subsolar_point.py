@@ -305,8 +305,7 @@ def subsolar_point(t, frame='GEO', lib='geopack_08_dp', lib_transform='geopack_0
       rtp[i, 2] = lon
 
     xyz = hxform.sph2car(rtp)
-    print(t)
-    print(xyz)
+
     if lib == 'mead':
       if frame != 'GEI':
         xyz = hxform.transform(xyz, t, 'GEI', frame, lib=lib_transform)
