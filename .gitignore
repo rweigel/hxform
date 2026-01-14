@@ -1,7 +1,7 @@
-
 .DS_Store
 *.so
 *.dll
+*.pkl
 
 .eggs/
 dist/
