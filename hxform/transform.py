@@ -417,11 +417,12 @@ def _spacepy(v, t, frame_in, frame_out, lib):
 
   import numpy
 
+  import warnings
+  warnings.filterwarnings("ignore", message="Leapseconds.*")
+
   import spacepy.coordinates as sc
   from spacepy.time import Ticktock
 
-  import warnings
-  warnings.filterwarnings("ignore", message="Leapseconds.*")
 
   if len(t.shape) == 1:
     # SpacePy requires time values to be strings with 1-second precision
@@ -514,6 +515,7 @@ def _sscweb(v, t, frame_in, frame_out):
   import numpy
 
   import hxform
+
   vt = numpy.full(v.shape, numpy.nan)
 
   info = hxform.lib_info('sscweb')
@@ -521,7 +523,7 @@ def _sscweb(v, t, frame_in, frame_out):
   frame_out = info['system_aliases'].get(frame_out, frame_out)
 
   if frame_in in ['GEO', 'GM']:
-    v[:,0], v[:,1], v[:,2] = car2sph(v[:,0], v[:,1], v[:,2])
+    v[:,0], v[:,1], v[:,2] = hxform.car2sph(v[:,0], v[:,1], v[:,2])
 
   execution_start = time.time()
   for i in range(t.shape[0]):
@@ -540,13 +542,12 @@ def _sscweb(v, t, frame_in, frame_out):
 
     # This is likely to fail if many requests are made.
     try:
-      print(f"Fetching URL: {url}")
+      #print(f"Fetching URL: {url}")
       r = requests.get(url, timeout=2)
     except Exception as e:
-      #print(e)
-      raise Exception(f"Failed to fetch URL: {url}.")
-      vt[i] = numpy.full((1, 3), numpy.nan)
-      continue
+      raise Exception(f"Failed to fetch URL {url}: {e}")
+      #vt[i] = numpy.full((1, 3), numpy.nan)
+      #continue
 
     if r.status_code != 200:
       raise Exception(f"Failed to fetch URL: {url}. Status code: {r.status_code}.")

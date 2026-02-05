@@ -1,5 +1,5 @@
 # Calls hxform.compare to compare different libraries for a given transformation
-# Writes results to compare_libs directory
+# Writes results to directory ./compare_libs
 import numpy as np
 
 import hxform
