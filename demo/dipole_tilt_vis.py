@@ -87,7 +87,7 @@ def _title(gsm_z_gse, t, t_dt, dipole_tilt):
   time_string = t_dt.strftime("%Y-%m-%dT%H:%M:%S")
   title = f'{time_string}\n'
   title += r'$Z_{GSM}$ in $GSE$ = '
-  title += f'[{gsm_z_gse[t, 0]:.2f}, {gsm_z_gse[t, 1]:.2f}, {gsm_z_gse[t, 2]:.2f}]'
+  title += f'[{gsm_z_gse[t, 0]:+.2f}, {gsm_z_gse[t, 1]:+.2f}, {gsm_z_gse[t, 2]:+.2f}]'
   title += f'\nDipole tilt = ${dipole_tilt:.2f}^\circ$'
   return title
 
@@ -109,9 +109,8 @@ labels = {
   'zlabel': '$Z_{GSE}$'
 }
 
-t = utilrsw.time.ints_list(to, tf, delta)
+t = utilrsw.time.ints_list(to, tf, delta, n=6)
 t_dts = utilrsw.time.ints2datetime(t)
-
 gsm_z = numpy.array([0., 0., 1.])
 kwargs['frame_in'] = 'GSM'
 gsm_z_gse = hxform.transform(gsm_z, t, **kwargs)
@@ -152,8 +151,8 @@ for t, t_dt in enumerate(t_dts):
   m_dot_s = numpy.dot([1, 0, 0], mag_z_gse[t, :])
   dipole_tilt = (180/numpy.pi)*numpy.arcsin(m_dot_s)
 
-  ax.set_title(_title(gsm_z_gse, t, t_dt, dipole_tilt))
+  ax.set_title(_title(gsm_z_gse, t, t_dt, dipole_tilt), fontfamily='monospace')
 
-  file_name = f'frame_vis/frame_vis_{t_dt.strftime("%Y%m%dT%H%M%S")}.png'
+  file_name = f'dipole_tilt_vis/dipole_tilt_vis_{t_dt.strftime("%Y%m%dT%H%M%S")}.png'
   _savefig(file_name)
   plt.close()
