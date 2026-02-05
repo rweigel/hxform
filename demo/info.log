@@ -1,0 +1,190 @@
+cxform
+  frames: ['J2000', 'GEI', 'GEO', 'GSE', 'GSM', 'SM', 'MAG', 'RTN', 'GSEQ', 'HEE', 'HAE', 'HEEQ']
+geopack_08_dp
+  frames: ['GEI', 'GEO', 'GSE', 'GSM', 'SM', 'MAG']
+spacepy
+  frames: ['ECI2000', 'ECITOD', 'GEI', 'GSE', 'GSM', 'GEO', 'SM', 'MAG', 'ECIMOD']
+spacepy-irbem
+  frames: ['ECI2000', 'ECITOD', 'GEI', 'GSE', 'GSM', 'GEO', 'SM', 'MAG']
+spiceypy1
+  frames: ['GEI', 'GEI_TOD', 'GEI_MOD', 'MEAN_ECLIP', 'GEO', 'GSE', 'GSM', 'MAG', 'SM']
+spiceypy2
+  frames: ['GEI', 'GEI_TOD', 'GEI_MOD', 'MEAN_ECLIP', 'GEO', 'GSE', 'GSE_Z_PRIMARY', 'GSM', 'MAG', 'SM']
+sunpy
+  frames: ['GEI', 'GEO', 'GSE', 'GSM', 'SM', 'MAG']
+sscweb
+  frames: ['GEI', 'GEO', 'MAG', 'GSE', 'GSM', 'J2000', 'SM']
+pyspedas
+  frames: ['GSE', 'GSM', 'GEI', 'SM', 'GEO', 'J2000']
+Library information:
+{
+  "cxform": {
+    "name": "cxform",
+    "version": null,
+    "version_info": null,
+    "frames": [
+      "J2000",
+      "GEI",
+      "GEO",
+      "GSE",
+      "GSM",
+      "SM",
+      "MAG",
+      "RTN",
+      "GSEQ",
+      "HEE",
+      "HAE",
+      "HEEQ"
+    ]
+  },
+  "geopack_08_dp": {
+    "name": "geopack_08_dp",
+    "version": null,
+    "version_info": "IGRF coefficients updated 01/01/20",
+    "frames": [
+      "GEI",
+      "GEO",
+      "GSE",
+      "GSM",
+      "SM",
+      "MAG"
+    ]
+  },
+  "spacepy": {
+    "name": "spacepy",
+    "version": "0.6.0",
+    "version_info": null,
+    "frames": [
+      "ECI2000",
+      "ECITOD",
+      "GEI",
+      "GSE",
+      "GSM",
+      "GEO",
+      "SM",
+      "MAG",
+      "ECIMOD"
+    ]
+  },
+  "spacepy-irbem": {
+    "name": "spacepy-irbem",
+    "parent": "spacepy",
+    "version": "0.6.0",
+    "version_info": null,
+    "frames": [
+      "ECI2000",
+      "ECITOD",
+      "GEI",
+      "GSE",
+      "GSM",
+      "GEO",
+      "SM",
+      "MAG"
+    ]
+  },
+  "spiceypy1": {
+    "name": "spiceypy1",
+    "parent": "spiceypy",
+    "version": "6.0.0",
+    "version_info": null,
+    "frames": [
+      "GEI",
+      "GEI_TOD",
+      "GEI_MOD",
+      "MEAN_ECLIP",
+      "GEO",
+      "GSE",
+      "GSM",
+      "MAG",
+      "SM"
+    ],
+    "kernel": {
+      "dir": "/Users/rweigel/git/stct/hxform/kernels",
+      "files": [
+        "naif0012.tls",
+        "rbsp_general011.tf",
+        "de440s.bsp",
+        "pck00011.tpc"
+      ]
+    }
+  },
+  "spiceypy2": {
+    "name": "spiceypy2",
+    "parent": "spiceypy",
+    "version": "6.0.0",
+    "version_info": null,
+    "frames": [
+      "GEI",
+      "GEI_TOD",
+      "GEI_MOD",
+      "MEAN_ECLIP",
+      "GEO",
+      "GSE",
+      "GSE_Z_PRIMARY",
+      "GSM",
+      "MAG",
+      "SM"
+    ],
+    "kernel": {
+      "dir": "/Users/rweigel/git/stct/hxform/kernels",
+      "files": [
+        "naif0012.tls",
+        "rbsp_general012_mod.tf",
+        "de440s.bsp",
+        "pck00011.tpc"
+      ]
+    }
+  },
+  "sunpy": {
+    "name": "sunpy",
+    "version": "7.0.3",
+    "version_info": null,
+    "frames": [
+      "GEI",
+      "GEO",
+      "GSE",
+      "GSM",
+      "SM",
+      "MAG"
+    ],
+    "system_aliases": {
+      "GEI": "geocentricearthequatorial",
+      "GSE": "geocentricsolarecliptic",
+      "GSM": "geocentricsolarmagnetospheric",
+      "GEO": "itrs",
+      "SM": "solarmagnetic",
+      "MAG": "geomagnetic"
+    }
+  },
+  "sscweb": {
+    "name": "sscweb",
+    "version": null,
+    "version_info": null,
+    "notes": "https://sscweb.gsfc.nasa.gov/users_guide/Appendix_C.shtml",
+    "frames": [
+      "GEI",
+      "GEO",
+      "MAG",
+      "GSE",
+      "GSM",
+      "J2000",
+      "SM"
+    ],
+    "system_aliases": {
+      "MAG": "GM"
+    }
+  },
+  "pyspedas": {
+    "name": "pyspedas",
+    "version": "1.7.28",
+    "version_info": null,
+    "frames": [
+      "GSE",
+      "GSM",
+      "GEI",
+      "SM",
+      "GEO",
+      "J2000"
+    ]
+  }
+}

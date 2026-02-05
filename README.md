@@ -15,6 +15,8 @@ and
 Web services include
 [`SSCWeb Coordinate Calculator`](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi).
 
+This code was used in [Weigel et al., 2026](https://arxiv.org/abs/2601.07605).
+
 # Motivation
 
 Over time, we have needed to use various coordinate transform libraries in Python. Multiple libraries have been used because
