@@ -1,0 +1,36 @@
+------------------------------------------------------------
+1 time value; 1000 different vectors
+------------------------------------------------------------
+time      lib
+0.00976   sunpy
+0.00273   pyspedas
+0.00013   cxform
+0.00001   geopack_08_dp
+0.04956   spiceypy2
+0.00855   spacepy
+0.04806   spiceypy1
+0.00688   spacepy-irbem
+------------------------------------------------------------
+1000 identical time values; 1000 different vectors
+------------------------------------------------------------
+time      lib
+          sunpy (skipped b/c N > 100)
+0.00301   pyspedas
+0.00014   cxform
+0.00034   geopack_08_dp
+0.04772   spiceypy2
+0.00840   spacepy
+0.04776   spiceypy1
+0.00682   spacepy-irbem
+------------------------------------------------------------
+# 1000 different time values; 1000 different vectors
+------------------------------------------------------------
+time      lib
+          sunpy skipped b/c N > 100
+0.00588   pyspedas
+0.00016   cxform
+0.00032   geopack_08_dp
+0.04789   spiceypy2
+2.99999   spacepy
+0.04832   spiceypy1
+0.00695   spacepy-irbem
