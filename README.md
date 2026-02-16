@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18663932.svg)](https://doi.org/10.5281/zenodo.18663932)]
+v1.0.0: https://doi.org/10.5281/zenodo.18663932
 
 # `hxform`
 
