@@ -1,5 +1,5 @@
-v1.0.0: https://doi.org/10.5281/zenodo.18663932
 <a href="https://doi.org/10.5281/zenodo.18663932"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.18663932.svg" alt="DOI"></a>
+
 # `hxform`
 
 Heliophysics reference-frame ("coordinate") transforms in Python, using various libraries, Python packages, and web services via a common interface.
