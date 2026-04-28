@@ -1,6 +1,8 @@
+[DOI](https://zenodo.org/records/18663932)
+
 # `hxform`
 
-Heliophysics reference frame ("coordinate") transforms in Python using various libraries, Python packages, and web services using a common interface.
+Heliophysics reference-frame ("coordinate") transforms in Python, using various libraries, Python packages, and web services via a common interface.
 
 Libraries include
 [`cxform`](https://github.com/edsantiago/cxform)
