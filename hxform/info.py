@@ -184,6 +184,7 @@ def lib_info(lib=None):
       'frames': [
         "GSE",
         "GSM",
+        "MAG",
         "GEI",
         "SM",
         "GEO",
