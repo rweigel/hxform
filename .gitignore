@@ -2,10 +2,12 @@
 *.so
 *.dll
 *.pkl
+demo/subsolar_point.log
 
 .eggs/
 dist/
 build/
 hxform.egg-info/
 __pycache__/
+
 

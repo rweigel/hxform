@@ -15,7 +15,7 @@ and
 Web services include
 [`SSCWeb Coordinate Calculator`](https://sscweb.gsfc.nasa.gov/cgi-bin/CoordCalculator.cgi).
 
-This code was used in [Weigel et al., 2026](https://arxiv.org/abs/2601.07605).
+This code was used in [Weigel et al., 2026](https://arxiv.org/abs/2601.07605). The specific code used for the analysis is in the [repository for the paper](https://github.com/rweigel/2024-Weigel-Coordinate-Frames).
 
 # Motivation
 
@@ -40,13 +40,15 @@ The list of supported libraries and frames is in [`info.py`](https://github.com/
 
 # Install
 
-First, install a Fortran compiler. Then
+Tested with Python 3.{11,12,13,14} on OS-X and Linux.
+
+First, install a Fortran compiler:
 
 * OS-X: `brew install gcc`
 * Linux: the package name is either `gfortran` or `gcc-fortran`, depending on the distribution
 * Windows: Not tested. If you have success with the following commands, please post an issue with the steps you followed
 
-Tested with Python 3.{11,12,13,14}
+Then
 
 ```bash
 git clone https://github.com/rweigel/hxform

@@ -1,7 +1,8 @@
 import hxform
 
 # See basic.log for expected output
-lib = 'spiceypy1'
+#lib = 'spiceypy1'
+lib = 'geopack_08_dp'
 
 final = 'GSM'
 initial = 'GSE'

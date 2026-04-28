@@ -1,4 +1,5 @@
 import pathlib
+import sys
 import warnings
 import setuptools
 
@@ -31,6 +32,7 @@ def version(pkg):
   with ver_path.open() as vf:
     exec(vf.read(), main_ns)
   return main_ns.get('__version__', '0.0.0')
+
 
 def build_geopack():
   """Try to build Geopack using numpy.f2py and copy the produced shared library
@@ -125,6 +127,7 @@ def build_geopack():
 
 emsg = build_geopack()
 if emsg:
+  print(f'WARNING: geopack build skipped\n{emsg}', file=sys.stderr, flush=True)
   warnings.warn(emsg)
 
 name = 'hxform'
@@ -138,7 +141,10 @@ setuptools.setup(
   long_description=long_description,
   long_description_content_type='text/markdown',
   include_package_data=True,
-  package_data={'': ['README.md']},
+  package_data={
+    '': ['README.md'],
+    name: ['geopack_08_dp*.so', 'geopack_08_dp*.pyd'],
+  },
   license='LICENSE.txt',
   install_requires=install_requires,
   ext_modules=[cxform_ext]
