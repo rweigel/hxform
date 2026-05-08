@@ -1,5 +1,5 @@
-import pathlib
 import sys
+import pathlib
 import warnings
 import setuptools
 
