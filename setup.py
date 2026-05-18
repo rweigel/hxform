@@ -14,7 +14,7 @@ install_requires = [
   'spacepy>=0.6.0',
   'spiceypy>=6.0.0',
   'pyspedas>=1.7.28',
-  'utilrsw[time] @ git+https://github.com/rweigel/utilrsw'
+  'utilrsw[time] @ git+https://github.com/rweigel/utilrsw@main'
 ]
 
 cxform_sources = [
