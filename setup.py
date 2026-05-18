@@ -143,7 +143,7 @@ setuptools.setup(
   include_package_data=True,
   package_data={
     '': ['README.md'],
-    name: ['geopack_08_dp*.so', 'geopack_08_dp*.pyd'],
+    name: ['geopack_08_dp*.so', 'geopack_08_dp*.pyd', 'kernels/*'],
   },
   license='LICENSE.txt',
   install_requires=install_requires,

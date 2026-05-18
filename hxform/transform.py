@@ -338,7 +338,7 @@ def _geopack_08_dp(v, t, frame_in, frame_out):
     raise ImportError(
       "gfortran is not installed. To use geopack_08_dp, execute\n"
       "  conda install -c conda-forge gfortran meson ninja -y\n"
-      "and reinstall hxform."
+      "and reinstall hxform or reinstall the package that depends on hxform."
     ) from None
 
   if frame_in == frame_out:

@@ -31,7 +31,7 @@ def lib_info(lib=None):
   ]
   frames_spacepy = frames_spacepy_irbem + ["ECIMOD"]
 
-  kernel_dir = os.path.join(os.path.dirname(__file__), '..', 'kernels')
+  kernel_dir = os.path.join(os.path.dirname(__file__), 'kernels')
   kernel_dir = os.path.abspath(kernel_dir)
 
   # In the following, a package with its configuration is a 'lib'. The top-level
