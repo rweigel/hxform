@@ -40,7 +40,7 @@ See the [`demo/`](https://github.com/rweigel/hxform/tree/main/demo) directory fo
 
 The list of supported libraries and frames is in [`info.py`](https://github.com/rweigel/hxform/blob/main/hxform/info.py).
 
-# Install
+# Install without Conda
 
 Tested with Python 3.{11,12,13,14} on OS-X and Linux.
 
@@ -48,13 +48,29 @@ First, install a Fortran compiler:
 
 * OS-X: `brew install gcc`
 * Linux: the package name is either `gfortran` or `gcc-fortran`, depending on the distribution
-* Windows: Not tested. If you have success with the following commands, please post an issue with the steps you followed
+* Windows: Not tested. If you have success with the following commands, please try using the `Install with Conda` instruction or post an issue with the steps you followed without using Conda.
 
 Then
 
 ```bash
 git clone https://github.com/rweigel/hxform
 cd hxform
+pip install -e .
+```
+
+To test if the installation was successful, execute
+
+```
+python demo/basic.py
+```
+
+# Install with Conda
+
+```
+conda create -n python3.14-hxform python=3.14
+git clone https://github.com/rweigel/hxform
+cd hxform
+conda install -c conda-forge gfortran meson ninja -y
 pip install -e .
 ```
 
@@ -78,6 +94,8 @@ pytest # Executes files in ./test
 ```
 
 ## Multiple versions of Python
+
+Requires `Install without Conda` install approach.
 
 To have a version automatically installed and tested, use
 ```

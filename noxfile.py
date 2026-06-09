@@ -51,5 +51,6 @@ def copy_logs(pyver):
     dest = dest_dir / f"{src.stem}.{pyver}.log"
     shutil.move(src, dest)
 
+
 if __name__ == "__main__":
   copy_logs("10")

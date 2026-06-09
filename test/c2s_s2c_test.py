@@ -59,7 +59,7 @@ def test_simple_values():
 def test_r_equal_zero():
   import pytest
   car0 = np.array([0., 0., 0.])
-  with pytest.raises(AssertionError):
+  with pytest.raises(ValueError):
     hxform.car2sph(*car0)
 
 
