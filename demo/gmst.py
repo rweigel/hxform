@@ -353,11 +353,11 @@ if __name__ == "__main__":
   ref = "R71"
   ref_val = gmstR71
 
-  print(f"USNO         GMST = {gmstUSNO_str}   | {gmstUSNO:.6f} deg | {gmstUSNO - ref_val:9.2e} deg diff from {ref} value")
-  print(f"Russell 1971 GMST = {deg2timestr(gmstR71)} | {gmstR71:.6f} deg | {gmstR71 - ref_val:9.2e} deg diff from {ref} value")
-  print(f"Hapgood 1992 GMST = {deg2timestr(gmstH92)} | {gmstH92:.6f} deg | {gmstH92 - ref_val:9.2e} deg diff from {ref} value")
-  print(f"F & H 2002   GMST = {deg2timestr(gmstF02)} | {gmstF02:.6f} deg | {gmstF02 - ref_val:9.2e} deg diff from {ref} value")
-  print(f"Meeus 1998   GMST = {deg2timestr(gmstM98)} | {gmstM98:.6f} deg | {gmstM98 - ref_val:9.2e} deg diff from {ref} value")
+  print(f"USNO         GMST = {gmstUSNO_str}   | {gmstUSNO:.6f} deg | {gmstUSNO - ref_val:9.4e} deg diff from {ref} value")
+  print(f"Russell 1971 GMST = {deg2timestr(gmstR71)} | {gmstR71:.6f} deg | {gmstR71 - ref_val:9.4e} deg diff from {ref} value")
+  print(f"Hapgood 1992 GMST = {deg2timestr(gmstH92)} | {gmstH92:.6f} deg | {gmstH92 - ref_val:9.4e} deg diff from {ref} value")
+  print(f"F & H 2002   GMST = {deg2timestr(gmstF02)} | {gmstF02:.6f} deg | {gmstF02 - ref_val:9.4e} deg diff from {ref} value")
+  print(f"Meeus 1998   GMST = {deg2timestr(gmstM98)} | {gmstM98:.6f} deg | {gmstM98 - ref_val:9.4e} deg diff from {ref} value")
 
 
   if False:
