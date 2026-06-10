@@ -102,10 +102,21 @@ def mjd(iyear, iday, secs):
 def checkargs(iyear, iday, secs):
   if not isinstance(iyear, int):
     raise ValueError(f"year must be an integer, got {type(iyear)}")
+
   if not isinstance(iday, int):
     raise ValueError(f"iday must be an integer, got {type(iday)}")
+
   if not isinstance(secs, (int, float)):
     raise ValueError(f"secs must be a number, got {type(secs)}")
+
+  if not secs >= 0.0 and secs < 86400.0:
+    raise ValueError(f"secs must be in the range [0, 86400), got {secs}")
+
+  if iday < 1 or iday > 366:
+    raise ValueError(f"iday must be in the range [1, 366], got {iday}")
+
+  if not is_leap_year(iyear) and iday == 366:
+    raise ValueError(f"iday must be in the range [1, 365] for non-leap years, got {iday} for year {iyear}")
 
 
 def deg2timestr(deg):
@@ -147,7 +158,7 @@ def timestr2deg(ts):
 
 
 def gmstR71(iyear, iday, secs):
-  """Compute Greenwich Mean Sidereal Time in degrees using Russell 1971 formula."""
+  """Greenwich Mean Sidereal Time in degrees using Russell 1971 formula."""
 
   checkargs(iyear, iday, secs)
   if iyear < 1901 or iyear > 3000:
@@ -185,7 +196,7 @@ def newcomb(iyear, iday, secs):
 
 
 def gmstF02(iyear, iday, secs):
-  """Compute Greenwich Mean Sidereal Time in degrees using Fränz and Harper 2002 formula.
+  """Greenwich Mean Sidereal Time in degrees using Fränz and Harper 2002 formula.
 
   Fränz and Harper 2002, Section 2
   ------------------------------------------------------------------------------
@@ -212,10 +223,11 @@ def gmstF02(iyear, iday, secs):
        -   0◦.000000026*T0^3
   ------------------------------------------------------------------------------
 
-  Note that 1/38710000 = 2.5833118057349522e-08 is used in Meeus 1998 Eqn 12.4
+  Note that 1/38710000 (= 2.5833118057349522e-08) is used in Meeus 1998 Eqn 12.4
   (see notes in gmstM98) and 2.6e-08 is used in Fränz and Harper 2002 (and
-  Siedelman 1992 3.352-1). Also, 0.000387933*T^2 used in Meeus 1998 Eqn 12.4
-  (and Siedelman 1992 3.352-1) but 0.0003875*T0^2 is used in Fränz and Harper 2002.
+  Siedelman 1992). Also, 0.000387933 is used in Meeus 1998 Eqn 12.4
+  (and Siedelman 1992) but 0.0003875 is used in Fränz and Harper 2002.
+
   Finally, Fränz and Harper 2002 cite "Meeus, J, 2000, Astronomical Algorithms
   2nd Edition" but but I am only  able to find 1998 associated with a 2nd edition.
   """
@@ -308,27 +320,27 @@ def gmstH92(iyear, iday, secs):
   The rotation angle theta is the Greenwich mean sidereal time. This can be
   calculated using the following formula (U.S. Naval Observatory, 1989):
 
-  theta = 100.461 + 360000.770*T0 + 15.04107 UT,
+  theta = 100.461 + 360000.770*T0 + 15.04107 UT,                          (3)
 
   where
 
-  T0 = (MJD - 51544.5)/36525.0                                             (3)
+  T0 = (MJD - 51544.5)/36525.0
 
   Note that T0 is the time in Julian centuries (36525 days) from 12:00 UT on
   1 January 2000 (known as epoch 2000.0) to the previous midnight.
   ------------------------------------------------------------------------------
 
-  Note that this equation (3) for theta is related to theta0 in Meeus 1998 (see
-  notes in gmstM198). Meeus 1998 Eqn 12.3 is
+  Note that equation (3) for theta in Hapgood 1992 is related to theta0 in 
+  Meeus 1998 (see notes in gmstM198). Meeus 1998 Eqn 12.3 is
 
   Theta0 = 100.46061837 + 36000.770053608*T + 0.000387933*T^2 - T^3/38710000.
 
-  and then states "...To obtain the sidereal time theta0 at Greenwich for any
-  instant UT of a given date, multiply that instant by 1.00273790935 and add
+  which is followed by "...To obtain the sidereal time theta0 at Greenwich for
+  any instant UT of a given date, multiply that instant by 1.00273790935 and add
   the result to the sidereal time Theta0 at 0h UT."
 
-  Equation (3) above has the first two numbers rounded to the nearest 0.001
-  degree and the T^2 and T^3 terms are omitted. The 15.04107 comes from rounding
+  Equation (3) above has the first two numbers rounded to three decimal places
+  and the T^2 and T^3 terms are omitted. The 15.04107 comes from rounding
   15*1.00273790935 = 15.0410686402499998.
   """
 
