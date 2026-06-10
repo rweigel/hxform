@@ -155,8 +155,32 @@ def gmstR71(iyear, iday, secs):
 
   fday = secs/86400.0
   dj = 365*(iyear - 1900) + (iyear - 1901)//4 + iday + fday - 0.5
+
   gst_deg = (279.690983 + 0.9856473354*dj + 360.0*fday + 180.0) % 360.0
 
+  """
+  Newcomb (https://apps.dtic.mil/sti/tr/pdf/ADA548492.pdf):
+  Long of Sun: 279° 41' 48''.04 + 129602768''.13 T
+  where T is the time reckoned in Julian centuries of 36525 days since
+  January 0, 1900, 12 h UT
+
+  279° 41' 48.04 = 279.6966777777777778 degrees
+  129602768.13/36525/3600 ≈ 0.9856473353867213 degrees/day
+
+  The difference in the leading constant in Russell 1971 and Newcomb's formula is
+  279.6966777777777778 - 279.690983 = 0.005694777777762283 degrees
+
+  This seems to correspond to the aberration of Δλ = -20.4898'' = 0.00569161111
+  due to light-time correction for the Sun's apparent position (Meeus 1998, pg 133).
+  """
+
+  return gst_deg
+
+
+def newcomb(iyear, iday, secs):
+  fday = secs/86400.0
+  dj = 365*(iyear - 1900) + (iyear - 1901)//4 + iday + fday - 0.5
+  gst_deg = (279.6966777777777778 + 0.9856473354*dj + 180.0) % 360.0
   return gst_deg
 
 
@@ -193,7 +217,7 @@ def gmstF02(iyear, iday, secs):
   Siedelman 1992 3.352-1). Also, 0.000387933*T^2 used in Meeus 1998 Eqn 12.4
   (and Siedelman 1992 3.352-1) but 0.0003875*T0^2 is used in Fränz and Harper 2002.
   Finally, Fränz and Harper 2002 cite "Meeus, J, 2000, Astronomical Algorithms
-  2nd Edition" but but I am only able to find 1998 associated with a 2nd edition.
+  2nd Edition" but but I am only  able to find 1998 associated with a 2nd edition.
   """
 
   checkargs(iyear, iday, secs)
@@ -348,16 +372,19 @@ if __name__ == "__main__":
   gmstF02 = gmstF02(year, iday, secs)
   gmstM98 = gmstM98(year, iday, secs)
 
+  print(gmstR71)
+  print(newcomb(year, iday, secs))
+
   #ref = "USNO"
   #ref_val = timestr2deg(gmstUSNO_str)
   ref = "R71"
   ref_val = gmstR71
 
-  print(f"USNO         GMST = {gmstUSNO_str}   | {gmstUSNO:.6f} deg | {gmstUSNO - ref_val:9.4e} deg diff from {ref} value")
-  print(f"Russell 1971 GMST = {deg2timestr(gmstR71)} | {gmstR71:.6f} deg | {gmstR71 - ref_val:9.4e} deg diff from {ref} value")
-  print(f"Hapgood 1992 GMST = {deg2timestr(gmstH92)} | {gmstH92:.6f} deg | {gmstH92 - ref_val:9.4e} deg diff from {ref} value")
-  print(f"F & H 2002   GMST = {deg2timestr(gmstF02)} | {gmstF02:.6f} deg | {gmstF02 - ref_val:9.4e} deg diff from {ref} value")
-  print(f"Meeus 1998   GMST = {deg2timestr(gmstM98)} | {gmstM98:.6f} deg | {gmstM98 - ref_val:9.4e} deg diff from {ref} value")
+  print(f"USNO         GMST = {gmstUSNO_str}   | {gmstUSNO:.6f} deg | {gmstUSNO - ref_val:9.6f} deg diff from {ref} value")
+  print(f"Russell 1971 GMST = {deg2timestr(gmstR71)} | {gmstR71:.6f} deg | {gmstR71 - ref_val:9.6f} deg diff from {ref} value")
+  print(f"Hapgood 1992 GMST = {deg2timestr(gmstH92)} | {gmstH92:.6f} deg | {gmstH92 - ref_val:9.6f} deg diff from {ref} value")
+  print(f"F & H 2002   GMST = {deg2timestr(gmstF02)} | {gmstF02:.6f} deg | {gmstF02 - ref_val:9.6f} deg diff from {ref} value")
+  print(f"Meeus 1998   GMST = {deg2timestr(gmstM98)} | {gmstM98:.6f} deg | {gmstM98 - ref_val:9.6f} deg diff from {ref} value")
 
 
   if False:
