@@ -157,6 +157,54 @@ def timestr2deg(ts):
 def gmstR71(iyear, iday, secs):
   """Greenwich Mean Sidereal Time in degrees using Russell 1971 formula."""
 
+  # http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm
+  """
+  The following is from
+  http://jsoc.stanford.edu/~jsoc/keywords/Chris_Russel/Geophysical%20Coordinate%20Transformations.htm
+  which is a copy of a page previous posted at on Russell's website.
+
+  Appendix 2. The Calculation of the Position of the Sun
+
+  G.D. Mead (private communication) has written a simple subroutine to calculate
+  the position of the Sun in GEI coordinates. It is accurate for years 1901
+  through 2099, to within 0.006 deg. The input is the year, day of year and
+  seconds of the day in UT. The output is Greenwich Mean Sideral Time in degrees,
+  the ecliptic longitude, apparent right ascension and declination of the Sun
+  in degrees. The listing of this program follows. We note that the cartesian
+  coordinates of the vector from the Earth to the Sun are:
+
+    X = cos(SRASN) cos(SDEC)
+    Y = sin(SRASN) cos(SDEC)
+    Z = sin(SDEC)
+
+    SUBROUTINE SUN(IYR, IDAY, SECS, GST, SLONG, SRASN, SDEC)
+  C PROGRAM TO CALCULATE SIDEREAL TIME AND POSITION OF THE SUN.
+  C GOOD FOR YEARS 1901 THROUGH 2099. ACCURACY 0.006 DEGREE.
+  C INPUT IS IYR, IDAY (INTEGERS), AND SECS, DEFINING UN. TIME.
+  C OUTPUT IS GREENWICH MEAN SIDEREAL TIME (GST) IN DEGREES,
+  C LONGITUDE ALONG ECLIPTIC (SLONG), AND APPARENT RIGHT ASCENSION
+  C AND DECLINATION (SRASN, SDEC) OF THE SUN, ALL IN DEGREES
+    DATA RAD /57.29578/
+    DOUBLE PRECISION DJ, FDAY
+    IF(IYR. LT. 1901. OR. IYR. GT. 2099) RETURN
+    FDAY = SECS/86400
+    DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5D0 
+    T = DJ / 36525
+    VL = DMOD (279.696678 + 0.9856473354*DJ, 360.D0)
+    GST = DMOD (279.690983 + 0.9856473354*DJ + 360.*FDAY + 180., 360.D0)
+    G = DMOD (358.475845 + 0.985600267*DJ, 360.D0) / RAD
+    SLONG = VL + (1.91946 -0.004789*T)*SIN(G) + 0.020094*SIN (2.*G)
+    OBLIQ = (23.45229 -0.0130125*T) / RAD
+    SLP = (SLONG -0.005686) / RAD
+    SIND = SIN (OBLIQ)*SIN (SLP)
+    COSD = SQRT(1.-SIND**2)
+    SDEC = RAD * ATAN (SIND/COSD)
+    SRASN = 180. -RAD*ATAN2
+    (COTAN (OBLIQ)*SIND/COSD, -COS (SLP)/COSD)
+    RETURN
+    END
+  """
+
   checkargs(iyear, iday, secs)
   if iyear < 1901 or iyear > 3000:
     raise ValueError(f"year must be in the range [1901, 2099], got {iyear}")
@@ -166,6 +214,12 @@ def gmstR71(iyear, iday, secs):
 
   gst_deg = (279.690983 + 0.9856473354*dj + 360.0*fday + 180.0) % 360.0
 
+  # Geopack-2008 version of this is
+  # DATA RAD/57.295779513D0/
+  # GST=DMOD(279.690983D0 + .9856473354D0*DJ + 360.D0*FDAY + 180.D0, 360.D0)/
+  # * RAD
+  # (the * before RAD is a line continuation character in Fortran, not a multiplication operator)
+
   """
   On iyear = 1900 iday = 1, fday = 0.5 => dj = 0, so
   gst_deg = (279.690983 + 360.0*0.5 + 180.0) % 360.0
@@ -173,6 +227,13 @@ def gmstR71(iyear, iday, secs):
 
   On iyear = 1901 iday = 1, fday = 0.5 => dj = 365, so
   0.9856473354*dj = 359.761277421 and
+  Newcomb (https://apps.dtic.mil/sti/tr/pdf/ADA548492.pdf Eqn 11):
+  Long of Sun: 279° 41' 48''.04 + 129602768''.13 T + 1.089''T^2
+  where T is the time reckoned in Julian centuries of 36525 days since
+  January 0, 1900, 12 h UT
+
+  279° 41' 48.04 ≈ 279.6966777777777778 degrees
+  129602768.13/36525/3600 ≈ 0.9856473353867213 degrees/day
 
   gst_deg = (279.690983 + 359.761277421 + 360) % 360
   gst_deg = (639.452260421 + 360) % 360
@@ -245,13 +306,17 @@ def gmstF02(iyear, iday, secs):
   by Hapgood (1992) are first order approximations of the third order formulae
   given in Expl.Suppl. (1961).
   ------------------------------------------------------------------------------
+  Note that 1/38710000 (= 2.5833118057349522e-08) is used in Meeus 1998 Eqn 12.4
+  (see notes in gmstM98) and 2.6e-08 is used in Fränz and Harper 2002 below (and
+  Siedelman 1992). Also, 0.000387933 is used in Meeus 1998 Eqn 12.4
+  (and Siedelman 1992) but 0.0003875 is used in Fränz and Harper 2002.
 
   Note that 1/38710000 = 2.5833118057349522e-08 is used in Meeus 1998 Eqn 12.4
   (see notes in gmstM98) and 2.6e-08 is used in Fränz and Harper 2002 (and
   Seidelmann 1992). Also, 0.000387933*T^2 used in Meeus 1998 Eqn 12.4
   (and Seidelmann 1992) but 0.0003875*T0^2 is used in Fränz and Harper 2002.
   Finally, Fränz and Harper 2002 cite "Meeus, J, 2000, Astronomical Algorithms
-  2nd Edition" but but I am only  able to find 1998 associated with a 2nd edition.
+  2nd Edition" but but I am only able to find 1998 associated with a 2nd edition.
   """
 
   checkargs(iyear, iday, secs)
@@ -265,6 +330,9 @@ def gmstF02(iyear, iday, secs):
   Meeus 1998, Eqn 12.4
   theta = 280.46061837 + 360.98564736629*d0 + 0.000387933*T0**2 - (1/38710000)*T0**3
   """
+  #print(0.0003875*T0**2)
+  #print(0.000387933*T0**2)
+
   theta = theta % 360.0
 
   return theta
@@ -355,6 +423,20 @@ def gmstH92(iyear, iday, secs):
   Note 1:
     U.S. Naval Observatory, 1989 does not give this formula explicitly.
     It gives (page B2, eqn. 1)
+  Hapgood 1995, Section 3
+  ------------------------------------------------------------------------------
+  The Russell (1971) paper is more complex. GST and $\\lambda_{\\odot}$ are given
+  by the Fortran subroutine in his Appendix 2. The statements in that routine
+  are functionally equivalent to the equations in Hapgood (1992) and thus yield
+  values in the mean epoch-of-date.
+  ...
+
+  However, the values of GST and $\\lambda_{\\odot}$ predicted by Russell agree
+  with those of Hapgood (1992) to within $0.01^\\circ$.
+  ------------------------------------------------------------------------------
+
+  Note that equation (3) for theta in Hapgood (1992) is related to Theta0 in 
+  Meeus 1998 (see notes in gmstM198). Meeus 1998 Eqn 12.3 is
 
     GMST = 6h.69737456 + 2400.051336 T_0 + 0.0000258622 T_0^2 + 1.002737909 UT
 
@@ -407,6 +489,10 @@ def gmstH92(iyear, iday, secs):
 def IAU2000():
   pass
   # https://www.celestialprogramming.com/snippets/greenwichMeanSiderealTime.html
+if __name__ == "__main__":
+  #julian_days_since_j2000_test()
+  #exit()
+  from utilrsw.xprint import xprint
 
 
 if __name__ == "__main__":
