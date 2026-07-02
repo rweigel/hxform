@@ -100,23 +100,20 @@ def mjd(iyear, iday, secs):
 
 
 def checkargs(iyear, iday, secs):
+
   if not isinstance(iyear, int):
     raise ValueError(f"year must be an integer, got {type(iyear)}")
-
   if not isinstance(iday, int):
     raise ValueError(f"iday must be an integer, got {type(iday)}")
-
   if not isinstance(secs, (int, float)):
     raise ValueError(f"secs must be a number, got {type(secs)}")
 
-  if not secs >= 0.0 and secs < 86400.0:
-    raise ValueError(f"secs must be in the range [0, 86400), got {secs}")
-
   if iday < 1 or iday > 366:
     raise ValueError(f"iday must be in the range [1, 366], got {iday}")
-
   if not is_leap_year(iyear) and iday == 366:
     raise ValueError(f"iday must be in the range [1, 365] for non-leap years, got {iday} for year {iyear}")
+  if not secs >= 0.0 and secs < 86400.0:
+    raise ValueError(f"secs must be in the range [0, 86400), got {secs}")
 
 
 def deg2timestr(deg):
@@ -170,29 +167,46 @@ def gmstR71(iyear, iday, secs):
   gst_deg = (279.690983 + 0.9856473354*dj + 360.0*fday + 180.0) % 360.0
 
   """
-  Newcomb (https://apps.dtic.mil/sti/tr/pdf/ADA548492.pdf):
-  Long of Sun: 279° 41' 48''.04 + 129602768''.13 T
-  where T is the time reckoned in Julian centuries of 36525 days since
-  January 0, 1900, 12 h UT
+  On iyear = 1900 iday = 1, fday = 0.5 => dj = 0, so
+  gst_deg = (279.690983 + 360.0*0.5 + 180.0) % 360.0
+  gst_deg = (279.690983 + 360.0) % 360.0
 
-  279° 41' 48.04 = 279.6966777777777778 degrees
-  129602768.13/36525/3600 ≈ 0.9856473353867213 degrees/day
+  On iyear = 1901 iday = 1, fday = 0.5 => dj = 365, so
+  0.9856473354*dj = 359.761277421 and
 
-  The difference in the leading constant in Russell 1971 and Newcomb's formula is
-  279.6966777777777778 - 279.690983 = 0.005694777777762283 degrees
+  gst_deg = (279.690983 + 359.761277421 + 360) % 360
+  gst_deg = (639.452260421 + 360) % 360
 
-  This seems to correspond to the aberration of Δλ = -20.4898'' = 0.00569161111
-  due to light-time correction for the Sun's apparent position (Meeus 1998, pg 133).
+  Newcomb 1898 pg 9 gives
+
+  𝜏 = 18^h 38^m 45^s.836 + 8 640 184^s.542T + 0.0929T^2
+
+  where T is # the number of Julian centuries of 36525 days since
+  1900, Jan 0, Greenwich Mean Noon.
+
+  This can be written as
+
+  𝜏 = 279.69098333333335° + (8640184.542)*15/3600 T
+    = 279.69098333333335° + 36000.768925 T
+
+  Note that 36000.768925/36525 = 0.9856473353867213, which matches the second
+  term in Russell's gst_deg equation to the precision given.
+
+  When T = 0
+  𝜏 = 279.69098333333335°, which matches the R71 case (even though equation
+  is said to not be valid for iyear = 1900).
+
+  On 1901, Jan 1, Greenwich Mean Noon, T = 365/36525,
+  𝜏 = 279.69098333333335° + 36000.768925 * (365/36525)
+  𝜏 = 639.452 260 749 487°
+
+  Compare this with the R71 value of
+     (639.452 260 421 + 360) % 360
+  the difference is due to rounding.
   """
 
   return gst_deg
 
-
-def newcomb(iyear, iday, secs):
-  fday = secs/86400.0
-  dj = 365*(iyear - 1900) + (iyear - 1901)//4 + iday + fday - 0.5
-  gst_deg = (279.6966777777777778 + 0.9856473354*dj + 180.0) % 360.0
-  return gst_deg
 
 
 def gmstF02(iyear, iday, secs):
@@ -223,11 +237,19 @@ def gmstF02(iyear, iday, secs):
        -   0◦.000000026*T0^3
   ------------------------------------------------------------------------------
 
-  Note that 1/38710000 (= 2.5833118057349522e-08) is used in Meeus 1998 Eqn 12.4
-  (see notes in gmstM98) and 2.6e-08 is used in Fränz and Harper 2002 (and
-  Siedelman 1992). Also, 0.000387933 is used in Meeus 1998 Eqn 12.4
-  (and Siedelman 1992) but 0.0003875 is used in Fränz and Harper 2002.
+  Fran̈z and Harper 2002, Section 1, last par
+  ------------------------------------------------------------------------------
+  We also cite the formulae and methods given by Hapgood (1992) for geocentric
+  systems, which are based on the Astronomical Almanac for Computers (1988)
+  which is no longer updated by the Nautical Almanac Offices. The formulae used
+  by Hapgood (1992) are first order approximations of the third order formulae
+  given in Expl.Suppl. (1961).
+  ------------------------------------------------------------------------------
 
+  Note that 1/38710000 = 2.5833118057349522e-08 is used in Meeus 1998 Eqn 12.4
+  (see notes in gmstM98) and 2.6e-08 is used in Fränz and Harper 2002 (and
+  Seidelmann 1992). Also, 0.000387933*T^2 used in Meeus 1998 Eqn 12.4
+  (and Seidelmann 1992) but 0.0003875*T0^2 is used in Fränz and Harper 2002.
   Finally, Fränz and Harper 2002 cite "Meeus, J, 2000, Astronomical Algorithms
   2nd Edition" but but I am only  able to find 1998 associated with a 2nd edition.
   """
@@ -238,7 +260,7 @@ def gmstF02(iyear, iday, secs):
   d0 = julian_days_since_j2000(iyear, iday, secs)
 
   # Fränz and Harper 2002, Eqn (20)
-  theta = 280.46061837 + 360.98564736629*d0 + 0.0003875*T0**2   - (2.6e-8)*T0**3
+  theta = 280.46061837 + 360.98564736629*d0 + 0.0003875*T0**2 - (2.6e-8)*T0**3
   """
   Meeus 1998, Eqn 12.4
   theta = 280.46061837 + 360.98564736629*d0 + 0.000387933*T0**2 - (1/38710000)*T0**3
@@ -276,7 +298,7 @@ def gmstM98(iyear, iday, secs):
   which correspond to 0h UT of a date. All other values would give incorrect
   results. To obtain the sidereal time theta0 at Greenwich for any instant UT of a
   given date, multiply that instant by 1.00273790935 and add the result to
-  the sidereal time Theta0 at Oh UT.
+  the sidereal time Theta0 at 0h UT.
 
   To obtain the sidereal time theta0 at Greenwich for any instant UT of a given date,
   multiply that instant by 1.002 737909 35 and add the result to the sidereal time
@@ -320,28 +342,56 @@ def gmstH92(iyear, iday, secs):
   The rotation angle theta is the Greenwich mean sidereal time. This can be
   calculated using the following formula (U.S. Naval Observatory, 1989):
 
-  theta = 100.461 + 360000.770*T0 + 15.04107 UT,                          (3)
+  theta = 100.461 + 36000.770*T0 + 15.04107 UT,
 
   where
 
-  T0 = (MJD - 51544.5)/36525.0
+  T0 = (MJD - 51544.5)/36525.0                                             (3)
 
   Note that T0 is the time in Julian centuries (36525 days) from 12:00 UT on
   1 January 2000 (known as epoch 2000.0) to the previous midnight.
   ------------------------------------------------------------------------------
 
-  Note that equation (3) for theta in Hapgood 1992 is related to theta0 in 
-  Meeus 1998 (see notes in gmstM198). Meeus 1998 Eqn 12.3 is
+  Note 1:
+    U.S. Naval Observatory, 1989 does not give this formula explicitly.
+    It gives (page B2, eqn. 1)
 
-  Theta0 = 100.46061837 + 36000.770053608*T + 0.000387933*T^2 - T^3/38710000.
+    GMST = 6h.69737456 + 2400.051336 T_0 + 0.0000258622 T_0^2 + 1.002737909 UT
 
-  which is followed by "...To obtain the sidereal time theta0 at Greenwich for
-  any instant UT of a given date, multiply that instant by 1.00273790935 and add
-  the result to the sidereal time Theta0 at 0h UT."
+    with definitions on page B3:
 
-  Equation (3) above has the first two numbers rounded to three decimal places
-  and the T^2 and T^3 terms are omitted. The 15.04107 comes from rounding
-  15*1.00273790935 = 15.0410686402499998.
+    To and T are time intervals in Julian centuries from J2000.0:
+      To = (JDo - 2451545.0) / 36525    T = (JD - 2451545.0) / 36525;
+    UT is the universal time in hours;
+    JDo and JD are the Julian dates at 0h UT and at an arbitrary time of the day,
+    respectively;
+
+    U.S. Naval Observatory, 1989 and Hapgood 1992 are equivalent because
+      360*6.69737456/24 = 100.4606184000000
+
+      1.002737909*15 = 15.041068634999998
+
+      MJD - 51544.5 = JD - 2451545.0
+
+      15*2400.051336 = 36000.77004000000
+
+    and Hapgood 1992 is
+
+    theta = 100.461 + 36000.770*T0 + 15.04107 UT
+
+  Note 2:
+    Equation (3) for theta is related to Theta0 in Meeus 1998 (see notes in
+    gmstM198). Meeus 1998 Eqn 12.3 is
+
+    Theta0 = 100.46061837 + 36000.770053608*T + 0.000387933*T^2 - T^3/38710000.
+
+    which is followed by "... To obtain the sidereal time theta0 at Greenwich for 
+    any instant UT of a given date, multiply that instant by 1.00273790935 and add
+    the result to the sidereal time Theta0 at 0h UT."
+
+    Equation (3) above has the first two numbers rounded to the nearest 0.001
+    degree and the T^2 and T^3 terms are omitted. The 15.04107 comes from rounding
+    15*1.00273790935 = 15.0410686402499998.
   """
 
   checkargs(iyear, iday, secs)
@@ -354,50 +404,85 @@ def gmstH92(iyear, iday, secs):
   return theta
 
 
-if __name__ == "__main__":
-  #julian_days_since_j2000_test()
-  #exit()
-  year = 2020
-  iday = 1
-  secs = 0.0
+def IAU2000():
+  pass
+  # https://www.celestialprogramming.com/snippets/greenwichMeanSiderealTime.html
 
+
+if __name__ == "__main__":
   """
   Entering data into https://aa.usno.navy.mil/data/siderealtime gives
-  https://aa.usno.navy.mil/calculated/siderealtime?date=2000-01-01&time=00:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=1899-12-31&time=12%3A00%3A00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
   Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
-  2000-Jan-1	00:00:00.0	06:39:52.2717	06:39:51.4197	06:39:52.2717 06:39:51.4197  -0.8520
-  https://aa.usno.navy.mil/calculated/siderealtime?date=2020-01-01&time=00:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
-  2020-Jan-1	00:00:00.0	06:40:29.2343	06:40:28.2256	06:40:29.2343	06:40:28.2256	-1.0087
+  1899-Dec-31	12:00:00.0	18:38:45.8477	18:38:46.9084	18:38:45.8477	18:38:46.9084	1.0607
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=1901-12-31&time=12%3A00%3A00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  1901-Dec-31	12:00:00.0	18:36:51.2622	18:36:51.9875	18:36:51.2622	18:36:51.9875	0.7253
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=1970-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  1970-Jan-1	12:00:00.0	18:42:53.3971	18:42:53.6719	18:42:53.3971	18:42:53.6719	0.2748
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=1980-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  1980-Jan-1	12:00:00.0	18:41:13.5942	18:41:13.1176	18:41:13.5942	18:41:13.1176	-0.4766
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=1990-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  1990-Jan-1	12:00:00.0	18:43:30.3485	18:43:31.0725	18:43:30.3485	18:43:31.0725	0.7239
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=2000-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  2000-Jan-1	12:00:00.0	18:41:50.5494	18:41:49.6974	18:41:50.5494	18:41:49.6974	-0.8520
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=2010-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  2010-Jan-1	12:00:00.0	18:44:07.3074	18:44:08.3189	18:44:07.3074	18:44:08.3189	1.0115
+
+  https://aa.usno.navy.mil/calculated/siderealtime?date=2020-01-01&time=12:00:00.000&intv_mag=1.00&intv_unit=1&reps=1&lat=0.0000&lon=0.0000&label=&submit=Get+Data
+  Date (UT1)	Time (UT1)  GST (Mean)  GST (Apparent)  LST (Mean)    LST (Apparent) EoE
+  2020-Jan-1	12:00:00.0	18:42:27.5120	18:42:26.5019	18:42:27.5120	18:42:26.5019	-1.0101
 
   where GST = Greenwich Sidereal Time, LST = Local Sidereal Time, and 
   EoE = Equation of the Equinoxes = GST (Apparent) - GST (Mean) = LST (Apparent) - LST (Mean)
   """
-  print(f"{year}-{iday:03d} {secs:.3f} sec")
-  if year == 2000 and iday == 1 and secs == 0.0:
-    gmstUSNO_str = "06:39:52.2717"
-  if year == 2020 and iday == 1 and secs == 0.0:
-    gmstUSNO_str = "06:40:29.2343"
+  usno_data = {
+    #(1899, 365, 43200.0): "18:38:45.8477", # Too early for R71
+    (1901, 365, 43200.0): "18:36:51.2622",
+    (1970, 1, 43200.0): "18:42:53.3971",
+    (1980, 1, 43200.0): "18:41:13.5942",
+    (1990, 1, 43200.0): "18:43:30.3485",
+    (2000, 1, 43200.0): "18:41:50.5494",
+    (2010, 1, 43200.0): "18:44:07.3074",
+    (2020, 1, 43200.0): "18:42:27.5120",
+  }
 
-  gmstUSNO = timestr2deg(gmstUSNO_str)
-  gmstR71 = gmstR71(year, iday, secs)
-  gmstH92 = gmstH92(year, iday, secs)
-  gmstF02 = gmstF02(year, iday, secs)
-  gmstM98 = gmstM98(year, iday, secs)
+  for key in usno_data:
 
-  print(gmstR71)
-  print(newcomb(year, iday, secs))
+    gmstUSNO_str = gmstUSNO_str = usno_data[key]
+    year, iday, secs = key
 
-  #ref = "USNO"
-  #ref_val = timestr2deg(gmstUSNO_str)
-  ref = "R71"
-  ref_val = gmstR71
+    _gmstUSNO = timestr2deg(gmstUSNO_str)
+    _gmstR71 = gmstR71(year, iday, secs)
+    _gmstH92 = gmstH92(year, iday, secs)
+    _gmstF02 = gmstF02(year, iday, secs)
+    _gmstM98 = gmstM98(year, iday, secs)
 
-  print(f"USNO         GMST = {gmstUSNO_str}   | {gmstUSNO:.6f} deg | {gmstUSNO - ref_val:9.6f} deg diff from {ref} value")
-  print(f"Russell 1971 GMST = {deg2timestr(gmstR71)} | {gmstR71:.6f} deg | {gmstR71 - ref_val:9.6f} deg diff from {ref} value")
-  print(f"Hapgood 1992 GMST = {deg2timestr(gmstH92)} | {gmstH92:.6f} deg | {gmstH92 - ref_val:9.6f} deg diff from {ref} value")
-  print(f"F & H 2002   GMST = {deg2timestr(gmstF02)} | {gmstF02:.6f} deg | {gmstF02 - ref_val:9.6f} deg diff from {ref} value")
-  print(f"Meeus 1998   GMST = {deg2timestr(gmstM98)} | {gmstM98:.6f} deg | {gmstM98 - ref_val:9.6f} deg diff from {ref} value")
+    #ref = "USNO"
+    #ref_val = timestr2deg(gmstUSNO_str)
+    ref = "R71"
+    ref_val = _gmstR71
 
+    print(40*"-")
+    print(f"{year}-{iday:03d} {secs/3600.0:.2f} h")
+    print(40*"-")
+    print(f"USNO         GMST = {gmstUSNO_str}   | {_gmstUSNO:.6f} deg | {_gmstUSNO - ref_val:9.6f} deg diff from {ref} value")
+    print(f"Russell 1971 GMST = {deg2timestr(_gmstR71)} | {_gmstR71:.6f} deg | {_gmstR71 - ref_val:9.6f} deg diff from {ref} value")
+    print(f"Hapgood 1992 GMST = {deg2timestr(_gmstH92)} | {_gmstH92:.6f} deg | {_gmstH92 - ref_val:9.6f} deg diff from {ref} value")
+    print(f"F & H 2002   GMST = {deg2timestr(_gmstF02)} | {_gmstF02:.6f} deg | {_gmstF02 - ref_val:9.6f} deg diff from {ref} value")
+    print(f"Meeus 1998   GMST = {deg2timestr(_gmstM98)} | {_gmstM98:.6f} deg | {_gmstM98 - ref_val:9.6f} deg diff from {ref} value")
+    print(40*"-")
 
   if False:
     year = 2200
