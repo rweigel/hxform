@@ -60,13 +60,13 @@ pip install -e .
 
 To test if the installation was successful, execute
 
-```
+```bash
 python demo/basic.py
 ```
 
 # Install with Conda
 
-```
+```bash
 conda create -n python3.14-hxform python=3.14
 git clone https://github.com/rweigel/hxform
 cd hxform
@@ -76,7 +76,7 @@ pip install -e .
 
 To test if the installation was successful, execute
 
-```
+```bash
 python demo/basic.py
 ```
 
@@ -98,13 +98,15 @@ pytest # Executes files in ./test
 Requires `Install without Conda` install approach.
 
 To have a version automatically installed and tested, use
-```
+
+```bash
 python -m pip install --upgrade 'nox[pbs]'
 nox -s tests
 ```
 
 To test using only a single version of Python
-```
+
+```bash
 nox -s tests --python 3.12
 ```
 
