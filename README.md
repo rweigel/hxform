@@ -1,4 +1,4 @@
-[DOI](https://zenodo.org/records/18663932)
+[DOI](https://doi.org/10.5281/zenodo.18663931)
 
 # `hxform`
 
