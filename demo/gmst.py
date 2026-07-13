@@ -168,7 +168,7 @@ def gmstR71(iyear, iday, secs):
   G.D. Mead (private communication) has written a simple subroutine to calculate
   the position of the Sun in GEI coordinates. It is accurate for years 1901
   through 2099, to within 0.006 deg. The input is the year, day of year and
-  seconds of the day in UT. The output is Greenwich Mean Sideral Time in degrees,
+  seconds of the day in UT. The output is Greenwich Mean Sidereal Time in degrees,
   the ecliptic longitude, apparent right ascension and declination of the Sun
   in degrees. The listing of this program follows. We note that the cartesian
   coordinates of the vector from the Earth to the Sun are:
@@ -213,58 +213,6 @@ def gmstR71(iyear, iday, secs):
   dj = 365*(iyear - 1900) + (iyear - 1901)//4 + iday + fday - 0.5
 
   gst_deg = (279.690983 + 0.9856473354*dj + 360.0*fday + 180.0) % 360.0
-
-  # Geopack-2008 version of this is
-  # DATA RAD/57.295779513D0/
-  # GST=DMOD(279.690983D0 + .9856473354D0*DJ + 360.D0*FDAY + 180.D0, 360.D0)/
-  # * RAD
-  # (the * before RAD is a line continuation character in Fortran, not a multiplication operator)
-
-  """
-  On iyear = 1900 iday = 1, fday = 0.5 => dj = 0, so
-  gst_deg = (279.690983 + 360.0*0.5 + 180.0) % 360.0
-  gst_deg = (279.690983 + 360.0) % 360.0
-
-  On iyear = 1901 iday = 1, fday = 0.5 => dj = 365, so
-  0.9856473354*dj = 359.761277421 and
-  Newcomb (https://apps.dtic.mil/sti/tr/pdf/ADA548492.pdf Eqn 11):
-  Long of Sun: 279° 41' 48''.04 + 129602768''.13 T + 1.089''T^2
-  where T is the time reckoned in Julian centuries of 36525 days since
-  January 0, 1900, 12 h UT
-
-  279° 41' 48.04 ≈ 279.6966777777777778 degrees
-  129602768.13/36525/3600 ≈ 0.9856473353867213 degrees/day
-
-  gst_deg = (279.690983 + 359.761277421 + 360) % 360
-  gst_deg = (639.452260421 + 360) % 360
-
-  Newcomb 1898 pg 9 gives
-
-  𝜏 = 18^h 38^m 45^s.836 + 8 640 184^s.542T + 0.0929T^2
-
-  where T is # the number of Julian centuries of 36525 days since
-  1900, Jan 0, Greenwich Mean Noon.
-
-  This can be written as
-
-  𝜏 = 279.69098333333335° + (8640184.542)*15/3600 T
-    = 279.69098333333335° + 36000.768925 T
-
-  Note that 36000.768925/36525 = 0.9856473353867213, which matches the second
-  term in Russell's gst_deg equation to the precision given.
-
-  When T = 0
-  𝜏 = 279.69098333333335°, which matches the R71 case (even though equation
-  is said to not be valid for iyear = 1900).
-
-  On 1901, Jan 1, Greenwich Mean Noon, T = 365/36525,
-  𝜏 = 279.69098333333335° + 36000.768925 * (365/36525)
-  𝜏 = 639.452 260 749 487°
-
-  Compare this with the R71 value of
-     (639.452 260 421 + 360) % 360
-  the difference is due to rounding.
-  """
 
   return gst_deg
 
@@ -340,44 +288,7 @@ def gmstF02(iyear, iday, secs):
 
 def gmstM98(iyear, iday, secs):
   """
-  Meeus 1998, Chapter 12
-  ------------------------------------------------------------------------------
-  We shall denote by Theta0 the sidereal time at Greenwich at 0h UT of a given
-  date, and by theta0 the sidereal time at Greenwich for any given instant UT.
-
-  The sidereal time at the meridian of Greenwich, at 0h Universal Time of a given
-  date, can be obtained as follows.
-
-  Calculate the JD corresponding to that date at 0h UT (Chapter 7). Thus, this
-  is a number ending on .5. Then find T by
-
-  (12.1)  T = (JD - 2451 545.0)/36525
-
-  The mean sidereal time at Greenwich at 0h UT is then given by the following
-  expression which was adopted in 1982 by the International Astronomical Union:
-
-  (12.2) Theta0 = 6h41m50s.54841 + 8640 184s.812 866*T + 0s.093 104*T^2 - 0s.000 0062*T^3
-
-  Expressed in degrees and decimals, this formula can be written
-
-  (12.3) Theta0 = 100.460 618 37 + 36000.770 053 608*T + 0.000 387 933*T^2 - T^3/38 710 000
-
-  Important: the formulae (12.2) and (12.3) are valid only for those values of T
-  which correspond to 0h UT of a date. All other values would give incorrect
-  results. To obtain the sidereal time theta0 at Greenwich for any instant UT of a
-  given date, multiply that instant by 1.00273790935 and add the result to
-  the sidereal time Theta0 at 0h UT.
-
-  To obtain the sidereal time theta0 at Greenwich for any instant UT of a given date,
-  multiply that instant by 1.002 737909 35 and add the result to the sidereal time
-  Theta0 at 0h UT.
-
-  The mean sidereal time at Greenwich, expressed in degrees, can also be found
-  directly for any instant as follows. If JD is the Julian Day corresponding to
-  that instant in UT (not necessarily 0h), find T by formula (12.1), and then
-
-  (12.4) theta0 = 280.460 618 37 + 360.985 647 366 29 (JD - 2451 545.0) + 0.000 387 933*T^2 - T^3/38 710 000
-  ------------------------------------------------------------------------------
+  Greenwich Mean Sidereal Time in degrees using Meeus 1998 Chapter 12
   """
 
   checkargs(iyear, iday, secs)
@@ -393,87 +304,6 @@ def gmstM98(iyear, iday, secs):
 
 def gmstH92(iyear, iday, secs):
   """Compute Greenwich Mean Sidereal Time in degrees using Hapgood 1992 formula.
-
-  Hapgood 1992, Section 4.1
-  ------------------------------------------------------------------------------
-  All of the fundamental transformations defined in the following sections are
-  time dependent. To maintain a uniform style, time is there specified by modified
-  Julian date (MJD), which is the time measured in days from 00:00 UT on 17
-  November 1858 (Julian date 2400000.5). In this paper we use only the integer
-  part of MJD, i.e. the value at 00:00 UT on the day of interest. For some
-  applications it is also necessary to give the time within the day as
-  Universal Time in hours (UT).
-  ------------------------------------------------------------------------------
-
-  Hapgood 1992, Section 4.1
-  ------------------------------------------------------------------------------
-  The rotation angle theta is the Greenwich mean sidereal time. This can be
-  calculated using the following formula (U.S. Naval Observatory, 1989):
-
-  theta = 100.461 + 36000.770*T0 + 15.04107 UT,
-
-  where
-
-  T0 = (MJD - 51544.5)/36525.0                                             (3)
-
-  Note that T0 is the time in Julian centuries (36525 days) from 12:00 UT on
-  1 January 2000 (known as epoch 2000.0) to the previous midnight.
-  ------------------------------------------------------------------------------
-
-  Note 1:
-    U.S. Naval Observatory, 1989 does not give this formula explicitly.
-    It gives (page B2, eqn. 1)
-  Hapgood 1995, Section 3
-  ------------------------------------------------------------------------------
-  The Russell (1971) paper is more complex. GST and $\\lambda_{\\odot}$ are given
-  by the Fortran subroutine in his Appendix 2. The statements in that routine
-  are functionally equivalent to the equations in Hapgood (1992) and thus yield
-  values in the mean epoch-of-date.
-  ...
-
-  However, the values of GST and $\\lambda_{\\odot}$ predicted by Russell agree
-  with those of Hapgood (1992) to within $0.01^\\circ$.
-  ------------------------------------------------------------------------------
-
-  Note that equation (3) for theta in Hapgood (1992) is related to Theta0 in 
-  Meeus 1998 (see notes in gmstM198). Meeus 1998 Eqn 12.3 is
-
-    GMST = 6h.69737456 + 2400.051336 T_0 + 0.0000258622 T_0^2 + 1.002737909 UT
-
-    with definitions on page B3:
-
-    To and T are time intervals in Julian centuries from J2000.0:
-      To = (JDo - 2451545.0) / 36525    T = (JD - 2451545.0) / 36525;
-    UT is the universal time in hours;
-    JDo and JD are the Julian dates at 0h UT and at an arbitrary time of the day,
-    respectively;
-
-    U.S. Naval Observatory, 1989 and Hapgood 1992 are equivalent because
-      360*6.69737456/24 = 100.4606184000000
-
-      1.002737909*15 = 15.041068634999998
-
-      MJD - 51544.5 = JD - 2451545.0
-
-      15*2400.051336 = 36000.77004000000
-
-    and Hapgood 1992 is
-
-    theta = 100.461 + 36000.770*T0 + 15.04107 UT
-
-  Note 2:
-    Equation (3) for theta is related to Theta0 in Meeus 1998 (see notes in
-    gmstM198). Meeus 1998 Eqn 12.3 is
-
-    Theta0 = 100.46061837 + 36000.770053608*T + 0.000387933*T^2 - T^3/38710000.
-
-    which is followed by "... To obtain the sidereal time theta0 at Greenwich for 
-    any instant UT of a given date, multiply that instant by 1.00273790935 and add
-    the result to the sidereal time Theta0 at 0h UT."
-
-    Equation (3) above has the first two numbers rounded to the nearest 0.001
-    degree and the T^2 and T^3 terms are omitted. The 15.04107 comes from rounding
-    15*1.00273790935 = 15.0410686402499998.
   """
 
   checkargs(iyear, iday, secs)
