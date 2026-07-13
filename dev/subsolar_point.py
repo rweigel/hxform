@@ -48,7 +48,7 @@ def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
   FDAY = SECS/86400
 
   #DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5D0
-  DJ = 365* (IYR-1900) + (IYR-1901)/4 + IDAY + FDAY -0.5
+  DJ = 365* (IYR-1900) + (IYR-1901)//4 + IDAY + FDAY -0.5
 
   #T = DJ / 36525
   T = DJ / 36525
@@ -80,7 +80,8 @@ def _mead(IYR, IDAY, SECS, lib_transform='geopack_08_dp'):
   #SDEC = RAD * ATAN (SIND/COSD)
   SDEC = RAD * atan (SIND/COSD)
 
-  #SRASN = 180. -RAD*ATAN2(COTAN (OBLIQ)*SIND/COSD, -COS (SLP)/COSD)
+  #SRASN = 180. -RAD*ATAN2
+  #(COTAN (OBLIQ)*SIND/COSD, -COS (SLP)/COSD)
 
   SRASN = 180. -RAD*atan2(cotan (OBLIQ)*SIND/COSD, -cos (SLP)/COSD)
 
@@ -135,7 +136,7 @@ def _laundal(year, doy, ut):
 def _apex(iyr, iday, ihr, imn, sec):
   # Subroutine subsol in
   # https://github.com/NCAR/apex_fortran/blob/master/apex.f90
-  # "Find subsolar geographic latitude and longitude given the date and time (Universal Time)"
+  # subsolar geographic latitude and longitude given the date and time (Universal Time)
   from math import sin, cos, atan2, asin
 
   dtr = 0.0174532925199432957692369076847
@@ -251,10 +252,10 @@ def _hxform(time, frame='GEO', lib='geopack_08_dp'):
 
   subsol_pt = hxform.transform([1., 0., 0.], time, 'GSM', frame, lib=lib)
 
-  if isinstance(time, outer_type):
-    return outer_type(subsol_pt)
-  else:
+  if isinstance(time, numpy.ndarray):
     return numpy.array(subsol_pt)
+  else:
+    return outer_type(subsol_pt)
 
 
 def subsolar_point(t, frame='GEO', lib='geopack_08_dp', lib_transform='geopack_08_dp'):

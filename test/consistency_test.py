@@ -15,7 +15,7 @@ libs_only = []
 
 raise_on_fail = False
 
-def excludes():
+def _excludes():
   # SSCWeb returns results to only two decimal places, leading to large
   # discrepancies when comparing matrix multiplication to transform results.
   # TODO: Compute appropriate threshold for pass.
@@ -42,7 +42,7 @@ def excludes():
   return libs_exclude
 
 
-def report(test_passed, diff, raise_on_fail, key, msg, error=None):
+def _report(test_passed, diff, raise_on_fail, key, msg, error=None):
   if not test_passed:
     hxform.xprint(f"  {msg}")
     if error is not None:
@@ -59,7 +59,7 @@ def report(test_passed, diff, raise_on_fail, key, msg, error=None):
     fails[key].append({'msg': msg, 'diff': diff, 'error': error})
 
 
-def matrix():
+def _matrix(f1, f2, lib, key):
   # Transform single vector at single timestamp
   msg = "matrix test: single vector, single timestamp"
   try:
@@ -67,10 +67,10 @@ def matrix():
     matrix = hxform.matrix(t1, f1, f2, lib=lib)
     diff = vt - numpy.dot(matrix, v1)
     test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-    report(test_passed, diff, raise_on_fail, key, msg)
+    _report(test_passed, diff, raise_on_fail, key, msg)
   except Exception as e:
     print(e)
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
   # Transform two vectors at with same timestamp
   msg = "matrix test: two vectors, single timestamp"
@@ -80,9 +80,9 @@ def matrix():
     for i in range(v2.shape[0]):
       diff = vt[i, :] - numpy.dot(matrix, v2[i, :])
       test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-      report(test_passed, diff, raise_on_fail, key, f"{msg} vector #{i}")
+      _report(test_passed, diff, raise_on_fail, key, f"{msg} vector #{i}")
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
   # Transform two vectors at two timestamps
@@ -93,12 +93,12 @@ def matrix():
     for i in range(matrices.shape[0]):
       diff = vt[i, :] - numpy.dot(matrices[i, :, :], v2[i, :])
       test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-      report(test_passed, diff, raise_on_fail, key,  f"{msg} vector {i}")
+      _report(test_passed, diff, raise_on_fail, key,  f"{msg} vector {i}")
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
-def coord_sys():
+def _coord_sys(f1, f2, lib, key):
   msg = "car/sph test: test #1 on single vector, single timestamp"
 
   try:
@@ -107,9 +107,9 @@ def coord_sys():
     output2 = hxform.transform(v1, t1, f1, f2, 'car', 'sph', lib=lib)
     diff = output1 - output2
     test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-    report(test_passed, diff, raise_on_fail, key, msg)
+    _report(test_passed, diff, raise_on_fail, key, msg)
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
   msg = "car/sph test: test #2 on single vector, single timestamp"
@@ -119,9 +119,9 @@ def coord_sys():
     output2 = hxform.car2sph(output2)
     diff = output1 - output2
     test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-    report(test_passed, diff, raise_on_fail, key, msg)
+    _report(test_passed, diff, raise_on_fail, key, msg)
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
   msg = "car/sph test: test #3 on single vector, single timestamp"
@@ -131,9 +131,9 @@ def coord_sys():
     output2 = hxform.transform(input2, t1, f1, f2, 'sph', 'car', lib=lib)
     diff = output1 - output2
     test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-    report(test_passed, diff, raise_on_fail, key, msg)
+    _report(test_passed, diff, raise_on_fail, key, msg)
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
   msg = "car/sph test: test #4 on single vector, single timestamp"
@@ -144,36 +144,42 @@ def coord_sys():
     output2 = hxform.transform(input1, t1, f1, f2, 'sph', 'car', lib=lib)
     diff = output1 - output2
     test_passed = numpy.all(numpy.abs(diff) < 1e-15)
-    report(test_passed, diff, raise_on_fail, key, msg)
+    _report(test_passed, diff, raise_on_fail, key, msg)
   except Exception as e:
-    report(False, None, raise_on_fail, key, msg, error=str(e))
+    _report(False, None, raise_on_fail, key, msg, error=str(e))
 
 
-libs_exclude = excludes()
+def test_consistency():
 
-fails = {}
-libs = hxform.libs()
-for lib in libs:
+  libs_exclude = _excludes()
 
-  if libs_only and lib not in libs_only:
-    hxform.xprint(f"{lib}: Skipping tests because it is not in libs_only")
-    continue
+  fails = {}
+  libs = hxform.libs()
+  for lib in libs:
 
-  if libs_exclude and lib in libs_exclude:
-    hxform.xprint(f"{lib}: Skipping tests because it is in libs_exclude")
-    continue
+    if libs_only and lib not in libs_only:
+      hxform.xprint(f"{lib}: Skipping tests because it is not in libs_only")
+      continue
 
-  for f1 in hxform.frames(lib):
-    for f2 in hxform.frames(lib):
-      key = f'{lib} {f1} to {f2}'
-      hxform.xprint(key)
+    if libs_exclude and lib in libs_exclude:
+      hxform.xprint(f"{lib}: Skipping tests because it is in libs_exclude")
+      continue
 
-      matrix()
-      coord_sys()
+    for f1 in hxform.frames(lib):
+      for f2 in hxform.frames(lib):
+        key = f'{lib} {f1} to {f2}'
+        hxform.xprint(key)
+
+        _matrix(f1, f2, lib, key)
+        _coord_sys(f1, f2, lib, key)
 
 
-if len(fails) != 0:
-  import json
-  fails = json.dumps(fails, indent=2, default=str)
-  hxform.xprint(f"Some tests failed: \n{fails}")
-  assert len(fails) == 0, "Some tests failed."
+  if len(fails) != 0:
+    import json
+    fails = json.dumps(fails, indent=2, default=str)
+    hxform.xprint(f"Some tests failed: \n{fails}")
+    assert len(fails) == 0, "Some tests failed."
+
+
+if __name__ == "__main__":
+  test_consistency()
