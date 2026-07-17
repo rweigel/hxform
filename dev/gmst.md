@@ -1,6 +1,6 @@
-# [Newcomb 1898](https://dn790009.ca.archive.org/0/items/06AstronomicalPapersPreparedForTheUse/06-Astronomical_Papers_Prepared_for_the_Use.pdf)
+# Newcomb 1898
 
-`Page 9`
+[Newcomb 1898](https://dn790009.ca.archive.org/0/items/06AstronomicalPapersPreparedForTheUse/06-Astronomical_Papers_Prepared_for_the_Use.pdf), Page 9
 
 I. BASIS OF THE TABLES.
 
@@ -19,11 +19,19 @@ $L = 279°\;41'\;48".04 + 129\;602\;768".13\,T + 1".089\,T^2$
 ----
 **Notes**
 
+Is $T$ in increments of $1/36525$, or can it be fractional?
+
 Or, with the base angle in decimal degrees instead of degrees-minutes-seconds,
 
-$L = 279.6966\overline{7}^\circ + ...$
+$L = 279.6966\overline{7}^\circ + 8\;640\;184^\text{s}.542\,T +  0^\text{s}.0726\,T^2$
 
-using $279 + 41/60 + 48.04/3600 = 279 + 62701​/90000​ = 279.6966\overline{7}$,
+using $279 + 41/60 + 48.04/3600 = 279 + 62701/90000 = 279.6966\overline{7}$,
+
+$129\;602\;768".13\cdot\displaystyle\frac{1^\text{s}}{15"} = 8\;640\;184^\text{s}.542^\text{s}$
+
+and
+
+$1".089\cdot\displaystyle\frac{1^\text{s}}{15"} = 0.0726^\text{s}$
 
 In terms of hour-angle (unconventional in this form because not an astronomical time, but useful for comparison
 to $\tau$)
@@ -72,10 +80,14 @@ $(53/60)\cdot 60 = 53^\text{m}$.
 
 The Right Ascension of the fictitious mean Sun, affected by aberration, and so taken as to have a uniform motion in the plane of the Earth's equator corresponding to the motion of the mean Sun in longitude at the epoch 1900;
 
-$\tau = 18^\text{h}\;38^\text{m}\;45^\text{s}.836 + 8\;640\;184^\text{s}.542\,T + 0.0929\,T^2$
+$\tau = 18^\text{h}\;38^\text{m}\;45^\text{s}.836 + 8\;640\;184^\text{s}.542\,T + 0^\text{s}.0929\,T^2$
 
 ----
 **Notes**
+
+From above, we have
+
+$L = 18^\text{h} \; 38^\text{m} \;47^\text{s}.2 + 8\;640\;184^\text{s}.542\,T +  0^\text{s}.0726\,T^2$
 
 Or
 
@@ -86,6 +98,61 @@ $L - \tau = (279 + 41459/60000) - (279 + 62701/90000)$
 $L - \tau = (41/7200)^\circ = 20.5"$ (exactly).
 
 On page 12, Newcomb (1898) gives a value $20".501 = 0.005\;694\;722\;...^\circ$ for aberration.
+
+
+The first terms differs from that in $\tau$ because of aberration. The second term matches. Why don't the third terms match?
+
+From USNO 1961 page 22: "_The Besselian solar year_. For certain applications it is more convenient to measure time in units of tropical centuries of 3652.21988 ephemeris days, the fundamental epoch being the beginning of the Besselian (fictitious) solar year
+1900.0, or 1900 January O$^\text{d}$·813 E.T. In the great majority of such cases the
+difference in length of the century is not significant: the same symbol T is accord-
+ingly used, though always with a specific explanation. The difference between the
+lengths of the Besselian solar year and the tropical year ($0^\text{s}.148\;T$) can always be neglected and multiples of 0·01 in T thus relate to the beginning of the corresponding
+Besselian year (see section 2B)."
+
+Newcomb's L vs τ — T² Discrepancy: Math Summary
+
+**Given formulas:**
+
+$$L = 279^\circ 41' 48.04'' + 129\,602\,768.13''\,T + 1.089''\,T^2$$
+
+$$\tau = 18^h 38^m 45.836^s + 8\,640\,184.542^s\,T + 0.0929^s\,T^2$$
+
+**Step 1 — Convert τ's linear term to arcseconds** (using $1^s = 15''$):
+
+$$8\,640\,184.542^s \times 15 = 129\,602\,768.13''$$
+
+$$\Rightarrow \tau_{T^1} \times 15 = L_{T^1} \quad \checkmark \text{ (exact match)}$$
+
+**Step 2 — Convert τ's T² term to arcseconds:**
+
+$$0.0929^s \times 15 = 1.3935''$$
+
+**Step 3 — Compare to L's T² term:**
+
+$$\Delta_{T^2} = 1.3935'' - 1.089'' = 0.3045''/\text{century}^2$$
+
+**Step 4 — Equivalently, convert L's T² term to time-seconds** (dividing by 15) and compare directly in time units:
+
+$$L_{T^2}^{(time)} = \frac{1.089''}{15} = 0.0726^s$$
+
+$$\Delta_{T^2}^{(time)} = 0.0929^s - 0.0726^s = 0.0203^s/\text{century}^2$$
+
+**Step 5 — Cross-check via unit conversion:**
+
+$$0.0203^s \times 15 = 0.3045''$$
+
+$$\Rightarrow \Delta_{T^2}^{(time)} \times 15 = \Delta_{T^2} \quad \checkmark \text{ (self-consistent)}$$
+
+**Conclusion:**
+
+$$\boxed{\Delta_{T^2} = 0.3045''/\text{century}^2 \;=\; 0.0203^s/\text{century}^2}$$
+
+This is documented in the *Explanatory Supplement to the Ephemeris* as the **"excess of the secular acceleration of the right ascension of the fictitious mean sun over the mean longitude of the Sun,"** and manifests as the Besselian year being shorter than the tropical year by:
+
+$$\delta_{year} \approx 0.148^s \, T$$
+
+(a linear-in-$T$ effect, consistent with being the time-derivative of a $T^2$ position offset, since $\dfrac{d}{dT}\!\left(k\,T^2\right) = 2kT$).
+
 
 ----
 
@@ -99,9 +166,9 @@ $g = 358^\circ\;28'\;33".0 + 129\;596\;579.10"\,T - 0".54\,T^2 - 0".012\,T^2$
 
 The eccentricity of the Earth's orbit;
 
-$e = 0.016\;751\;04 - .000\;041\;80T — .000\;000\;126\,T^2$
+$e = 0.016\;751\;04 - .000\;041\;80T - .000\;000\;126\,T^2$
 
-$\phantom{e} = 3455".150 - 8".621\,T -0".0260\,T^2$
+$\phantom{e} = 3455".150 - 8".621\,T - 0".0260\,T^2$
 
 `Page 10`
 
@@ -113,22 +180,34 @@ $\epsilon = 23^\circ\;27'\;8".26 - 46".845\,T - 0".0059\,T^2 + 0".001\;81T^2$
 
 `Page 73`
 
+3\. Universal time
+
+Universal time is the precise measure of time used as the basis for all civil time-keeping; it conforms with a very close approximation of the mean diural motion of the Sun. $^*$
+
+$^*$See note on page vi regarding the current basis of civil time scales. In genral the term "universal time" (U.T.) may be identified throughout this Supplement with the system of U.T.I defined on page 86.
+
+It is, and since the introduction of Newcomb's _Tables of the Sun_ has been, defined as 12 hours $+$ the Greenwich hour angle of a point on the equator whos right ascention, measured from the mean equinox of date, is:
 ...
 
 $R_\text{U} = 18^\text{h}\; 38^\text{m}\; 45^\text{s}.836 + 8640184^\text{s}.542\;T_U + 0\text{s}.0929\;T_U^2$
 
-...
-
-`Page 74-75`
-
-...
+where $T_U$ is the number of Julian centuries of 36525 days of universal time elapsed since the epoch of Greenwich mean noon (regarded as 12$^\text{h}$ U.T.) on 1900 January 0. The expression for $R_U$ is identical with that given by Newcomb (_Tables of the Sun, A.P.A.E._, **6**, part I, page 9, 1895) for the right ascension of the fictious mean sun, with the exception that Newcomb used $T$ instead of $T_U$ and did not specify in what measure of time $T$ was to be reconed. Newcomb, not recognising the variable rotation of the Earth, considered that $T$ was measured in mean solar time applicable alike to orbital motions and to hour angles; as explained in sub-section B.I, Newcomb's $T$ may now be identified with ephemeris time. The poin on the equator whose right ascension is $R_U$ is not identical with the "fictitious mean sun" as defined by Newcomb; the right ascension of the fictitious mean sun is:
 
 $R_\text{U} = 18^\text{h}\; 38^\text{m}\; 45^\text{s}.836 + 8640184^\text{s}.542\;T_\text{E} + 0\text{s}.0929\;T_\text{E}^2$
-where $T_\text{E}^2$ is the number of Julian centuries of 36525 days of ephemeris time elapsed since the epoch of $12^\text{h}$ E.T. on 1900 January 0. $R_\text{E}$ differs from $R_\text{U}$ by $0.002738\; \Delta T$, where $\Delta T$ is the difference E.T. $-$ U.T.
+
+where $T_\text{E}$ is the number of Julian centuries of 36525 days of ephemeris time elapsed since the epoch of $12^\text{h}$ E.T. on 1900 January 0. $R_\text{E}$ differs from $R_\text{U}$ by $0.002738\; \Delta T$, where $\Delta T$ is the difference E.T. $-$ U.T.
+
+The implications of this distinction are considered in sub-section B.4.
+
+The measure of universal time at time $T_U$, expressed in hours, minutes, and seconds, is thus:
+
+12$^\text{h} + $ the Greenwich hour angle of the mean equinox of date $-R_U$
+
+The date expressed in teh form either of a calendar date or of a Julian date (see sub-section B.I), is that corresponding to the time $T_U$.
 
 ...
 
-Greenwich men sidereal time = U.T. + $R_U$ + $12^\text{h}$
+Greenwich men sidereal time = U.T. $+$  $R_U$ $+$ $12^\text{h}$
 
 for $0^\text{h}$ U.T. of every day; at U.T. = $0^\text{h}$ the value of the right-hand side is obtainedby adding $12^\text{h}$ to the expression $R_\text{U}$ for the mean sidereal time of $12^\text{h}$ U.T., and the relation becomes
 
